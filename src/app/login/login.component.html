@@ -1,0 +1,70 @@
+<form
+  tuiAppearance="floating"
+  tuiCardLarge
+  tuiForm="m"
+  [formGroup]="form"
+  [style.max-width.rem]="32"
+  [style.margin]="'100px auto'"
+>
+  <header tuiHeader>
+    <h2 tuiTitle class="tui-text_h1">Вход в систему</h2>
+    <span tuiAccessories>
+      <tui-segmented>
+        <button type="button" (click)="setAuthorizationType('login')">
+          Авторизация
+        </button>
+        <button type="button" (click)="setAuthorizationType('registration')">
+          Регистрация
+        </button>
+      </tui-segmented>
+    </span>
+  </header>
+  <tui-notification appearance="warning">
+    <h3 tuiTitle>
+      Authenticity required
+      <span tuiSubtitle>Please be honest and use your real data</span>
+    </h3>
+  </tui-notification>
+  <ng-container *ngIf="this.authorizationType === 'login'">
+    <tui-textfield class="tui-form__row">
+      <label tuiLabel>Type an email</label>
+      <input
+        formControlName="email"
+        placeholder="john@wick.com"
+        tuiTextfield
+        type="email"
+      />
+    </tui-textfield>
+    <tui-textfield>
+      <label tuiLabel>Пароль</label>
+      <input formControlName="password" tuiTextfield />
+    </tui-textfield>
+    <label tuiLabel>
+      <input formControlName="subscribe" tuiSwitch type="checkbox" />
+      Subscribe for newsletter
+      <tui-icon tuiTooltip="We will not send you spam, pinky promise!" />
+    </label>
+  </ng-container>
+  <ng-container *ngIf="this.authorizationType === 'registration'">
+    <tui-textfield>
+      <label tuiLabel>Имя</label>
+      <input formControlName="firstName" placeholder="Дмитрий" tuiTextfield />
+    </tui-textfield>
+    <tui-error
+      formControlName="firstName"
+      [error]="[] | tuiFieldError | async"
+    />
+    <tui-textfield>
+      <label tuiLabel>Фамилия</label>
+      <input formControlName="lastName" placeholder="Смертин" tuiTextfield />
+    </tui-textfield>
+    <tui-error
+      formControlName="lastName"
+      [error]="[] | tuiFieldError | async"
+    />
+  </ng-container>
+  <footer>
+    <button appearance="secondary" tuiButton type="button">Закрыть</button>
+    <button tuiButton type="submit">Войти</button>
+  </footer>
+</form>
