@@ -26,8 +26,8 @@
     </h3>
   </tui-notification>
   <ng-container *ngIf="this.authorizationType === 'login'">
-    <tui-textfield class="tui-form__row">
-      <label tuiLabel>Type an email</label>
+    <tui-textfield>
+      <label tuiLabel>E-mail</label>
       <input
         formControlName="email"
         placeholder="john@wick.com"
@@ -37,13 +37,8 @@
     </tui-textfield>
     <tui-textfield>
       <label tuiLabel>Пароль</label>
-      <input formControlName="password" tuiTextfield />
+      <input formControlName="password" tuiTextfield type="password" />
     </tui-textfield>
-    <label tuiLabel>
-      <input formControlName="subscribe" tuiSwitch type="checkbox" />
-      Subscribe for newsletter
-      <tui-icon tuiTooltip="We will not send you spam, pinky promise!" />
-    </label>
   </ng-container>
   <ng-container *ngIf="this.authorizationType === 'registration'">
     <tui-textfield>
@@ -62,6 +57,79 @@
       formControlName="lastName"
       [error]="[] | tuiFieldError | async"
     />
+
+    <tui-textfield>
+      <label tuiLabel>E-mail</label>
+      <input
+        formControlName="email"
+        placeholder="john@wick.com"
+        tuiTextfield
+        type="email"
+      />
+    </tui-textfield>
+
+    <tui-textfield>
+      <label tuiLabel>Контактный телефон</label>
+      <input
+        [maskito]="options"
+        formControlName="phoneNumber"
+        tuiTextfield
+        type="phone"
+      />
+    </tui-textfield>
+
+    <tui-textfield>
+      <label tuiLabel>Пароль</label>
+      <input formControlName="password" tuiTextfield type="password" />
+    </tui-textfield>
+
+    <tui-textfield>
+      <label tuiLabel>Подтвердите пароль</label>
+      <input formControlName="passwordConfirm" tuiTextfield type="password" />
+    </tui-textfield>
+
+    <label tuiLabel>
+      <input formControlName="personalData" tuiSwitch type="checkbox" />
+      <div>
+        Я даю свое согласие на обработку
+        <a
+          href="https://azimuthotels.com/content/policy/3_Consent_processing.pdf"
+          tuiLink
+        >
+          Персональных данных</a
+        >
+        и согласен с
+        <a
+          href="https://azimuthotels.com/content/policy/1_Confidencial_policy.pdf"
+          tuiLink
+          >Политикой конфиденциальности</a
+        >
+        и
+        <a
+          href="https://azimuthotels.com/content/pdf/hotel-reservation-rules-ru.pdf"
+          tuiLink
+          >Правилами бронирования</a
+        >
+      </div>
+      <tui-icon tuiTooltip="We will not send you spam, pinky promise!" />
+    </label>
+    <label tuiLabel>
+      <input
+        formControlName="registrationAgreement"
+        tuiSwitch
+        type="checkbox"
+      />
+      <div>
+        Я регистрируюсь в программе лояльности, чтобы бронировать проживание на
+        сайте по льготным тарифам, получать выгодные персональные предложения от
+        AZIMUT Bonus и
+        <a
+          href="https://azimuthotels.com/content/policy/4_Consent_mailings.pdf"
+          tuiLink
+          >рекламные рассылки</a
+        >
+      </div>
+    </label>
   </ng-container>
   <footer>
     <button appearance="secondary" tuiButton type="button">Закрыть</button>
