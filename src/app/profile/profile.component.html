@@ -1,1 +1,15 @@
-<p>profile works!</p>
+<div class=""></div>
+
+<input
+  type="file"
+  accept="image/jpeg"
+  #fileInput
+  (change)="onFileSelected($event)"
+  style="display: none"
+/>
+<tui-avatar
+  [src]="avatar$ | async"
+  [size]="'xxl'"
+  (click)="fileInput.click()"
+  style="cursor: pointer"
+></tui-avatar>

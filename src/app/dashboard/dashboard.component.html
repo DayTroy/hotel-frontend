@@ -1,0 +1,57 @@
+<navheader></navheader>
+<div [style.display]="'flex'">
+  <navsidebar></navsidebar>
+  <main tuiNavigationMain [style.z-index]="-1">
+    <!-- <nav compact tuiSubheader [style.position]="'sticky'">
+      <tui-breadcrumbs [itemsLimit]="10">
+        <ng-container *ngFor="let item of breadcrumbs; let last = last">
+          <ng-container *ngIf="last">
+            <strong *tuiItem tuiFade>
+              {{ item }}
+            </strong>
+          </ng-container>
+          <ng-container *ngIf="!last">
+            <button *tuiItem tuiLink type="button">
+              {{ item }}
+            </button>
+          </ng-container>
+        </ng-container>
+      </tui-breadcrumbs>
+    </nav> -->
+    <ng-container *tuiRepeatTimes="let index of 1">
+      <form
+        tuiAppearance="floating"
+        tuiCardLarge
+        tuiForm="m"
+        [style.grid-column]="'2 / span 7'"
+        [style.margin-top.rem]="1"
+      >
+        <header tuiHeader>
+          <h2 tuiTitle>
+            Registration form
+            <span tuiSubtitle>Tell us about yourself</span>
+          </h2>
+        </header>
+        <tui-textfield>
+          <label tuiLabel>Name</label>
+          <input placeholder="John Wick" tuiTextfield />
+        </tui-textfield>
+        <footer>
+          <button appearance="secondary" tuiButton type="button">Cancel</button>
+          <button tuiButton type="submit">Ok</button>
+        </footer>
+      </form>
+      <div
+        tuiAppearance="outline-grayscale"
+        tuiCardLarge
+        [style.grid-column]="'span 3'"
+        [style.margin-top.rem]="1"
+      >
+        <h2 tuiTitle>
+          Sidebar content
+          <span tuiSubtitle>Use CSS grid to position</span>
+        </h2>
+      </div>
+    </ng-container>
+  </main>
+</div>

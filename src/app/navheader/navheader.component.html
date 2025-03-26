@@ -1,0 +1,66 @@
+<header tuiNavigationHeader [style.background-color]="'#E4002B'">
+  <!-- <button
+    title="Menu"
+    tuiIconButton
+    tuiNavigationDrawer
+    type="button"
+    [(open)]="open"
+  >
+    <tui-data-list>
+      <tui-opt-group
+        *ngFor="let group of drawer | keyvalue"
+        [label]="group.key"
+      >
+        <button
+          *ngFor="let item of group.value"
+          tuiOption
+          type="button"
+          (click)="open = false"
+        >
+          <img alt="icon" [src]="item.icon" />
+          {{ item.name }}
+        </button>
+      </tui-opt-group>
+      <tui-opt-group>
+        <label tuiOption>
+          <input size="s" tuiSwitch type="checkbox" [(ngModel)]="switch" />
+          Dark mode
+        </label>
+      </tui-opt-group>
+    </tui-data-list>
+  </button> -->
+  <span tuiNavigationLogo>
+    <tui-icon icon="@tui.home" />
+    <span tuiFade>Azimut Hotels</span>
+  </span>
+  <button
+    appearance="secondary-grayscale"
+    tuiButton
+    tuiChevron
+    tuiDropdownOpen
+    type="button"
+    [tuiDropdown]="products"
+  >
+    <span tuiFade>Azimut Hotels</span>
+    <ng-template #products>
+      <tui-data-list size="s">
+        <button tuiOption type="button">
+          Azimut Hotels
+          <tui-icon
+            icon="@tui.check"
+            [style.font-size.em]="1"
+            [style.margin-left.rem]="0.5"
+          />
+        </button>
+        <button tuiOption type="button">Something else</button>
+      </tui-data-list>
+    </ng-template>
+  </button>
+  <hr />
+  <button iconStart="@tui.bell" tuiIconButton type="button">
+    Уведомления
+    <tui-badge-notification />
+  </button>
+  <button iconStart="@tui.ellipsis" tuiIconButton type="button">More</button>
+  <tui-avatar src="AI" />
+</header>
