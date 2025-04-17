@@ -55,7 +55,6 @@ import {TuiSelectModule, TuiTextfieldControllerModule, TuiComboBoxModule} from '
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    // Ignore portal related code, it is only here to position drawer inside the example block
     providers: [TuiDropdownService, tuiAsPortal(TuiDropdownService)],
 })
 export default class DashboardComponent extends TuiPortals {

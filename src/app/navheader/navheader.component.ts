@@ -1,24 +1,18 @@
-import {KeyValuePipe, NgForOf} from '@angular/common';
 import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {tuiAsPortal, TuiPortals} from '@taiga-ui/cdk';
 import {
-    TuiAppearance,
     TuiButton,
     TuiDataList,
     TuiDropdown,
     TuiDropdownService,
     TuiIcon,
-    TuiTextfield,
 } from '@taiga-ui/core';
 import {
     TuiAvatar,
-    TuiBadge,
     TuiBadgeNotification,
     TuiChevron,
     TuiFade,
-    TuiSwitch,
-    TuiTabs,
 } from '@taiga-ui/kit';
 import {TuiNavigation} from '@taiga-ui/layout';
 
@@ -30,11 +24,7 @@ const ICON =
     selector: "navheader",
     imports: [
         FormsModule,
-        KeyValuePipe,
-        NgForOf,
-        TuiAppearance,
         TuiAvatar,
-        TuiBadge,
         TuiBadgeNotification,
         TuiButton,
         TuiChevron,
@@ -43,14 +33,10 @@ const ICON =
         TuiFade,
         TuiIcon,
         TuiNavigation,
-        TuiSwitch,
-        TuiTabs,
-        TuiTextfield,
     ],
     templateUrl: './navheader.component.html',
     styleUrl: './navheader.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    // Ignore portal related code, it is only here to position drawer inside the example block
     providers: [TuiDropdownService, tuiAsPortal(TuiDropdownService)],
 })
 export default class NavHeaderComponent extends TuiPortals {
