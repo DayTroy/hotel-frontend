@@ -39,7 +39,7 @@ const ICON =
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [TuiDropdownService, tuiAsPortal(TuiDropdownService)],
 })
-export default class NavHeaderComponent extends TuiPortals {
+export default class NavHeaderComponent {
     protected expanded = signal(false);
     protected open = false;
     protected switch = false;

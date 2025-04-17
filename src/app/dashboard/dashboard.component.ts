@@ -1,71 +1,47 @@
-import {CommonModule, NgForOf, NgIf} from '@angular/common';
-import  {ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {tuiAsPortal, TuiPortals, TuiRepeatTimes } from '@taiga-ui/cdk';
-import {
-    TuiAppearance,
-    TuiButton,
-    TuiDataList,
-    TuiDropdown,
-    TuiDropdownService,
-    TuiLink,
-    TuiTextfield,
-    TuiTitle,
-} from '@taiga-ui/core';
+import { CommonModule } from '@angular/common';
+import  { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {TuiTextfield } from '@taiga-ui/core';
 import {
     TuiBreadcrumbs,
-    TuiFade,
+    TuiSelect,
     TuiTabs,
     TuiDataListWrapper
 } from '@taiga-ui/kit';
-import {TuiCardLarge, TuiForm, TuiHeader, TuiNavigation} from '@taiga-ui/layout';
 import NavHeaderComponent from '../navheader/navheader.component';
 import NavSidebarComponent from '../navsidebar/navsidebar.component';
-import {TuiSelectModule, TuiTextfieldControllerModule, TuiComboBoxModule} from '@taiga-ui/legacy';
+
+interface Character {
+    readonly id: number;
+    readonly name: string;
+}
 @Component({
+    selector: 'azim-dashboard',
     standalone: true,
     imports: [
         CommonModule,
         NavHeaderComponent,
         NavSidebarComponent,
         FormsModule,
-        ReactiveFormsModule,
-        NgForOf,
-        NgIf,
-        TuiAppearance,
-        TuiBreadcrumbs,
-        TuiButton,
-        TuiCardLarge,
-        TuiDataList,
-        TuiDropdown,
-        TuiFade,
-        TuiForm,
-        TuiHeader,
-        TuiLink,
-        TuiNavigation,
-        TuiRepeatTimes,
         TuiTabs,
         TuiTextfield,
-        TuiTitle,
         TuiDataListWrapper,
-        TuiSelectModule,
-        TuiTextfieldControllerModule,
-        TuiComboBoxModule
+        TuiSelect
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [TuiDropdownService, tuiAsPortal(TuiDropdownService)],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export default class DashboardComponent extends TuiPortals {
+export default class DashboardComponent  {
     protected readonly breadcrumbs = ['Home', 'Angular', 'Repositories', 'Taiga UI'];
-    protected readonly items = [
-        {name: 'John', surname: 'Cleese'},
-        {name: 'Eric', surname: 'Idle'},
-        {name: 'Graham', surname: 'Chapman'},
-        {name: 'Michael', surname: 'Palin'},
-        {name: 'Terry', surname: 'Gilliam'},
-        {name: 'Terry', surname: 'Jones'},
+    protected readonly references = [
+        'Гостиничные номера',
+        'Типы гостинчиных номеров',
+        'Сотрудника',
+        'Отделы',
+        'Дополнительные услуги',
+        'Гости',
     ];
-    protected value = '';
+
+    protected value: string | null = 'Выберите справочник...';
 }

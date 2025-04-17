@@ -21,7 +21,7 @@ import {TuiNavigation} from '@taiga-ui/layout';
     styleUrl: './navsidebar.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class NavSidebarComponent extends TuiPortals {
+export default class NavSidebarComponent {
     protected expanded = signal(false);
     protected open = false;
     protected switch = false;

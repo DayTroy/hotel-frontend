@@ -24,17 +24,19 @@
           </ng-container>
         </tui-breadcrumbs>
       </nav> -->
-      <tui-combo-box [(ngModel)]="value">
-        Find the best employees
+      <tui-textfield tuiChevron>
         <input
-            placeholder="Type a name"
-            tuiTextfieldLegacy
+            tuiSelect
+            [(ngModel)]="value"
         />
+    
         <tui-data-list-wrapper
-            *tuiDataList
-            [items]="items"
+            *tuiTextfieldDropdown
+            new
+            [items]="references"
         />
-    </tui-combo-box>
+    </tui-textfield>
+    
     </main>
   </div>
 </div>
