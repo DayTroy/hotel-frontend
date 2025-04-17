@@ -48,6 +48,7 @@ const ICON =
         TuiTextfield,
     ],
     templateUrl: './navheader.component.html',
+    styleUrl: './navheader.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     // Ignore portal related code, it is only here to position drawer inside the example block
     providers: [TuiDropdownService, tuiAsPortal(TuiDropdownService)],

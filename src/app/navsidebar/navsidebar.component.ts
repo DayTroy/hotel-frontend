@@ -41,6 +41,7 @@ import {TuiNavigation} from '@taiga-ui/layout';
         TuiTextfield
     ],
     templateUrl: './navsidebar.component.html',
+    styleUrl: './navsidebar.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     // Ignore portal related code, it is only here to position drawer inside the example block
     providers: [TuiDropdownService, tuiAsPortal(TuiDropdownService)],
