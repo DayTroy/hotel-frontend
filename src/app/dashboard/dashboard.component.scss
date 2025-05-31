@@ -1,4 +1,17 @@
-.tui-navigation-main__wrapper {
-    width: 100%;
-    padding: 2rem;
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 25rem 1fr;
+}
+
+.main-content {
+  margin-left: 15rem;
+  padding: 1rem;
+  background: #fff;
+}
+
+.modules-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
 }

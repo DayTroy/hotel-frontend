@@ -1,27 +1,20 @@
 import { AuthApiService } from './auth-api.service';
 import { AuthFormService } from './auth-forms.service';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiAppearance,
   TuiButton,
-  TuiError,
-  TuiIcon,
-  TuiNotification,
   TuiTextfield,
   TuiTitle,
-  TuiLink,
   TuiAlertService,
 } from '@taiga-ui/core';
-import {TuiFieldErrorPipe, TuiSegmented, TuiSwitch, TuiTooltip} from '@taiga-ui/kit';
-import {TuiCardLarge, TuiForm, TuiHeader} from '@taiga-ui/layout';
+import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { map, startWith, Subject, switchMap, timer } from 'rxjs';
-import {MaskitoDirective} from '@maskito/angular';
-import type {MaskitoOptions} from '@maskito/core';
-import {TUI_FALSE_HANDLER} from '@taiga-ui/cdk';
+import type { MaskitoOptions } from '@maskito/core';
+import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { TuiButtonLoading } from '@taiga-ui/kit';
-import { TUI_ALERT_POSITION } from '@taiga-ui/core';
 
 import mask from './mask';
 
@@ -30,26 +23,16 @@ import mask from './mask';
   standalone: true,
   imports: [
     AsyncPipe,
-    NgIf,
     ReactiveFormsModule,
     TuiAppearance,
     TuiButton,
     TuiCardLarge,
-    TuiError,
-    TuiFieldErrorPipe,
     TuiForm,
     TuiHeader,
-    TuiIcon,
-    TuiNotification,
-    TuiSegmented,
-    TuiSwitch,
     TuiTextfield,
     TuiTitle,
-    TuiTooltip,
-    TuiLink,
-    MaskitoDirective,
     TuiButtonLoading
-],
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -69,14 +52,14 @@ export class LoginComponent implements OnInit {
     private readonly authForms: AuthFormService,
     private readonly authApi: AuthApiService,
     private readonly alerts: TuiAlertService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
   }
 
   private initForm(): void {
-    this.form = this.authorizationType === 'login' 
+    this.form = this.authorizationType === 'login'
       ? this.authForms.createLoginForm()
       : this.authForms.createRegistrationForm();
   }
@@ -86,14 +69,14 @@ export class LoginComponent implements OnInit {
     this.initForm();
   }
 
-  initSubscriptions () {
-    
+  initSubscriptions() {
+
   }
 
   submit(): void {
-    if(this.form.invalid) {
+    if (this.form.invalid) {
       this.alerts
-        .open('При загрузке приложения возникли ошибки. Приложение может работать не корректно. Пожалуйста попробуйте снова или перезагрузите страницу', 
+        .open('При загрузке приложения возникли ошибки. Приложение может работать не корректно. Пожалуйста попробуйте снова или перезагрузите страницу',
           {
             label: 'Ошибка',
             appearance: 'negative',

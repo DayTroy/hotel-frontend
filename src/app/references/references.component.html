@@ -1,0 +1,5 @@
+<div class="tui-text_h4 tui-space_top-5">Справочники</div>
+<tui-textfield tuiChevron class="tui-space_top-5">
+  <input tuiSelect [(ngModel)]="value" />
+  <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="references" />
+</tui-textfield>

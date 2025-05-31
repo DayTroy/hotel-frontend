@@ -1,43 +1,7 @@
 <navheader></navheader>
-<div [style.display]="'flex'">
+<div [style.display]="'dashboard-layout'">
   <navsidebar></navsidebar>
-  <div class="tui-navigation-main__wrapper" [style.padding.rem]="1">
-    <main 
-      [style.z-index]="-1" 
-      [style.border-radius.rem]="1"
-      [style.overflow]="'hidden'"
-      [style.background-color]="'var(--tui-base-01)'"
-    >
-      <!-- <nav compact tuiSubheader [style.position]="'sticky'">
-        <tui-breadcrumbs [itemsLimit]="10">
-          <ng-container *ngFor="let item of breadcrumbs; let last = last">
-            <ng-container *ngIf="last">
-              <strong *tuiItem tuiFade>
-                {{ item }}
-              </strong>
-            </ng-container>
-            <ng-container *ngIf="!last">
-              <button *tuiItem tuiLink type="button">
-                {{ item }}
-              </button>
-            </ng-container>
-          </ng-container>
-        </tui-breadcrumbs>
-      </nav> -->
-      <div class="tui-text_h4 tui-space_top-5">Справочники</div>
-      <tui-textfield tuiChevron class="tui-space_top-5">
-        <input
-            tuiSelect
-            [(ngModel)]="value"
-        />
-    
-        <tui-data-list-wrapper
-            *tuiTextfieldDropdown
-            new
-            [items]="references"
-        />
-    </tui-textfield>
-    
-    </main>
+  <div class="main-content">
+    <router-outlet></router-outlet>
   </div>
 </div>

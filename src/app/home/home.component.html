@@ -1,0 +1,21 @@
+<main>
+    <div class="tui-text_h4 tui-space_top-5 tui-space_bottom-5">Главное меню</div>
+
+    <div class="modules-list">
+        @for (module of modules; track module.name) {
+        <div tuiCardLarge tuiAppearance="floating">
+            <div tuiHeader [style.display]="'flex'" [style.justify-content]="'space-between'"
+                [style.align-items]="'center'">
+                <h2 tuiTitle>{{module.name}}</h2>
+                <tui-icon icon="@tui.{{module.icon}}" [style.color]="'#000'" />
+            </div>
+            <div [style.display]="'grid'" [style.grid-template-columns]="'2fr 1fr'" [style.align-items]="'end'">
+                <span tuiSubtitle>{{module.description}}</span>
+                <button size="m" tuiButton type="button" [style.color]="'#fff'"
+                    [style.background-color]="'#EB3B43'">Перейти
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+</main>

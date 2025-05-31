@@ -1,39 +1,27 @@
-<aside
-  [style.height]="'100vh'"
-  [style.background-color]="'#E4002B'"
-  [tuiNavigationAside]="expanded()"
->
-  <!-- <header>
-    <button iconStart="@tui.home" tuiAsideItem type="button">
-      <span tuiFade>Azimut Hotels</span>
-    </button>
-  </header> -->
-  <button iconStart="@tui.send" tuiAsideItem type="button">
-    Заявки
-    <ng-container *ngIf="expanded()">
-      <tui-badge appearance="accent">12</tui-badge>
-    </ng-container>
-  </button>
+<aside 
+  [style.height]="'100vh'" 
+  [style.background-color]="'#E4002B'" 
+  [style.position]="'fixed'"
+  [style.padding-left]="'1rem'"
+  [style.margin-top]="'-2.5rem'"
+  [tuiNavigationAside]="true">
+
+  <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin-bottom]="'1rem'">
+
+  <a iconStart="@tui.send" tuiAsideItem>Заявки</a>
+
   <a iconStart="@tui.book-open-check" tuiAsideItem>Бронирования</a>
 
   <a iconStart="@tui.key-round" tuiAsideItem>Номера</a>
 
   <a iconStart="@tui.paintbrush" tuiAsideItem>Уборка</a>
 
-  <a iconStart="@tui.file-search" tuiAsideItem>Документы</a>
-
   <a iconStart="@tui.chart-line" tuiAsideItem>Аналитика</a>
 
   <a iconStart="@tui.book-marked" tuiAsideItem>Справочники</a>
-
+  <hr />
   <tui-aside-group>
-    <button
-      automation-id="setting"
-      iconStart="@tui.settings"
-      tuiAsideItem
-      tuiChevron
-      type="button"
-    >
+    <button automation-id="setting" iconStart="@tui.settings" tuiAsideItem tuiChevron type="button">
       Настройки
       <ng-template>
         <button tuiAsideItem type="button">Профиль</button>
@@ -42,18 +30,4 @@
       </ng-template>
     </button>
   </tui-aside-group>
-
-  <hr />
-  <button
-    tuiAsideItem
-    type="button"
-    [iconStart]="expanded() ? '@tui.chevron-left' : '@tui.chevron-right'"
-    (click)="handleToggle()"
-    [style.margin-top]="'10rem'"
-  >
-    {{ expanded() ? "Скрыть" : "Раскрыть" }}
-  </button>
-  <!-- <footer>
-    
-  </footer> -->
 </aside>

@@ -1,195 +1,24 @@
-<div
-  [style.background-color]="'#EB3B43'"
-  [style.padding]="'8rem'"
-  [style.min-height]="'65vh'"
->
-  <form
-    tuiAppearance="floating"
-    tuiCardLarge
-    tuiForm="m"
-    [formGroup]="form"
-    [style.max-width.rem]="32"
-    [style.margin]="'0 auto'"
-    [style.padding.rem]="'2'"
-  >
+<div [style.background-color]="'#EB3B43'" [style.padding]="'8rem'" [style.min-height]="'65vh'">
+  <form tuiAppearance="floating" tuiCardLarge tuiForm="m" [formGroup]="form" [style.max-width.rem]="32"
+    [style.margin]="'0 auto'" [style.padding.rem]="'2'">
     <header tuiHeader>
       <h2 tuiTitle class="tui-text_h1">Вход в систему</h2>
       <span tuiAccessories>
-        <tui-segmented>
-          <button type="button" (click)="setAuthorizationType('login')">
-            Авторизация
-          </button>
-          <button type="button" (click)="setAuthorizationType('registration')">
-            Регистрация
-          </button>
-        </tui-segmented>
       </span>
     </header>
-    <tui-notification appearance="warning">
-      <h3 tuiTitle>
-        Требуется подлинность
-        <span tuiSubtitle
-          >Пожалуйста, будьте честны и используйте ваши реальные данные</span
-        >
-      </h3>
-    </tui-notification>
-    <ng-container *ngIf="this.authorizationType === 'login'">
-      <tui-textfield>
-        <label tuiLabel>E-mail</label>
-        <input
-          formControlName="email"
-          placeholder="john@wick.com"
-          tuiTextfield
-          type="email"
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-      <tui-textfield>
-        <label tuiLabel>Пароль</label>
-        <input
-          formControlName="password"
-          tuiTextfield
-          type="password"
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-      <a
-        tuiLink
-        routerLink="/https://taiga-ui.dev/components/link"
-        routerLinkActive="router-link-active"
-        [style.margin]="'0 auto'"
-        [style.color]="'#EB3B43'"
-        >Забыли пароль?</a
-      >
-    </ng-container>
-    <ng-container *ngIf="this.authorizationType === 'registration'">
-      <tui-textfield>
-        <label tuiLabel>Имя</label>
-        <input
-          formControlName="firstName"
-          placeholder="Дмитрий"
-          tuiTextfield
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-      <tui-error
-        formControlName="firstName"
-        [error]="[] | tuiFieldError | async"
-      />
-      <tui-textfield>
-        <label tuiLabel>Фамилия</label>
-        <input
-          formControlName="lastName"
-          placeholder="Смертин"
-          tuiTextfield
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-      <tui-error
-        formControlName="lastName"
-        [error]="[] | tuiFieldError | async"
-      />
-
-      <tui-textfield>
-        <label tuiLabel>E-mail</label>
-        <input
-          formControlName="email"
-          placeholder="john@wick.com"
-          tuiTextfield
-          type="email"
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-
-      <tui-textfield>
-        <label tuiLabel>Контактный телефон</label>
-        <input
-          [maskito]="options"
-          formControlName="phoneNumber"
-          tuiTextfield
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-
-      <tui-textfield>
-        <label tuiLabel>Пароль</label>
-        <input
-          formControlName="password"
-          tuiTextfield
-          type="password"
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-
-      <tui-textfield>
-        <label tuiLabel>Подтвердите пароль</label>
-        <input
-          formControlName="passwordConfirm"
-          tuiTextfield
-          type="password"
-          autocomplete="new-password"
-        />
-      </tui-textfield>
-
-      <label tuiLabel>
-        <input
-          formControlName="personalDataAgreement"
-          tuiSwitch
-          type="checkbox"
-        />
-        <div>
-          Я даю свое согласие на обработку
-          <a
-            href="https://azimuthotels.com/content/policy/3_Consent_processing.pdf"
-            tuiLink
-          >
-            Персональных данных</a
-          >
-          и согласен с
-          <a
-            href="https://azimuthotels.com/content/policy/1_Confidencial_policy.pdf"
-            tuiLink
-            >Политикой конфиденциальности</a
-          >
-          и
-          <a
-            href="https://azimuthotels.com/content/pdf/hotel-reservation-rules-ru.pdf"
-            tuiLink
-            >Правилами бронирования</a
-          >
-        </div>
-        <tui-icon tuiTooltip="We will not send you spam, pinky promise!" />
-      </label>
-      <label tuiLabel>
-        <input
-          formControlName="registrationAgreement"
-          tuiSwitch
-          type="checkbox"
-        />
-        <div>
-          Я регистрируюсь в программе лояльности, чтобы бронировать проживание
-          на сайте по льготным тарифам, получать выгодные персональные
-          предложения от AZIMUT Bonus и
-          <a
-            href="https://azimuthotels.com/content/policy/4_Consent_mailings.pdf"
-            tuiLink
-            >рекламные рассылки</a
-          >
-        </div>
-      </label>
-    </ng-container>
+    <tui-textfield>
+      <label tuiLabel>E-mail</label>
+      <input formControlName="email" placeholder="john@wick.com" tuiTextfield type="email"
+        autocomplete="new-password" />
+    </tui-textfield>
+    <tui-textfield>
+      <label tuiLabel>Пароль</label>
+      <input formControlName="password" tuiTextfield type="password" autocomplete="new-password" />
+    </tui-textfield>
     <footer>
-      <!-- <button appearance="secondary" tuiButton type="button">Закрыть</button> -->
-      <button
-        tuiButton
-        type="submit"
-        [disabled]="form.invalid"
-        [loading]="loading$ | async"
-        (click)="submit()"
-        [style.width]="'100%'"
-        [style.background-color]="'#EB3B43'"
-      >
-        {{ authorizationType === "login" ? "Войти" : "Создать аккаунт" }}
+      <button tuiButton type="submit" [disabled]="form.invalid" [loading]="loading$ | async" (click)="submit()"
+        [style.width]="'100%'" [style.background-color]="'#EB3B43'">
+        Войти
       </button>
     </footer>
   </form>
