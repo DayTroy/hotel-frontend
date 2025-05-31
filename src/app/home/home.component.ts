@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiCardLarge, TuiHeader } from '@taiga-ui/layout';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,8 @@ import { TuiCardLarge, TuiHeader } from '@taiga-ui/layout';
     TuiIcon,
     TuiCardLarge,
     TuiHeader,
-    TuiButton
+    TuiButton,
+    RouterLink
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -45,6 +47,7 @@ export class HomeComponent {
       name: 'Справочники',
       icon: 'book-marked',
       description: 'Управление справочниками для эффективной работсоспосбности',
+      url: '/references'
     }
 
   ];

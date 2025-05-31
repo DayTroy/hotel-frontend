@@ -15,6 +15,7 @@ import { map, startWith, Subject, switchMap, timer } from 'rxjs';
 import type { MaskitoOptions } from '@maskito/core';
 import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { TuiButtonLoading } from '@taiga-ui/kit';
+import { Router } from '@angular/router';
 
 import mask from './mask';
 
@@ -51,7 +52,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly authForms: AuthFormService,
     private readonly authApi: AuthApiService,
-    private readonly alerts: TuiAlertService
+    private readonly alerts: TuiAlertService,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +88,16 @@ export class LoginComponent implements OnInit {
         .subscribe();
       return
     } else {
+      this.alerts
+        .open('Вход в систему выполнен успешно',
+          {
+            label: 'Авторизация пройдена',
+            appearance: 'positive',
+            autoClose: 0,
+          }
+        )
+        .subscribe();
+      this.router.navigate(['/dashboard', 'home'])
       this.trigger$.next()
       // this.authApi.
     }

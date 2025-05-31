@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {TuiButton, TuiTextfield} from '@taiga-ui/core';
-import {TuiChevron,} from '@taiga-ui/kit';
-import {TuiNavigation} from '@taiga-ui/layout';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TuiButton, TuiTextfield } from '@taiga-ui/core';
+import { TuiChevron, } from '@taiga-ui/kit';
+import { TuiNavigation } from '@taiga-ui/layout';
+import { RouterLink } from '@angular/router';
 @Component({
     standalone: true,
     selector: "navsidebar",
@@ -11,7 +12,8 @@ import {TuiNavigation} from '@taiga-ui/layout';
         TuiChevron,
         TuiNavigation,
         TuiTextfield,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        RouterLink
     ],
     templateUrl: './navsidebar.component.html',
     styleUrl: './navsidebar.component.scss',
