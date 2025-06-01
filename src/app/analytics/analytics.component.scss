@@ -1,0 +1,17 @@
+.colors {
+    background: var(--tui-background-base);
+ 
+    &::before {
+        color: #E4002B;
+        box-shadow: none;
+    }
+ 
+    .active {
+        color: #fff;
+    }
+}
+
+.axes {
+    block-size: 18.75rem;
+    inline-size: 37.5rem;
+}

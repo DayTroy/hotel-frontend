@@ -1,0 +1,27 @@
+<div class="analytics-container">
+    <h1 [style.margin-bottom]="'2rem'">Аналитика</h1>
+    <form [formGroup]="testForm" class="analytics-container-header" [style.display]="'flex'"
+        [style.align-items]="'center'" [style.gap]="'2rem'">
+        <tui-segmented class="colors" size="l" [style.border]="'1px solid #E4002B'" [(activeItemIndex)]="active"
+            [style.width]="'fit-content'">
+            <button *ngFor="let button of buttons; let index = index" type="button" [class.active]="index === active">
+                {{ button }}
+            </button>
+        </tui-segmented>
+        <tui-input-date-range [style.width]="'20rem'" formControlName="testValue"
+            tuiUnfinishedValidator="Finish filling the field" [max]="max" [min]="min">
+            Выберите период
+            <input placeholder="From - To" tuiTextfieldLegacy />
+        </tui-input-date-range>
+        <button size="m" tuiButton type="button" [style.background-color]="'#E4002B'"
+            [style.color]="'#fff'">Сгенерировать отчет
+        </button>
+        <button size="m" tuiButton type="button" [style.background-color]="'#E4002B'"
+            [style.color]="'#fff'">Экспортировать отчет
+        </button>
+    </form>
+    <tui-pie-chart [size]="'xl'" [value]="pie"></tui-pie-chart>
+    <tui-axes class="axes" [axisXLabels]="labelsX" [axisYLabels]="labelsY">
+        <tui-bar-chart [size]="'l'" [max]="10000" [value]="bar" />
+    </tui-axes>
+</div>

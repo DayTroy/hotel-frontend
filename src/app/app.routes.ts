@@ -5,6 +5,7 @@ import DashboardComponent from './dashboard/dashboard.component';
 import { ReferencesComponent } from './references/references.component';
 import { HomeComponent } from './home/home.component';
 import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -20,7 +21,7 @@ export const routes: Routes = [
       // { path: 'bookings', component: BookingsComponent },
       // { path: 'cleaning', component: CleaningComponent },
       // { path: 'rooms', component: RoomsComponent },
-      // { path: 'analytics', component: AnalyticsComponent }
+      { path: 'analytics', component: AnalyticsComponent }
     ]
   }
 ];
