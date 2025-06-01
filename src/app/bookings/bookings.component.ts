@@ -9,7 +9,7 @@ import { TuiStatus } from '@taiga-ui/kit';
 @Component({
   selector: 'app-bookings',
   standalone: true,
-  imports: [TuiTextfield, FormsModule, TuiTable, TuiStatus, NgFor, TuiButton, TuiIcon, RouterLink],
+  imports: [TuiTextfield, FormsModule, TuiTable, TuiStatus, NgFor, TuiButton, RouterLink],
   templateUrl: './bookings.component.html',
   styleUrl: './bookings.component.scss'
 })

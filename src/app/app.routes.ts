@@ -8,6 +8,7 @@ import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { RequestsComponent } from './requests/requests.component';
 import { BookingsComponent } from './bookings/bookings.component';
+import { CleaningComponent } from './cleaning/cleaning.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,12 +17,13 @@ export const routes: Routes = [
     path: 'dashboard', 
     component: DashboardComponent,
     children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'references', component: ReferencesComponent },
       { path: 'search-rooms', component: SearchRoomsComponent },
       { path: 'requests', component: RequestsComponent },
       { path: 'bookings', component: BookingsComponent },
-      // { path: 'cleaning', component: CleaningComponent },
+      { path: 'cleaning', component: CleaningComponent },
       { path: 'analytics', component: AnalyticsComponent }
     ]
   }
