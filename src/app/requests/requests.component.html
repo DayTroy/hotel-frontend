@@ -6,13 +6,15 @@
     </tui-textfield>
 </div>
 
-<table tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'" [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
+<table tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'"
+    [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
     <thead>
         <tr>
             <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Номер заявки</th>
             <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Дата создания</th>
             <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Статус</th>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Контактный телефон</th>
+            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Контактный телефон
+            </th>
             <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Комментарий</th>
             <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Действия</th>
         </tr>
@@ -38,28 +40,16 @@
 
             <td tuiTd>
                 <span tuiStatus>
-                    <button
-                        appearance="action"
-                        iconStart="@tui.pencil"
-                        size="s"
-                        tuiIconButton
-                        type="button"
-                        [style.color]="'#FFB134'"  
-                    >
+                    <button appearance="action" iconStart="@tui.pencil" size="s" tuiIconButton type="button"
+                        [style.color]="'#FFB134'">
                         Изменить
                     </button>
-                    <button
-                        appearance="action"
-                        iconStart="@tui.trash"
-                        size="s"
-                        tuiIconButton
-                        type="button"
-                        [style.color]="'#E4002B'"  
-                    >
+                    <button appearance="action" iconStart="@tui.trash" size="s" tuiIconButton type="button"
+                        [style.color]="'#E4002B'">
                         Удалить
                     </button>
                 </span>
             </td>
         </tr>
     </tbody>
-  </table>
+</table>
