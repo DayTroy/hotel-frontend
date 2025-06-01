@@ -1,30 +1,50 @@
 <div class="tui-text_h4 tui-space_top-5">Справочники</div>
 <div [style.display]="'flex'" [style.align-items]="'end'">
   <tui-textfield tuiChevron class="tui-space_top-5" [style.width]="'25rem'">
-    <input tuiSelect [(ngModel)]="value"/>
+    <input tuiSelect [(ngModel)]="value" />
     <tui-data-list-wrapper *tuiTextfieldDropdown new [items]="references" />
   </tui-textfield>
   <ng-container *ngIf="value && value !== 'Выберите справочник...'">
-    <button class="tui-space_left-5" size="l" tuiButton type="button" [style.background-color]="'#E4002B'" [style.color]="'#fff'" [style.aspect-ratio]="'1'">
-      +
+    <button class="tui-space_left-5" size="l" tuiButton type="button" [style.background-color]="'#E4002B'"
+      [style.color]="'#fff'" [style.aspect-ratio]="'1'">
+      <tui-icon icon="@tui.plus"></tui-icon>
     </button>
   </ng-container>
 </div>
 
 <ng-container *ngIf="value === 'Типы гостиничных номеров'">
-  <table tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'" [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
+  <table tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'"
+    [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
     <thead>
-      <tr tuiThGroup>
+      <tr>
         <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">
           Наименование
         </th>
         <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">Цена проживания за сутки</th>
+        <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Действия</th>
       </tr>
     </thead>
-    <tbody tuiTbody [data]="data">
-      <tr *ngFor="let item of data" tuiTr>
-        <td *tuiCell="'pricePerNight'" tuiTd>
+    <tbody tuiTbody>
+      <tr *ngFor="let item of data">
+        <td tuiTd>
+          <p>{{item.name }}</p>
+        </td>
+
+        <td tuiTd>
           <p>{{item.pricePerNight }} {{ 'RUB' | tuiCurrency }}</p>
+        </td>
+
+        <td tuiTd>
+          <span tuiStatus>
+            <button appearance="action" iconStart="@tui.pencil" size="s" tuiIconButton type="button"
+              [style.color]="'#FFB134'">
+              Изменить
+            </button>
+            <button appearance="action" iconStart="@tui.trash" size="s" tuiIconButton type="button"
+              [style.color]="'#E4002B'">
+              Удалить
+            </button>
+          </span>
         </td>
       </tr>
     </tbody>

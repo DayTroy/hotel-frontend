@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TuiTextfield } from '@taiga-ui/core';
-import { TuiDataListWrapper, TuiSelect, TuiChevron } from '@taiga-ui/kit';
+import { TuiButton, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiDataListWrapper, TuiSelect, TuiChevron, TuiStatus } from '@taiga-ui/kit';
 import {TuiCurrencyPipe} from '@taiga-ui/addon-commerce';
 import { TuiTable } from '@taiga-ui/addon-table';
 @Component({
@@ -16,7 +16,10 @@ import { TuiTable } from '@taiga-ui/addon-table';
     FormsModule,
     TuiTable,
     TuiCurrencyPipe,
-    TuiChevron
+    TuiChevron,
+    TuiIcon,
+    TuiButton,
+    TuiStatus
   ],
   templateUrl: './references.component.html',
   styleUrl: './references.component.scss'

@@ -5,11 +5,12 @@ import { TuiTable } from '@taiga-ui/addon-table';
 import { NgFor } from '@angular/common';
 import { TuiStatus } from '@taiga-ui/kit';
 import { TuiButton } from '@taiga-ui/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-requests',
   standalone: true,
-  imports: [TuiTextfield, FormsModule, TuiTable, TuiStatus, NgFor, TuiButton],
+  imports: [TuiTextfield, FormsModule, TuiTable, TuiStatus, NgFor, TuiButton, RouterLink],
   templateUrl: './requests.component.html',
   styleUrl: './requests.component.scss'
 })
@@ -23,7 +24,6 @@ export class RequestsComponent {
       status: 'Новая',
       contactNumber: '+7 (999) 123-45-67',
       comment: 'Комментарий',
-      actions: '213123',
     },
     {
       id: 'REQ-4129807',
@@ -31,7 +31,6 @@ export class RequestsComponent {
       status: 'Новая',
       contactNumber: '+7 (999) 123-45-67',
       comment: 'Комментарий',
-      actions: '123123',
     },
     {
       id: 'REQ-4129807',
@@ -39,7 +38,6 @@ export class RequestsComponent {
       status: 'Новая',
       contactNumber: '+7 (999) 123-45-67',
       comment: 'Комментарий',
-      actions: '123123',
     },
   ] as const;
 
