@@ -20,14 +20,23 @@
 
   <a iconStart="@tui.book-marked" tuiAsideItem [routerLink]="'/dashboard/references'">Справочники</a>
   <hr />
-  <tui-aside-group>
-    <button automation-id="setting" iconStart="@tui.settings" tuiAsideItem tuiChevron type="button">
-      Настройки
-      <ng-template>
-        <button tuiAsideItem type="button">Профиль</button>
-        <button tuiAsideItem type="button">Уведомления</button>
-        <button tuiAsideItem type="button">Конфиденциальность</button>
-      </ng-template>
-    </button>
-  </tui-aside-group>
+    <tui-aside-group>
+      <button automation-id="setting" iconStart="@tui.settings" tuiAsideItem tuiChevron type="button">
+        Настройки
+        <ng-template>
+          <button tuiAsideItem type="button">Профиль</button>
+          <button tuiAsideItem type="button">Уведомления</button>
+          <button tuiAsideItem type="button" iconEnd="@tui.log-out">Выход</button>
+        </ng-template>
+      </button>
+    </tui-aside-group>
+
+    <div class="role">
+      <div class="role__icon">
+        <tui-icon icon="@tui.user-round" />
+      </div>
+      <div class="role__name">
+        Управляющий
+      </div>
+    </div>  
 </aside>

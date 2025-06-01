@@ -12,7 +12,7 @@
 </div>
 
 <ng-container *ngIf="value === 'Типы гостиничных номеров'">
-  <table tuiTable class="table tui-space_top-5" [columns]="columns">
+  <table tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'" [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
     <thead>
       <tr tuiThGroup>
         <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">

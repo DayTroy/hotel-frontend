@@ -4,6 +4,7 @@ import { TuiButton, TuiTextfield } from '@taiga-ui/core';
 import { TuiChevron, } from '@taiga-ui/kit';
 import { TuiNavigation } from '@taiga-ui/layout';
 import { RouterLink } from '@angular/router';
+import { TuiIcon } from '@taiga-ui/core';
 @Component({
     standalone: true,
     selector: "navsidebar",
@@ -13,7 +14,8 @@ import { RouterLink } from '@angular/router';
         TuiNavigation,
         TuiTextfield,
         ReactiveFormsModule,
-        RouterLink
+        RouterLink,
+        TuiIcon
     ],
     templateUrl: './navsidebar.component.html',
     styleUrl: './navsidebar.component.scss',

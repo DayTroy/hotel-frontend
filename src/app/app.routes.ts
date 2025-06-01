@@ -6,6 +6,7 @@ import { ReferencesComponent } from './references/references.component';
 import { HomeComponent } from './home/home.component';
 import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { RequestsComponent } from './requests/requests.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -17,10 +18,9 @@ export const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'references', component: ReferencesComponent },
       { path: 'search-rooms', component: SearchRoomsComponent },
-      // { path: 'requests', component: RequestsComponent },
+      { path: 'requests', component: RequestsComponent },
       // { path: 'bookings', component: BookingsComponent },
       // { path: 'cleaning', component: CleaningComponent },
-      // { path: 'rooms', component: RoomsComponent },
       { path: 'analytics', component: AnalyticsComponent }
     ]
   }
