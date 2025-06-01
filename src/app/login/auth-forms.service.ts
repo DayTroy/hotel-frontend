@@ -9,7 +9,7 @@ export class AuthFormService {
 
   createLoginForm(): FormGroup {
     const form = new FormGroup({
-      email: new FormControl('', Validators.email),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
     return form;

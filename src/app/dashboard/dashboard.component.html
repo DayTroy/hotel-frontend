@@ -1,7 +1,7 @@
-<navheader></navheader>
-<div [style.display]="'dashboard-layout'">
+<div [style.display]="'flex'">
   <navsidebar></navsidebar>
-  <div class="main-content">
+  <main tuiNavigationMain>
+    <navheader></navheader>
     <router-outlet></router-outlet>
-  </div>
+  </main>
 </div>

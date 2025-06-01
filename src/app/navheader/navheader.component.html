@@ -1,17 +1,13 @@
-<header tuiNavigationHeader [style.background-color]="'#E4002B'" [style.padding]="'2rem 1rem'" [style.z-index]="'1'">
-  <hr />
-  <tui-textfield>
-    <input [tuiInputSearch]="results" />
+<header class="navheader">
+  <tui-textfield [style.width]="'40rem'">
+    <input [tuiInputSearch]="results" placeholder="Поиск..."/>
     <ng-template #results>
       <!-- ... -->
     </ng-template>
   </tui-textfield>
-
-
-  <button iconStart="@tui.bell" tuiIconButton type="button">
-    Уведомления
-    <tui-badge-notification />
-  </button>
-  <button iconStart="@tui.ellipsis" tuiIconButton type="button">More</button>
-  <tui-avatar src="AI" />
-</header>
+  <hr />
+  <div class="navheader-right">
+    <button iconStart="@tui.ellipsis" [style.background-color]="'#E4002B'" tuiIconButton type="button" size="m">More</button>
+    <tui-avatar src="AI" size="m" />
+  </div>
+</header> 

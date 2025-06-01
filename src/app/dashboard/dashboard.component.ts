@@ -10,6 +10,7 @@ import {
 } from '@taiga-ui/kit';
 import NavHeaderComponent from '../navheader/navheader.component';
 import NavSidebarComponent from '../navsidebar/navsidebar.component';
+import { TuiNavigation } from '@taiga-ui/layout';
 
 @Component({
     selector: 'azim-dashboard',
@@ -23,7 +24,8 @@ import NavSidebarComponent from '../navsidebar/navsidebar.component';
         TuiTextfield,
         TuiDataListWrapper,
         TuiSelect,
-        RouterOutlet
+        RouterOutlet,
+        TuiNavigation
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',

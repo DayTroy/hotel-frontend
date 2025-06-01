@@ -12,12 +12,11 @@
     </header>
     <tui-textfield>
       <label tuiLabel>E-mail</label>
-      <input formControlName="email" placeholder="john@wick.com" tuiTextfield type="email"
-        autocomplete="new-password" />
+      <input formControlName="email" placeholder="john@wick.com" tuiTextfield  />
     </tui-textfield>
     <tui-textfield>
       <label tuiLabel>Пароль</label>
-      <input formControlName="password" tuiTextfield type="password" autocomplete="new-password" />
+      <input formControlName="password" tuiTextfield type="password" />
     </tui-textfield>
     <footer>
       <button tuiButton type="submit" [disabled]="form.invalid" [loading]="loading$ | async" (click)="submit()"

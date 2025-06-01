@@ -1,12 +1,11 @@
 <aside 
-  [style.height]="'100vh'" 
-  [style.background-color]="'#E4002B'" 
-  [style.position]="'fixed'"
-  [style.padding-left]="'1rem'"
-  [style.margin-top]="'-2.5rem'"
+  [style.height]="'100vh'"
+  [style.background-color]="'#E4002B'"
+  [style.z-index]="'0'"
   [tuiNavigationAside]="true">
-
-  <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin-bottom]="'1rem'">
+  <header>
+    <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin]="'1rem'">
+  </header>
 
   <a iconStart="@tui.send" tuiAsideItem [routerLink]="'/dashboard/requests'">Заявки</a>
 
@@ -30,13 +29,25 @@
         </ng-template>
       </button>
     </tui-aside-group>
-
-    <div class="role">
+<!-- 
+    <div class="role" tuiAsideItem [style.margin-top]="'10rem'">
       <div class="role__icon">
-        <tui-icon icon="@tui.user-round" />
+        <tui-icon icon="@tui.user-round" [style.font-size.rem]="2"/>
       </div>
       <div class="role__name">
         Управляющий
       </div>
-    </div>  
+    </div> -->
+
+    <footer>
+      <div class="role" tuiAsideItem>
+        <div class="role__icon">
+          <tui-icon icon="@tui.user-round" [style.font-size.rem]="2"/>
+        </div>
+        <div class="role__name">
+          Управляющий
+        </div>
+      </div>
+    </footer>
+    
 </aside>
