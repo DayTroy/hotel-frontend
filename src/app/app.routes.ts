@@ -4,17 +4,23 @@ import { ProfileComponent } from './profile/profile.component';
 import DashboardComponent from './dashboard/dashboard.component';
 import { ReferencesComponent } from './references/references.component';
 import { HomeComponent } from './home/home.component';
+import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 
 export const routes: Routes = [
-  { path: '', component: DashboardComponent },
-  { path: 'login', component: LoginComponent },
+  { path: '', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
   { 
     path: 'dashboard', 
     component: DashboardComponent,
     children: [
       { path: 'home', component: HomeComponent },
-      { path: 'references', component: ReferencesComponent }
+      { path: 'references', component: ReferencesComponent },
+      { path: 'search-rooms', component: SearchRoomsComponent },
+      // { path: 'requests', component: RequestsComponent },
+      // { path: 'bookings', component: BookingsComponent },
+      // { path: 'cleaning', component: CleaningComponent },
+      // { path: 'rooms', component: RoomsComponent },
+      // { path: 'analytics', component: AnalyticsComponent }
     ]
   }
 ];

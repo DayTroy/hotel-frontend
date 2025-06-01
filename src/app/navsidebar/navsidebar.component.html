@@ -8,13 +8,13 @@
 
   <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin-bottom]="'1rem'">
 
-  <a iconStart="@tui.send" tuiAsideItem>Заявки</a>
+  <a iconStart="@tui.send" tuiAsideItem [routerLink]="'/dashboard/requests'">Заявки</a>
 
-  <a iconStart="@tui.book-open-check" tuiAsideItem>Бронирования</a>
+  <a iconStart="@tui.book-open-check" tuiAsideItem [routerLink]="'/dashboard/bookings'">Бронирования</a>
 
-  <a iconStart="@tui.key-round" tuiAsideItem>Номера</a>
+  <a iconStart="@tui.key-round" tuiAsideItem [routerLink]="'/dashboard/search-rooms'">Номера</a>
 
-  <a iconStart="@tui.paintbrush" tuiAsideItem>Уборка</a>
+  <a iconStart="@tui.paintbrush" tuiAsideItem [routerLink]="'/dashboard/cleaning'">Уборка</a>
 
   <a iconStart="@tui.chart-line" tuiAsideItem>Аналитика</a>
 

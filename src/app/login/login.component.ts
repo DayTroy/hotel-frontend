@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit {
     switchMap(() => timer(2000).pipe(map(TUI_FALSE_HANDLER), startWith('Loading')))
   );
 
-  authorizationType = 'login';
   readonly options: MaskitoOptions = mask;
 
   constructor(
@@ -61,14 +60,7 @@ export class LoginComponent implements OnInit {
   }
 
   private initForm(): void {
-    this.form = this.authorizationType === 'login'
-      ? this.authForms.createLoginForm()
-      : this.authForms.createRegistrationForm();
-  }
-
-  setAuthorizationType(authorizationType: string) {
-    this.authorizationType = authorizationType;
-    this.initForm();
+    this.form = this.authForms.createLoginForm();
   }
 
   initSubscriptions() {

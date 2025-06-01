@@ -1,0 +1,48 @@
+<form [formGroup]="form" [style.background-color]="'#E4002B'" [style.border-radius]="'10px'" [style.padding]="'1rem 2rem'"
+    [style.margin-top]="'2rem'" class="search-rooms-container">
+    <div class="search-rooms-header">
+        <h1 [style.color]="'#fff'">Поиск гостиничных номеров</h1>
+    </div>
+    <div class="search-rooms-form" [style.margin-top]="'2rem'" [style.display]="'grid'"
+        [style.grid-template-columns]="'1fr 1fr 1fr'" [style.gap]="'1rem'">
+        <tui-textfield>
+            <label tuiLabel>Дата заезда</label>
+            <input tuiInputDate formControlName="checkInDate"/>
+            <tui-calendar *tuiTextfieldDropdown />
+        </tui-textfield>
+        <tui-textfield>
+            <label tuiLabel>Дата выезда</label>
+            <input tuiInputDate formControlName="checkOutDate"/>
+            <tui-calendar *tuiTextfieldDropdown />
+        </tui-textfield>
+        <tui-textfield>
+            <label tuiLabel>Количество гостей</label>
+            <input postfix=" чел." tuiInputNumber [max]="12" [min]="1" [step]="1" formControlName="guests" />
+        </tui-textfield>
+    </div>
+
+    <div class="search-rooms-results" [style.margin-top]="'2rem'" [style.background-color]="'#fff'"
+        [style.border-radius]="'10px'" [style.padding]="'1rem 2rem'">
+
+        <ng-container *ngIf="isLoading">
+            <div class="search-rooms-results-loader" [style.display]="'flex'" [style.flex-direction]="'column'"
+                [style.justify-content]="'center'" [style.align-items]="'center'">
+                <tui-loader size="xxl" [inheritColor]="true" [style.margin-top]="'1rem'" [style.width]="'100%'" />
+                <h2 [style.color]="'#000'">Ищем подходящие гостиничные номера...</h2>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoading">
+            <div class="search-rooms-results-header">
+                <h2 [style.color]="'#000'">Результаты поиска</h2>
+            </div>
+        </ng-container>
+    </div>
+    <div class="search-rooms-footer" [style.margin-top]="'2rem'" [style.display]="'flex'"
+        [style.justify-content]="'flex-end'">
+        <button size="m" tuiButton [style.width]="'20%'" type="button" [style.color]="'#fff'" tuiButton type="submit"
+            [disabled]="form.invalid" [loading]="loading$ | async" (click)="submit()"
+            [style.background-color]="'#EB3B43'" iconEnd="@tui.search">Найти
+        </button>
+    </div>
+</form>
