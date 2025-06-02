@@ -1,1 +1,18 @@
+.error-message {
+  color: #E4002B;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: rgba(228, 0, 43, 0.1);
+  border-radius: 0.5rem;
+}
 
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.table {
+  margin-top: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
