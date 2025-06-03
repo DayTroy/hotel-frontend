@@ -1,0 +1,187 @@
+<div *ngIf="loading$ | async" class="tui-space_top-5 loading">Загрузка...</div>
+
+<div *ngIf="error$ | async" class="tui-space_top-5" [style.color]="'#E4002B'">
+  {{ error$ | async }}
+</div>
+
+<table
+  *ngIf="!(loading$ | async) && !(error$ | async)"
+  tuiTable
+  class="table tui-space_top-5"
+  [columns]="columns"
+  [style.width]="'100%'"
+  [style.border-top-left-radius]="'1rem'"
+  [style.border-top-right-radius]="'1rem'"
+  [style.overflow]="'hidden'"
+>
+  <thead>
+    <tr>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Номер категории
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Наименование
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Цена проживания за сутки
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Вместимость
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Описание
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Действия
+      </th>
+    </tr>
+  </thead>
+  <tbody tuiTb>
+    <tr *ngFor="let item of roomCategories$ | async">
+      <td tuiTd>
+        <p>{{ item.roomCategoryId }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.title }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.pricePerNight | tuiCurrency }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.capacity }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.description }}</p>
+      </td>
+
+      <td tuiTd>
+        <span tuiStatus>
+          <button
+            appearance="action"
+            iconStart="@tui.pencil"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#FFB134'"
+            (click)="editRoomCategory(roomCategoryDialog, item)"
+          >
+            Изменить
+          </button>
+          <button
+            appearance="action"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#E4002B'"
+            (click)="confirmRoomCategoryRemove(item.roomCategoryId)"
+          >
+            Удалить
+          </button>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<ng-template #roomCategoryDialog let-observer>
+    <h1 tuiHeader>
+      {{ isEditMode ? "Редактирование" : "Создание" }} категории гостиничного
+      номера
+    </h1>
+    <form [formGroup]="roomCategoryForm">
+      <div
+        [style.display]="'grid'"
+        [style.grid-template-columns]="'1fr 1fr'"
+        [style.grid-template-rows]="'1fr 1fr'"
+        [style.gap]="'1rem'"
+        [style.margin-top]="'2rem'"
+      >
+        <tui-textfield iconEnd="@tui.hash">
+          <label tuiLabel>Номер категории</label>
+          <input
+            placeholder="Введите номер категории"
+            tuiTextfield
+            formControlName="roomCategoryId"
+          />
+        </tui-textfield>
+        <tui-textfield iconEnd="@tui.captions">
+          <label tuiLabel>Наименование</label>
+          <input
+            placeholder="Введите наименование категории"
+            tuiTextfield
+            formControlName="title"
+          />
+        </tui-textfield>
+        <tui-textfield iconEnd="@tui.badge-russian-ruble">
+          <label tuiLabel>Стоимость проживания</label>
+          <input
+            placeholder="Введите стоимость проживания"
+            tuiInputNumber
+            [postfix]="' ' + ('RUB' | tuiCurrency)"
+            formControlName="pricePerNight"
+          />
+        </tui-textfield>
+        <tui-textfield iconStart="@tui.memory-stick">
+          <label tuiLabel>Вместимость</label>
+          <input postfix=" чел." tuiInputNumber placeholder="Укажите вместимость" [max]="12" [min]="1" [step]="1" formControlName="capacity" />
+        </tui-textfield>
+      </div>
+      <tui-textfield [style.margin-block-end.rem]="1" [style.margin-top]="'2rem'">
+        <label tuiLabel>Описание</label>
+        <textarea
+          formControlName="description"
+          placeholder="Введите описание"
+          tuiTextarea
+          [limit]="100"
+          [max]="6"
+          [min]="3"
+        ></textarea>
+      </tui-textfield>
+      <div
+        [style.display]="'flex'"
+        [style.align-items]="'center'"
+        [style.justify-content]="'space-between'"
+      >
+        <button
+          size="m"
+          tuiButton
+          type="button"
+          (click)="observer.complete()"
+          [style.width]="'45%'"
+          [style.background-color]="'#F74C54'"
+        >
+          Закрыть
+        </button>
+        <button
+          size="m"
+          tuiButton
+          type="button"
+          class="tui-space_right-3"
+          [style.width]="'45%'"
+          [style.background-color]="'#E4002B'"
+          [disabled]="roomCategoryForm.invalid"
+          [loading]="loading$ | async"
+          (click)="submit()"
+        >
+          {{ isEditMode ? "Сохранить" : "Создать" }}
+        </button>
+      </div>
+    </form>
+  </ng-template>
+  
