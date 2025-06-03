@@ -1,17 +1,25 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class RoomsApiService {
   private readonly apiUrl = 'http://localhost:3000/api';
 
-  constructor(
-    private readonly httpClient: HttpClient 
-  ) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   getAll(): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/rooms`);
+  }
+
+  searchAvailableRooms(params: {
+    checkInDate: string;
+    checkOutDate: string;
+    guests: number;
+  }): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/rooms/available`, {
+      params: params as any,
+    });
   }
 
   delete(roomId: string): Observable<any> {

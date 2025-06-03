@@ -32,10 +32,48 @@
             </div>
         </ng-container>
 
-        <ng-container *ngIf="!isLoading">
-            <div class="search-rooms-results-header">
+        <ng-container *ngIf="error$ | async">
+            <div class="search-rooms-error" [style.color]="'#E4002B'" [style.text-align]="'center'">
+                {{ error$ | async }}
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoading && !(error$ | async)">
+            <div class="search-rooms-results-header" [style.display]="'flex'" [style.justify-content]="'center'">
                 <h2 [style.color]="'#000'">Результаты поиска</h2>
             </div>
+
+            <div *ngIf="!(availableRooms$ | async)?.length" class="search-rooms-no-results" [style.text-align]="'center'" [style.margin-top]="'2rem'">
+                <h3 [style.color]="'#666'">По вашему запросу ничего не найдено</h3>
+            </div>
+
+            <ng-container *ngIf="(availableRooms$ | async)?.length">
+                <div class="search-rooms-list" [style.margin-top]="'2rem'">
+                    <div *ngFor="let room of availableRooms$ | async" class="room-card" 
+                        [style.background-color]="'#f5f5f5'" 
+                        [style.border-radius]="'8px'" 
+                        [style.padding]="'1rem'" 
+                        [style.margin-bottom]="'1rem'">
+                        <div [style.display]="'grid'" [style.grid-template-columns]="'1fr 1fr'" [style.gap]="'1rem'">
+                            <div>
+                                <h3 [style.margin]="'0'" [style.color]="'#000'">Номер {{ room?.roomId }}</h3>
+                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">Этаж: {{ room?.stage }}</p>
+                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">Категория: {{ room?.roomCategory?.title }}</p>
+                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">Вместимость: {{ room?.roomCategory?.capacity }} чел.</p>
+                            </div>
+                            <div [style.text-align]="'right'">
+                                <p [style.margin]="'0'" [style.font-size]="'1.5rem'" [style.font-weight]="'bold'" [style.color]="'#E4002B'">
+                                    {{ room?.roomCategory?.pricePerNight }} {{ 'RUB' | tuiCurrency }}
+                                </p>
+                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">{{ room?.roomCategory?.description }}</p>
+                                <button tuiButton type="button" [style.background-color]="'#E4002B'" [style.color]="'#fff'" [style.margin-top]="'1rem'">
+                                    Забронировать
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </ng-container>
     </div>
     <div class="search-rooms-footer" [style.margin-top]="'2rem'" [style.display]="'flex'"

@@ -1,8 +1,13 @@
-aside[tuiNavigationAside]:before {
-    box-shadow: none;
+aside[tuiNavigationAside] {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 100;
 }
 
-aside::before {
+aside::before, aside::after {
     display: none;
 }
  
@@ -12,12 +17,10 @@ header::after {
 
 .role {
     background-color: black;
-    // width: 100%;
-    margin-bottom: 12rem;
     padding: 2rem 1rem;
+    margin-bottom: 12rem;
 
     &__name {
         font-size: 1.2rem;
     }
-
 }
