@@ -4,12 +4,12 @@ import { Observable } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Injectable({ providedIn: "root" })
-export class roomCategoriesForms {
+export class RoomCategoriesForms {
   constructor(
     private readonly httpClient: HttpClient 
   ) {}
 
-  createCategoryForm(): any {
+  createRoomCategoryForm(): any {
     return new FormGroup<{
         roomCategoryId: FormControl<string>;
         title: FormControl<string>;

@@ -27,6 +27,10 @@
     <app-room-categories #roomCategoriesComponent></app-room-categories>
   </ng-template>
 
+  <ng-template [ngSwitchCase]="'Гостиничные номера'">
+    <app-rooms #roomsComponent></app-rooms>
+  </ng-template>
+
   <ng-template ngSwitchDefault>
     <div class="not-found-message">Справочник не найден</div>
   </ng-template>

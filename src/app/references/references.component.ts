@@ -44,6 +44,7 @@ import {
 
 import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { RoomCategoriesComponent } from './room-categories/room-categories.component';
+import { RoomsComponent } from './rooms/rooms.component';
 
 interface RoomCategory {
   roomCategoryId: string;
@@ -80,6 +81,7 @@ interface RoomCategoryForm {
     ReactiveFormsModule,
     TuiInputNumber,
     RoomCategoriesComponent,
+    RoomsComponent
   ],
   templateUrl: './references.component.html',
   styleUrl: './references.component.scss',
@@ -89,6 +91,9 @@ export class ReferencesComponent {
   @ViewChild('roomDialog') roomDialog!: TemplateRef<any>;
   @ViewChild('roomCategoriesComponent')
   roomCategoriesComponent!: RoomCategoriesComponent;
+  @ViewChild('roomsComponent')
+  roomsComponent!: RoomsComponent;
+
 
   protected readonly references = [
     'Гостиничные номера',
@@ -113,7 +118,12 @@ export class ReferencesComponent {
         break;
 
       case 'Гостиничные номера':
-        // TODO: Implement room dialog
+        const roomsComponent = this.roomsComponent;
+        if (roomsComponent) {
+          roomsComponent.addRoom(
+            roomsComponent.roomDialog
+          );
+        }
         break;
     }
   }

@@ -4,15 +4,15 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TUI_FALSE_HANDLER, tuiTakeUntilDestroyed } from '@taiga-ui/cdk';
 import { timer, catchError, map, startWith, Subject, switchMap, BehaviorSubject, finalize, of } from 'rxjs';
-import { roomCategoriesForms } from './room-categories-forms.service';
+import { RoomCategoriesForms } from './room-categories-forms.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TUI_CONFIRM, TuiButtonLoading, TuiConfirmData, TuiInputNumber, TuiStatus, TuiTextarea, TuiTextareaLimit } from '@taiga-ui/kit';
 import { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { roomCategoriesApiService  } from './room-categories-api.service';
+import { RoomCategoriesApiService  } from './room-categories-api.service';
 
-interface RoomCategory {
+export interface RoomCategory {
     roomCategoryId: string;
     title: string;
     pricePerNight: number;
@@ -38,23 +38,14 @@ interface RoomCategory {
 })
 export class RoomCategoriesComponent implements OnInit {
     @ViewChild('roomCategoryDialog') roomCategoryDialog!: TemplateRef<any>;
-    @ViewChild('roomDialog') roomDialog!: TemplateRef<any>;
   
-    roomCategoryForm = this._roomCategoriesForms.createCategoryForm();
+    roomCategoryForm = this._roomCategoriesForms.createRoomCategoryForm();
   
     destroyRef = inject(DestroyRef);
     private readonly dialogs = inject(TuiDialogService);
     private readonly alerts = inject(TuiAlertService);
     private currentDialogObserver: any;
   
-    protected readonly references = [
-      'Гостиничные номера',
-      'Типы гостиничных номеров',
-      'Сотрудники',
-      'Отделы',
-      'Дополнительные услуги',
-      'Гости',
-    ] as const;
   
     protected selectedReference: string | null = 'Выберите справочник...';
     protected readonly loading$ = new BehaviorSubject<boolean>(false);
@@ -77,7 +68,7 @@ export class RoomCategoriesComponent implements OnInit {
       'actions',
     ];
   
-    constructor(private readonly _roomCategoriesApi: roomCategoriesApiService, private readonly _roomCategoriesForms: roomCategoriesForms) {}
+    constructor(private readonly _roomCategoriesApi: RoomCategoriesApiService, private readonly _roomCategoriesForms: RoomCategoriesForms) {}
   
     ngOnInit(): void {
       this.loadRoomCategories();
