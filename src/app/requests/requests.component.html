@@ -1,67 +1,140 @@
 <div class="requests-container">
-    <h1>Заявки</h1>
-    <tui-textfield iconEnd="@tui.search" [style.width]="'20rem'" [style.margin-top]="'2rem'">
-        <label tuiLabel>Номер заявки</label>
-        <input placeholder="Введите номер заявки" tuiTextfield [(ngModel)]="searchValue" (ngModelChange)="onSearch($event)" />
-    </tui-textfield>
+  <h1>Заявки</h1>
+  <tui-textfield
+    iconEnd="@tui.search"
+    [style.width]="'20rem'"
+    [style.margin-top]="'2rem'"
+  >
+    <label tuiLabel>Номер заявки</label>
+    <input
+      placeholder="Введите номер заявки"
+      tuiTextfield
+      [(ngModel)]="searchValue"
+      (ngModelChange)="onSearch($event)"
+    />
+  </tui-textfield>
 
-    <div *ngIf="error" class="error-message">
-        {{ error }}
-    </div>
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
 
-    <div *ngIf="notFound$$ | async" class="not-found-message">
-        Заявки не найдены
-    </div>
+  <div *ngIf="notFound$$ | async" class="not-found-message">
+    Заявки не найдены
+  </div>
 
-    <div *ngIf="loading$$ | async" class="loading">
-        Загрузка...
-    </div>
+  <div *ngIf="loading$$ | async" class="loading">Загрузка...</div>
 
-    <table *ngIf="!(loading$$ | async) && !error && !(notFound$$ | async)" tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'"
-        [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
-        <thead>
-            <tr>
-                <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Номер заявки</th>
-                <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Дата создания</th>
-                <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Статус</th>
-                <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Контактный телефон
-                </th>
-                <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Комментарий</th>
-                <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Действия</th>
-            </tr>
-        </thead>
+  <table
+    *ngIf="!(loading$$ | async) && !error && !(notFound$$ | async)"
+    tuiTable
+    class="table tui-space_top-5"
+    [columns]="columns"
+    [style.width]="'100%'"
+    [style.border-top-left-radius]="'1rem'"
+    [style.border-top-right-radius]="'1rem'"
+    [style.overflow]="'hidden'"
+  >
+    <thead>
+      <tr>
+        <th
+          tuiTh
+          [resizable]="true"
+          [style.background-color]="'#E4002B'"
+          [style.color]="'#fff'"
+        >
+          Номер заявки
+        </th>
+        <th
+          tuiTh
+          [resizable]="true"
+          [style.background-color]="'#E4002B'"
+          [style.color]="'#fff'"
+        >
+          Дата создания
+        </th>
+        <th
+          tuiTh
+          [resizable]="true"
+          [style.background-color]="'#E4002B'"
+          [style.color]="'#fff'"
+        >
+          Статус
+        </th>
+        <th
+          tuiTh
+          [resizable]="true"
+          [style.background-color]="'#E4002B'"
+          [style.color]="'#fff'"
+        >
+          Контактный телефон
+        </th>
+        <th
+          tuiTh
+          [resizable]="true"
+          [style.background-color]="'#E4002B'"
+          [style.color]="'#fff'"
+        >
+          Комментарий
+        </th>
+        <th
+          tuiTh
+          [resizable]="true"
+          [style.background-color]="'#E4002B'"
+          [style.color]="'#fff'"
+        >
+          Действия
+        </th>
+      </tr>
+    </thead>
 
-        <tbody tuiTbody>
-            <tr *ngFor="let item of requests$$ | async" [routerLink]="['/dashboard/requests', item.requestId]" style="cursor: pointer">
-                <td tuiTd>
-                    <p>{{ item.requestId }}</p>
-                </td>
-                <td tuiTd>
-                    <p>{{ item.creationDate }}</p>
-                </td>
-                <td tuiTd>
-                    <p>{{ item.status }}</p>
-                </td>
-                <td tuiTd>
-                    <p>{{ 'telephone' }}</p>
-                </td>
-                <td tuiTd>
-                    <p>{{ item.description }}</p>
-                </td>
+    <tbody tuiTbody>
+      <tr
+        *ngFor="let item of requests$$ | async"
+        [routerLink]="['/dashboard/requests', item.requestId]"
+        style="cursor: pointer"
+      >
+        <td tuiTd>
+          <p>{{ item.requestId }}</p>
+        </td>
+        <td tuiTd>
+          <p>{{ item.creationDate }}</p>
+        </td>
+        <td tuiTd>
+          <p>{{ item.status }}</p>
+        </td>
+        <td tuiTd>
+          <p>{{ "telephone" }}</p>
+        </td>
+        <td tuiTd>
+          <p>{{ item.description }}</p>
+        </td>
 
-                <td tuiTd (click)="$event.stopPropagation()" [style.cursor]="'default'">
-                    <span tuiStatus>
-                        <button appearance="action" iconStart="@tui.pencil" size="s" tuiIconButton type="button"
-                            [style.color]="'#FFB134'">
-                            Изменить
-                        </button>
-                        <button appearance="action" iconStart="@tui.trash" size="s" tuiIconButton type="button"
-                            [style.color]="'#E4002B'" (click)="confirmRequestRemove(item.requestId)">
-                            Удалить
-                        </button>
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <td tuiTd (click)="$event.stopPropagation()" [style.cursor]="'default'">
+          <span tuiStatus>
+            <button
+              appearance="action"
+              iconStart="@tui.pencil"
+              size="s"
+              tuiIconButton
+              type="button"
+              [style.color]="'#FFB134'"
+            >
+              Изменить
+            </button>
+            <button
+              appearance="action"
+              iconStart="@tui.trash"
+              size="s"
+              tuiIconButton
+              type="button"
+              [style.color]="'#E4002B'"
+              (click)="confirmRequestRemove(item.requestId)"
+            >
+              Удалить
+            </button>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -1,1 +1,15 @@
-// No styles needed as they are handled by the dashboard component
+.not-found-message {
+  color: #666;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: rgba(102, 102, 102, 0.1);
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
