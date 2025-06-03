@@ -8,7 +8,7 @@ import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { RequestsComponent } from './requests/requests.component';
 import { BookingsComponent } from './bookings/bookings.component';
-import { CleaningComponent } from './cleaning/cleaning.component';
+import { CleaningComponent } from './cleaning/cleaning.component';import { RequestInfoComponent } from './request-info/request-info.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -22,6 +22,7 @@ export const routes: Routes = [
       { path: 'references', component: ReferencesComponent },
       { path: 'search-rooms', component: SearchRoomsComponent },
       { path: 'requests', component: RequestsComponent },
+      { path: 'requests/:id', component: RequestInfoComponent },  
       { path: 'bookings', component: BookingsComponent },
       { path: 'cleaning', component: CleaningComponent },
       { path: 'analytics', component: AnalyticsComponent }

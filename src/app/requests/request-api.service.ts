@@ -13,4 +13,16 @@ export class RequestsApiService {
   getAll(): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/requests`);
   }
+
+  findRequest(requestId: string): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/requests/${requestId}`);
+  }
+
+  editRequest(requestId: string, updatedRequest: any): Observable<any> {
+    return this.httpClient.patch(`${this.apiUrl}/requests/${requestId}`, updatedRequest);
+  }
+
+  deleteRequest(requestId: string): Observable<any> {
+    return this.httpClient.delete(`${this.apiUrl}/requests/${requestId}`);
+  }
 }

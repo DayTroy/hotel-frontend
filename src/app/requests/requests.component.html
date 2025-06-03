@@ -2,18 +2,22 @@
     <h1>Заявки</h1>
     <tui-textfield iconEnd="@tui.search" [style.width]="'20rem'" [style.margin-top]="'2rem'">
         <label tuiLabel>Номер заявки</label>
-        <input placeholder="Введите номер заявки" tuiTextfield [(ngModel)]="value" />
+        <input placeholder="Введите номер заявки" tuiTextfield [(ngModel)]="searchValue" (ngModelChange)="onSearch($event)" />
     </tui-textfield>
 
     <div *ngIf="error" class="error-message">
         {{ error }}
     </div>
 
+    <div *ngIf="notFound$$ | async" class="not-found-message">
+        Заявки не найдены
+    </div>
+
     <div *ngIf="loading$$ | async" class="loading">
         Загрузка...
     </div>
 
-    <table *ngIf="!(loading$$ | async) && !error" tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'"
+    <table *ngIf="!(loading$$ | async) && !error && !(notFound$$ | async)" tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'"
         [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
         <thead>
             <tr>
@@ -28,7 +32,7 @@
         </thead>
 
         <tbody tuiTbody>
-            <tr *ngFor="let item of requests$$ | async" [routerLink]="['/request', item.requestId]" [style.cursor]="'pointer'">
+            <tr *ngFor="let item of requests$$ | async" [routerLink]="['/dashboard/requests', item.requestId]" style="cursor: pointer">
                 <td tuiTd>
                     <p>{{ item.requestId }}</p>
                 </td>
@@ -45,14 +49,14 @@
                     <p>{{ item.description }}</p>
                 </td>
 
-                <td tuiTd>
+                <td tuiTd (click)="$event.stopPropagation()" [style.cursor]="'default'">
                     <span tuiStatus>
                         <button appearance="action" iconStart="@tui.pencil" size="s" tuiIconButton type="button"
                             [style.color]="'#FFB134'">
                             Изменить
                         </button>
                         <button appearance="action" iconStart="@tui.trash" size="s" tuiIconButton type="button"
-                            [style.color]="'#E4002B'">
+                            [style.color]="'#E4002B'" (click)="confirmRequestRemove(item.requestId)">
                             Удалить
                         </button>
                     </span>
