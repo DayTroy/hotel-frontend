@@ -1,86 +1,357 @@
-<form [formGroup]="form" [style.background-color]="'#E4002B'" [style.border-radius]="'10px'" [style.padding]="'1rem 2rem'"
-    [style.margin-top]="'2rem'" class="search-rooms-container">
-    <div class="search-rooms-header">
-        <h1 [style.color]="'#fff'">Поиск гостиничных номеров</h1>
-    </div>
-    <div class="search-rooms-form" [style.margin-top]="'2rem'" [style.display]="'grid'"
-        [style.grid-template-columns]="'1fr 1fr 1fr'" [style.gap]="'1rem'">
-        <tui-textfield>
-            <label tuiLabel>Дата заезда</label>
-            <input tuiInputDate formControlName="checkInDate"/>
-            <tui-calendar *tuiTextfieldDropdown />
-        </tui-textfield>
-        <tui-textfield>
-            <label tuiLabel>Дата выезда</label>
-            <input tuiInputDate formControlName="checkOutDate"/>
-            <tui-calendar *tuiTextfieldDropdown />
-        </tui-textfield>
-        <tui-textfield>
-            <label tuiLabel>Количество гостей</label>
-            <input postfix=" чел." tuiInputNumber [max]="12" [min]="1" [step]="1" formControlName="guests" />
-        </tui-textfield>
-    </div>
+<form
+  [formGroup]="searchRoomsForm"
+  [style.background-color]="'#E4002B'"
+  [style.border-radius]="'10px'"
+  [style.padding]="'1rem 2rem'"
+  [style.margin-top]="'2rem'"
+  class="search-rooms-container"
+>
+  <div class="search-rooms-header">
+    <h1 [style.color]="'#fff'">Поиск гостиничных номеров</h1>
+  </div>
+  <div
+    class="search-rooms-form"
+    [style.margin-top]="'2rem'"
+    [style.display]="'grid'"
+    [style.grid-template-columns]="'1fr 1fr 1fr'"
+    [style.gap]="'1rem'"
+  >
+    <tui-textfield>
+      <label tuiLabel>Дата заезда</label>
+      <input tuiInputDate formControlName="checkInDate" />
+      <tui-calendar *tuiTextfieldDropdown />
+    </tui-textfield>
+    <tui-textfield>
+      <label tuiLabel>Дата выезда</label>
+      <input tuiInputDate formControlName="checkOutDate" />
+      <tui-calendar *tuiTextfieldDropdown />
+    </tui-textfield>
+    <tui-textfield>
+      <label tuiLabel>Количество гостей</label>
+      <input
+        postfix=" чел."
+        tuiInputNumber
+        [max]="12"
+        [min]="1"
+        [step]="1"
+        formControlName="guests"
+      />
+    </tui-textfield>
+  </div>
 
-    <div class="search-rooms-results" [style.margin-top]="'2rem'" [style.background-color]="'#fff'"
-        [style.border-radius]="'10px'" [style.padding]="'1rem 2rem'">
+  <div
+    class="search-rooms-results"
+    [style.margin-top]="'2rem'"
+    [style.background-color]="'#fff'"
+    [style.border-radius]="'10px'"
+    [style.padding]="'1rem 2rem'"
+  >
+    <ng-container *ngIf="isLoading">
+      <div
+        class="search-rooms-results-loader"
+        [style.display]="'flex'"
+        [style.flex-direction]="'column'"
+        [style.justify-content]="'center'"
+        [style.align-items]="'center'"
+      >
+        <tui-loader
+          size="xxl"
+          [inheritColor]="true"
+          [style.margin-top]="'1rem'"
+          [style.width]="'100%'"
+        />
+        <h2 [style.color]="'#000'">Ищем подходящие гостиничные номера...</h2>
+      </div>
+    </ng-container>
 
-        <ng-container *ngIf="isLoading">
-            <div class="search-rooms-results-loader" [style.display]="'flex'" [style.flex-direction]="'column'"
-                [style.justify-content]="'center'" [style.align-items]="'center'">
-                <tui-loader size="xxl" [inheritColor]="true" [style.margin-top]="'1rem'" [style.width]="'100%'" />
-                <h2 [style.color]="'#000'">Ищем подходящие гостиничные номера...</h2>
+    <ng-container *ngIf="error$ | async">
+      <div
+        class="search-rooms-error"
+        [style.color]="'#E4002B'"
+        [style.text-align]="'center'"
+      >
+        {{ error$ | async }}
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading && !(error$ | async)">
+      <div
+        class="search-rooms-results-header"
+        [style.display]="'flex'"
+        [style.justify-content]="'center'"
+      >
+        <h2 [style.color]="'#000'">Результаты поиска</h2>
+      </div>
+
+      <div
+        *ngIf="!(availableRooms$ | async)?.length"
+        class="search-rooms-no-results"
+        [style.text-align]="'center'"
+        [style.margin-top]="'2rem'"
+      >
+        <h3 [style.color]="'#666'">По вашему запросу ничего не найдено</h3>
+      </div>
+
+      <ng-container *ngIf="(availableRooms$ | async)?.length">
+        <div class="search-rooms-list" [style.margin-top]="'2rem'">
+          <div
+            *ngFor="let room of availableRooms$ | async"
+            class="room-card"
+            [style.background-color]="'#f5f5f5'"
+            [style.border-radius]="'8px'"
+            [style.padding]="'1rem'"
+            [style.margin-bottom]="'1rem'"
+          >
+            <div
+              [style.display]="'grid'"
+              [style.grid-template-columns]="'1fr 1fr'"
+              [style.gap]="'1rem'"
+            >
+              <div>
+                <h3 [style.margin]="'0'" [style.color]="'#000'">
+                  Номер {{ room?.roomId }}
+                </h3>
+                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">
+                  Этаж: {{ room?.stage }}
+                </p>
+                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">
+                  Категория: {{ room?.roomCategory?.title }}
+                </p>
+                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">
+                  Вместимость: {{ room?.roomCategory?.capacity }} чел.
+                </p>
+              </div>
+              <div [style.text-align]="'right'">
+                <p
+                  [style.margin]="'0'"
+                  [style.font-size]="'1.5rem'"
+                  [style.font-weight]="'bold'"
+                  [style.color]="'#E4002B'"
+                >
+                  {{ room?.roomCategory?.pricePerNight }}
+                  {{ "RUB" | tuiCurrency }}
+                </p>
+                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">
+                  {{ room?.roomCategory?.description }}
+                </p>
+                <button
+                  tuiButton
+                  type="button"
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                  [style.margin-top]="'1rem'"
+                  (click)="openBookingDialog(createBookingForm)"
+                >
+                  Забронировать
+                </button>
+              </div>
             </div>
-        </ng-container>
-
-        <ng-container *ngIf="error$ | async">
-            <div class="search-rooms-error" [style.color]="'#E4002B'" [style.text-align]="'center'">
-                {{ error$ | async }}
-            </div>
-        </ng-container>
-
-        <ng-container *ngIf="!isLoading && !(error$ | async)">
-            <div class="search-rooms-results-header" [style.display]="'flex'" [style.justify-content]="'center'">
-                <h2 [style.color]="'#000'">Результаты поиска</h2>
-            </div>
-
-            <div *ngIf="!(availableRooms$ | async)?.length" class="search-rooms-no-results" [style.text-align]="'center'" [style.margin-top]="'2rem'">
-                <h3 [style.color]="'#666'">По вашему запросу ничего не найдено</h3>
-            </div>
-
-            <ng-container *ngIf="(availableRooms$ | async)?.length">
-                <div class="search-rooms-list" [style.margin-top]="'2rem'">
-                    <div *ngFor="let room of availableRooms$ | async" class="room-card" 
-                        [style.background-color]="'#f5f5f5'" 
-                        [style.border-radius]="'8px'" 
-                        [style.padding]="'1rem'" 
-                        [style.margin-bottom]="'1rem'">
-                        <div [style.display]="'grid'" [style.grid-template-columns]="'1fr 1fr'" [style.gap]="'1rem'">
-                            <div>
-                                <h3 [style.margin]="'0'" [style.color]="'#000'">Номер {{ room?.roomId }}</h3>
-                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">Этаж: {{ room?.stage }}</p>
-                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">Категория: {{ room?.roomCategory?.title }}</p>
-                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">Вместимость: {{ room?.roomCategory?.capacity }} чел.</p>
-                            </div>
-                            <div [style.text-align]="'right'">
-                                <p [style.margin]="'0'" [style.font-size]="'1.5rem'" [style.font-weight]="'bold'" [style.color]="'#E4002B'">
-                                    {{ room?.roomCategory?.pricePerNight }} {{ 'RUB' | tuiCurrency }}
-                                </p>
-                                <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">{{ room?.roomCategory?.description }}</p>
-                                <button tuiButton type="button" [style.background-color]="'#E4002B'" [style.color]="'#fff'" [style.margin-top]="'1rem'">
-                                    Забронировать
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-        </ng-container>
-    </div>
-    <div class="search-rooms-footer" [style.margin-top]="'2rem'" [style.display]="'flex'"
-        [style.justify-content]="'flex-end'">
-        <button size="m" tuiButton [style.width]="'20%'" type="button" [style.color]="'#fff'" tuiButton type="submit"
-            [disabled]="form.invalid" [loading]="loading$ | async" (click)="submit()"
-            [style.background-color]="'#EB3B43'" iconEnd="@tui.search">Найти
-        </button>
-    </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div
+    class="search-rooms-footer"
+    [style.margin-top]="'2rem'"
+    [style.display]="'flex'"
+    [style.justify-content]="'flex-end'"
+  >
+    <button
+      size="m"
+      tuiButton
+      [style.width]="'20%'"
+      type="button"
+      [style.color]="'#fff'"
+      tuiButton
+      type="submit"
+      [disabled]="searchRoomsForm.invalid"
+      [loading]="loading$ | async"
+      (click)="submit()"
+      [style.background-color]="'#EB3B43'"
+      iconEnd="@tui.search"
+    >
+      Найти
+    </button>
+  </div>
 </form>
+
+<ng-template #createBookingForm let-observer>
+  <h2>Оформление брони</h2>
+  <form [formGroup]="bookingForm">
+    <div
+      [style.display]="'grid'"
+      [style.grid-template-columns]="'1fr 1fr'"
+      [style.gap]="'1rem'"
+      [style.margin-top]="'2rem'"
+    >
+      <tui-textfield>
+        <label tuiLabel>Дата заезда</label>
+        <input tuiInputDate formControlName="checkInDate" />
+        <tui-calendar *tuiTextfieldDropdown />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Дата выезда</label>
+        <input tuiInputDate formControlName="checkOutDate" />
+        <tui-calendar *tuiTextfieldDropdown />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Количество гостей</label>
+        <input
+          postfix=" чел."
+          tuiInputNumber
+          [max]="12"
+          [min]="1"
+          [step]="1"
+          formControlName="guests"
+        />
+      </tui-textfield>
+      <tui-textfield iconEnd="@tui.hash">
+        <label tuiLabel>Гостиничный номер</label>
+        <input
+          placeholder="Укажите гостиничный номер"
+          tuiTextfield
+          formControlName="roomId"
+        />
+      </tui-textfield>
+    </div>
+    <h2>Гости</h2>
+
+    <div *ngFor="let guestForm of guestForms; let i = index" class="guest">
+      <div class="guest-header">
+        <div class="guest-header__main">
+          <tui-icon
+            icon="@tui.user-round"
+            class="guest-header__icon"
+          ></tui-icon>
+          <p class="guest-header__title">Гость {{i + 1}}</p>
+        </div>
+        <div class="guest-header-expand">
+          <button 
+            [class.expanded]="expandedStates[i]"
+            (click)="toggleGuest(i)"
+          >
+            <tui-icon icon="@tui.chevron-up"></tui-icon>
+          </button>
+        </div>
+      </div>
+      <tui-expand [expanded]="expandedStates[i]">
+        <div
+          [style.display]="'flex'"
+          [style.flex-direction]="'column'"
+          [style.gap]="'1rem'"
+          [formGroup]="guestForm"
+        >
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Имя</label>
+            <input
+              placeholder="Введите имя гостя"
+              tuiTextfield
+              formControlName="firstName"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Фамилия</label>
+            <input
+              placeholder="Введите фамилию гостя"
+              tuiTextfield
+              formControlName="lastName"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Отчество</label>
+            <input
+              placeholder="Введите отчество гостя"
+              tuiTextfield
+              formControlName="middleName"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Почта</label>
+            <input
+              placeholder="Введите почту гостя"
+              tuiTextfield
+              formControlName="email"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Контактный телефон</label>
+            <input
+              placeholder="Введите телефон гостя"
+              tuiTextfield
+              formControlName="phoneNumber"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Гражданство</label>
+            <input
+              placeholder="Укажите гражданство гостя"
+              tuiTextfield
+              formControlName="citizenship"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Номер паспорта</label>
+            <input
+              placeholder="Введите номер паспорта"
+              tuiTextfield
+              formControlName="passportNumber"
+            />
+          </tui-textfield>
+          <tui-textfield iconEnd="@tui.hash">
+            <label tuiLabel>Серия паспорта</label>
+            <input
+              placeholder="Введите серию паспорта"
+              tuiTextfield
+              formControlName="passportSeries"
+            />
+          </tui-textfield>
+        </div>
+      </tui-expand>
+    </div>
+
+    <button
+        size="m"
+        tuiButton
+        type="button"
+        iconStart="@tui.plus"
+        [style.width]="'100%'"
+        [style.margin-top]="'2rem'"
+        [style.background-color]="'#E4002B'"
+        [disabled]="guestForms.length >= (bookingForm.get('guests')?.value || 0)"
+        (click)="addGuest()"
+      >
+        Добавить гостя
+      </button>
+
+    <div
+      [style.display]="'flex'"
+      [style.align-items]="'center'"
+      [style.justify-content]="'space-between'"
+      [style.margin-top]="'2rem'"
+    >
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+        [style.width]="'45%'"
+        [style.background-color]="'#F74C54'"
+      >
+        Закрыть
+      </button>
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        [style.width]="'45%'"
+        [style.background-color]="'#E4002B'"
+        [disabled]="bookingForm.invalid"
+        [loading]="loading$ | async"
+        (click)="submit()"
+      >
+        Оформить
+      </button>
+    </div>
+  </form>
+</ng-template>

@@ -11,10 +11,7 @@ import {
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiButton,
   TuiIcon,
@@ -45,7 +42,7 @@ import {
 import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { RoomCategoriesComponent } from './room-categories/room-categories.component';
 import { RoomsComponent } from './rooms/rooms.component';
-
+import { AmenitiesComponent } from '../amenities/amenities.component';
 interface RoomCategory {
   roomCategoryId: string;
   title: string;
@@ -81,19 +78,23 @@ interface RoomCategoryForm {
     ReactiveFormsModule,
     TuiInputNumber,
     RoomCategoriesComponent,
-    RoomsComponent
-  ],
+    RoomsComponent,
+    AmenitiesComponent
+],
   templateUrl: './references.component.html',
   styleUrl: './references.component.scss',
 })
 export class ReferencesComponent {
   @ViewChild('roomCategoryDialog') roomCategoryDialog!: TemplateRef<any>;
   @ViewChild('roomDialog') roomDialog!: TemplateRef<any>;
+  @ViewChild('amenityDialog') amenityDialog!: TemplateRef<any>;
+
   @ViewChild('roomCategoriesComponent')
   roomCategoriesComponent!: RoomCategoriesComponent;
   @ViewChild('roomsComponent')
   roomsComponent!: RoomsComponent;
-
+  @ViewChild('amenitiesComponent')
+  amenitiesComponent!: AmenitiesComponent;
 
   protected readonly references = [
     'Гостиничные номера',
@@ -120,9 +121,14 @@ export class ReferencesComponent {
       case 'Гостиничные номера':
         const roomsComponent = this.roomsComponent;
         if (roomsComponent) {
-          roomsComponent.addRoom(
-            roomsComponent.roomDialog
-          );
+          roomsComponent.addRoom(roomsComponent.roomDialog);
+        }
+        break;
+
+      case 'Дополнительные услуги':
+        const amenitiesComponent = this.amenitiesComponent;
+        if (amenitiesComponent) {
+          amenitiesComponent.addAmenity(amenitiesComponent.amenityDialog);
         }
         break;
     }

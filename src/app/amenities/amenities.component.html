@@ -4,15 +4,15 @@
   {{ error$ | async }}
 </div>
 
-<div *ngIf="(roomCategories$ | async)?.length === 0" class="not-found-message">
-  Справочник "Типы гостиничных номеров" пуст
+<div *ngIf="(amenities$ | async)?.length === 0" class="not-found-message">
+  Справочник "Дополнительные услуги" пуст
 </div>
 
 <table
   *ngIf="
     !(loading$ | async) &&
     !(error$ | async) &&
-    !((roomCategories$ | async)?.length === 0)
+    !((amenities$ | async)?.length === 0)
   "
   tuiTable
   class="table tui-space_top-5"
@@ -25,7 +25,7 @@
   <thead>
     <tr>
       <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
-        Номер категории
+        Номер услуги
       </th>
       <th
         tuiTh
@@ -36,13 +36,7 @@
         Наименование
       </th>
       <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
-        Цена проживания за сутки
-      </th>
-      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
-        Вместимость
-      </th>
-      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
-        Описание
+        Стоимость дополнительной услуги
       </th>
       <th
         tuiTh
@@ -55,25 +49,17 @@
     </tr>
   </thead>
   <tbody tuiTb>
-    <tr *ngFor="let item of roomCategories$ | async">
+    <tr *ngFor="let item of amenities$ | async">
       <td tuiTd>
-        <p>{{ item.roomCategoryId }}</p>
+        <p>{{ item.amenityId }}</p>
       </td>
 
       <td tuiTd>
-        <p>{{ item.title }}</p>
+        <p>{{ item.amenityTitle }}</p>
       </td>
 
       <td tuiTd>
-        <p>{{ item.pricePerNight }} {{ 'RUB' | tuiCurrency }}</p>
-      </td>
-
-      <td tuiTd>
-        <p>{{ item.capacity }}</p>
-      </td>
-
-      <td tuiTd>
-        <p>{{ item.description }}</p>
+        <p>{{ item.amenityPrice }} {{ 'RUB' | tuiCurrency }}</p>
       </td>
 
       <td tuiTd>
@@ -85,7 +71,7 @@
             tuiIconButton
             type="button"
             [style.color]="'#FFB134'"
-            (click)="editRoomCategory(roomCategoryDialog, item)"
+            (click)="editAmenity(amenityDialog, item)"
           >
             Изменить
           </button>
@@ -96,7 +82,7 @@
             tuiIconButton
             type="button"
             [style.color]="'#E4002B'"
-            (click)="confirmRoomCategoryRemove(item.roomCategoryId)"
+            (click)="confirmAmenityRemove(item.amenityId)"
           >
             Удалить
           </button>
@@ -106,72 +92,48 @@
   </tbody>
 </table>
 
-<ng-template #roomCategoryDialog let-observer>
+<ng-template #amenityDialog let-observer>
   <h1 tuiHeader>
-    {{ isEditMode ? "Редактирование" : "Создание" }} категории гостиничного
-    номера
+    {{ isEditMode ? "Редактирование" : "Создание" }} дополнительной услуги
   </h1>
-  <form [formGroup]="roomCategoryForm">
+  <form [formGroup]="amenityForm">
     <div
       [style.display]="'grid'"
-      [style.grid-template-columns]="'1fr 1fr'"
-      [style.grid-template-rows]="'1fr 1fr'"
+      [style.grid-template-rows]="'1fr 1fr 1fr'"
       [style.gap]="'1rem'"
       [style.margin-top]="'2rem'"
     >
       <tui-textfield iconEnd="@tui.hash">
-        <label tuiLabel>Номер категории</label>
+        <label tuiLabel>Номер доп.услуги</label>
         <input
-          placeholder="Введите номер категории"
+          placeholder="Введите номер услуги"
           tuiTextfield
-          formControlName="roomCategoryId"
+          formControlName="amenityId"
         />
       </tui-textfield>
       <tui-textfield iconEnd="@tui.captions">
         <label tuiLabel>Наименование</label>
         <input
-          placeholder="Введите наименование категории"
+          placeholder="Введите наименование услуги"
           tuiTextfield
-          formControlName="title"
+          formControlName="amenityTitle"
         />
       </tui-textfield>
       <tui-textfield iconEnd="@tui.badge-russian-ruble">
-        <label tuiLabel>Стоимость проживания</label>
+        <label tuiLabel>Стоимость услуги</label>
         <input
-          placeholder="Введите стоимость проживания"
+          placeholder="Введите стоимость услуги"
           tuiInputNumber
           [postfix]="' ' + ('RUB' | tuiCurrency)"
-          formControlName="pricePerNight"
-        />
-      </tui-textfield>
-      <tui-textfield iconStart="@tui.memory-stick">
-        <label tuiLabel>Вместимость</label>
-        <input
-          postfix=" чел."
-          tuiInputNumber
-          placeholder="Укажите вместимость"
-          [max]="12"
-          [min]="1"
-          [step]="1"
-          formControlName="capacity"
+          formControlName="amenityPrice"
         />
       </tui-textfield>
     </div>
-    <tui-textfield [style.margin-block-end.rem]="1" [style.margin-top]="'2rem'">
-      <label tuiLabel>Описание</label>
-      <textarea
-        formControlName="description"
-        placeholder="Введите описание"
-        tuiTextarea
-        [limit]="100"
-        [max]="6"
-        [min]="3"
-      ></textarea>
-    </tui-textfield>
     <div
       [style.display]="'flex'"
       [style.align-items]="'center'"
       [style.justify-content]="'space-between'"
+      [style.margin-top]="'2rem'"
     >
       <button
         size="m"
@@ -187,10 +149,9 @@
         size="m"
         tuiButton
         type="button"
-        class="tui-space_right-3"
         [style.width]="'45%'"
         [style.background-color]="'#E4002B'"
-        [disabled]="roomCategoryForm.invalid"
+        [disabled]="amenityForm.invalid"
         [loading]="loading$ | async"
         (click)="submit()"
       >

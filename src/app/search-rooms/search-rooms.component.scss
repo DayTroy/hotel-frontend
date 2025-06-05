@@ -1,0 +1,41 @@
+.guest {
+  margin-bottom: 1rem;
+  background-color: #EEEEEE;
+  border-radius: 8px;
+  padding: 1rem;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__main {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &__icon {
+      color: #E4002B;
+    }
+
+    &__title {
+      margin: 0;
+      color: #000;
+    }
+
+    &-expand {
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: transform 0.3s ease;
+
+        &.expanded {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}
