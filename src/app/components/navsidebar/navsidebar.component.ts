@@ -22,4 +22,7 @@ import { TuiIcon } from '@taiga-ui/core';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class NavSidebarComponent {
+    logout(): void {
+        
+    }
 }

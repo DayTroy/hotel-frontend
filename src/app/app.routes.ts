@@ -13,7 +13,6 @@ import { BookingInfoComponent } from './modules/booking-info/booking-info.compon
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'profile', component: ProfileComponent },
   { 
     path: 'dashboard', 
     component: DashboardComponent,
@@ -27,7 +26,8 @@ export const routes: Routes = [
       { path: 'bookings', component: BookingsComponent },
       { path: 'bookings/1', component: BookingInfoComponent },  
       { path: 'cleaning', component: CleaningComponent },
-      { path: 'analytics', component: AnalyticsComponent }
+      { path: 'analytics', component: AnalyticsComponent },
+      { path: 'profile', component: ProfileComponent },
     ]
   }
 ];

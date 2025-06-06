@@ -22,24 +22,14 @@
       <button automation-id="setting" iconStart="@tui.settings" tuiAsideItem tuiChevron type="button">
         Настройки
         <ng-template>
-          <button tuiAsideItem type="button">Профиль</button>
-          <button tuiAsideItem type="button">Уведомления</button>
-          <button tuiAsideItem type="button" iconEnd="@tui.log-out">Выход</button>
+          <button tuiAsideItem type="button" [routerLink]="'/dashboard/profile'">Профиль</button>
+          <button tuiAsideItem type="button" iconEnd="@tui.log-out" (click)="logout()">Выход</button>
         </ng-template>
       </button>
     </tui-aside-group>
-<!-- 
-    <div class="role" tuiAsideItem [style.margin-top]="'10rem'">
-      <div class="role__icon">
-        <tui-icon icon="@tui.user-round" [style.font-size.rem]="2"/>
-      </div>
-      <div class="role__name">
-        Управляющий
-      </div>
-    </div> -->
 
     <footer>
-      <div class="role" tuiAsideItem>
+      <div class="role" tuiAsideItem [routerLink]="'/dashboard/profile'">
         <div class="role__icon">
           <tui-icon icon="@tui.user-round" [style.font-size.rem]="2"/>
         </div>

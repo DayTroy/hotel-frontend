@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit{
+  // new BehaviorSubject(`${employeeFirstName[0]},${employeeLastName[0]}}AI`)
   avatar$ = new BehaviorSubject("AI")
 
 

@@ -1,13 +1,50 @@
 <header class="navheader">
   <tui-textfield [style.width]="'40rem'">
-    <input [tuiInputSearch]="results" placeholder="Поиск..."/>
+    <input [tuiInputSearch]="results" placeholder="Поиск..." />
     <ng-template #results>
       <!-- ... -->
     </ng-template>
   </tui-textfield>
   <hr />
   <div class="navheader-right">
-    <button iconStart="@tui.ellipsis" [style.background-color]="'#E4002B'" tuiIconButton type="button" size="m">More</button>
-    <tui-avatar src="AI" size="m" />
+    <button
+      iconStart="@tui.ellipsis"
+      [style.background-color]="'#E4002B'"
+      tuiIconButton
+      type="button"
+      size="m"
+      tuiDropdownAlign="center"
+    [tuiAppearanceState]="open ? 'active' : null"
+    [tuiDropdown]="dropdown"
+    [tuiDropdownSided]="true"
+    [(tuiDropdownOpen)]="open"
+    >
+      More
+    </button>
+    <tui-avatar src="AI" size="m" [routerLink]="['/dashboard/profile']" [style.cursor]="'pointer'"/>
   </div>
-</header> 
+</header>
+
+<ng-template
+#dropdown
+let-close
+>
+<tui-data-list>
+    <tui-opt-group>
+        <button
+            tuiOption
+            [routerLink]="['/dashboard/profile']"
+            type="button"
+        >
+            Перейти в профиль
+        </button>
+        <button
+            tuiOption
+            type="button"
+            (click)="logout()"
+        >
+            Выйти из системы
+        </button>
+    </tui-opt-group>
+</tui-data-list>
+</ng-template>

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import {
     TuiButton,
     TuiDataList,
@@ -21,17 +22,26 @@ const ICON =
     imports: [
         FormsModule,
         TuiAvatar,
-        TuiBadgeNotification,
         TuiButton,
         TuiDataList,
         TuiDropdown,
         TuiNavigation,
         TuiTextfield,
         TuiInputSearch,
+        RouterLink,
     ],
     templateUrl: './navheader.component.html',
     styleUrl: './navheader.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class NavHeaderComponent {
+    protected open = false;
+ 
+    protected onClick(): void {
+        this.open = false;
+    }
+
+    protected logout(): void {
+        
+    }
 }
