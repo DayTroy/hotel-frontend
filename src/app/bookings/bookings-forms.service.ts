@@ -14,7 +14,9 @@ export class BookingsForms {
       bookingId: FormControl<string>;
       checkInDate: FormControl<Date | null>;
       checkOutDate: FormControl<Date | null>;
-      guests: FormControl<number | null>;
+      guests: FormControl<any[] | null>;
+      providedAmenities: FormControl<any[] | null>;
+      roomId: FormControl<string | null>;
     }>({
       bookingId: new FormControl('', {
         nonNullable: true,
@@ -26,6 +28,12 @@ export class BookingsForms {
         nonNullable: true,
       }),
       guests: new FormControl({value: null, disabled: true}, {
+        nonNullable: true,
+      }),
+      providedAmenities: new FormControl({value: null, disabled: true}, {
+        nonNullable: true,
+      }),
+      roomId: new FormControl({value: null, disabled: true}, {
         nonNullable: true,
       }),
     });

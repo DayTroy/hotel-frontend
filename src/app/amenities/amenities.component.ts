@@ -10,7 +10,7 @@ import { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AmenitiesForms } from './amenities-forms.service';
-import { AmenityApiService } from './amenities-api.service';
+import { AmenitiesApiService } from './amenities-api.service';
 
 export interface Amenity {
     amenityId: string;
@@ -62,7 +62,7 @@ export class AmenitiesComponent implements OnInit {
       'actions',
     ];
   
-    constructor(private readonly _amenitiesApi: AmenityApiService, private readonly _amenitiesForms: AmenitiesForms) {}
+    constructor(private readonly _amenitiesApi: AmenitiesApiService, private readonly _amenitiesForms: AmenitiesForms) {}
   
     ngOnInit(): void {
       this.loadAmenities();

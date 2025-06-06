@@ -140,7 +140,7 @@
                   [style.background-color]="'#E4002B'"
                   [style.color]="'#fff'"
                   [style.margin-top]="'1rem'"
-                  (click)="openBookingDialog(createBookingForm)"
+                  (click)="openBookingDialog(createBookingForm, room)"
                 >
                   Забронировать
                 </button>
@@ -215,114 +215,311 @@
         />
       </tui-textfield>
     </div>
-    <h2>Гости</h2>
+    <section class="guest">
+      <h3>Гости</h3>
 
-    <div *ngFor="let guestForm of guestForms; let i = index" class="guest">
-      <div class="guest-header">
-        <div class="guest-header__main">
-          <tui-icon
-            icon="@tui.user-round"
-            class="guest-header__icon"
-          ></tui-icon>
-          <p class="guest-header__title">Гость {{i + 1}}</p>
+      <div
+        *ngFor="let guestForm of guestForms; let i = index"
+        class="guest-block"
+      >
+        <div class="guest-header">
+          <div class="guest-header__main">
+            <tui-icon
+              icon="@tui.user-round"
+              class="guest-header__icon"
+            ></tui-icon>
+            <p class="guest-header__title">Гость {{ i + 1 }}</p>
+          </div>
+          <div class="guest-header-expand">
+            <button (click)="deleteGuest(i)">
+              <tui-icon icon="@tui.trash"></tui-icon>
+            </button>
+            <button
+              [class.expanded]="expandedStates[i]"
+              (click)="toggleGuest(i)"
+            >
+              <tui-icon icon="@tui.chevron-up"></tui-icon>
+            </button>
+          </div>
         </div>
-        <div class="guest-header-expand">
-          <button 
-            [class.expanded]="expandedStates[i]"
-            (click)="toggleGuest(i)"
+        <tui-expand [expanded]="expandedStates[i]">
+          <div
+            [style.display]="'flex'"
+            [style.flex-direction]="'column'"
+            [style.gap]="'1rem'"
+            [formGroup]="guestForms[i]"
           >
-            <tui-icon icon="@tui.chevron-up"></tui-icon>
-          </button>
-        </div>
+            <tui-textfield>
+              <label tuiLabel>Имя</label>
+              <input
+                placeholder="Введите имя гостя"
+                tuiTextfield
+                formControlName="firstName"
+              />
+            </tui-textfield>
+            <tui-textfield>
+              <label tuiLabel>Фамилия</label>
+              <input
+                placeholder="Введите фамилию гостя"
+                tuiTextfield
+                formControlName="lastName"
+              />
+            </tui-textfield>
+            <tui-textfield>
+              <label tuiLabel>Отчество</label>
+              <input
+                placeholder="Введите отчество гостя"
+                tuiTextfield
+                formControlName="middleName"
+              />
+            </tui-textfield>
+            <tui-textfield iconEnd="@tui.at-sign">
+              <label tuiLabel>Почта</label>
+              <input
+                placeholder="Введите почту гостя"
+                tuiTextfield
+                formControlName="email"
+              />
+            </tui-textfield>
+            <tui-textfield iconEnd="@tui.phone">
+              <label tuiLabel>Контактный телефон</label>
+              <input
+                placeholder="Введите телефон гостя"
+                tuiTextfield
+                formControlName="phoneNumber"
+              />
+            </tui-textfield>
+            <div
+              [style.display]="'grid'"
+              [style.grid-template-columns]="'1fr 1fr'"
+              [style.grid-template-rows]="'1fr 1fr 1fr'"
+              [style.gap]="'1rem'"
+            >
+              <tui-textfield tuiChevron>
+                <input
+                  tuiSelect
+                  placeholder="Выберите пол гостя"
+                  formControlName="gender"
+                />
+                <tui-data-list-wrapper
+                  *tuiTextfieldDropdown
+                  new
+                  [items]="genders"
+                />
+              </tui-textfield>
+              <tui-textfield tuiChevron>
+                <input
+                  tuiSelect
+                  placeholder="Гражданство гостя"
+                  formControlName="citizenship"
+                />
+                <tui-data-list-wrapper
+                  *tuiTextfieldDropdown
+                  new
+                  [items]="citizenships"
+                />
+              </tui-textfield>
+              <tui-textfield>
+                <label tuiLabel>Номер паспорта</label>
+                <input
+                  placeholder="Введите номер паспорта"
+                  tuiTextfield
+                  formControlName="passportNumber"
+                />
+              </tui-textfield>
+              <tui-textfield>
+                <label tuiLabel>Серия паспорта</label>
+                <input
+                  placeholder="Введите серию паспорта"
+                  tuiTextfield
+                  formControlName="passportSeries"
+                />
+              </tui-textfield>
+              <tui-textfield>
+                <label tuiLabel>Дата рождения</label>
+                <input tuiInputDate formControlName="birthdate" />
+                <tui-calendar *tuiTextfieldDropdown />
+              </tui-textfield>
+              <tui-textfield>
+                <label tuiLabel>Место рождения</label>
+                <input
+                  placeholder="Введите место рождения"
+                  tuiTextfield
+                  formControlName="birthplace"
+                />
+              </tui-textfield>
+            </div>
+          </div>
+        </tui-expand>
       </div>
-      <tui-expand [expanded]="expandedStates[i]">
-        <div
-          [style.display]="'flex'"
-          [style.flex-direction]="'column'"
-          [style.gap]="'1rem'"
-          [formGroup]="guestForm"
-        >
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Имя</label>
-            <input
-              placeholder="Введите имя гостя"
-              tuiTextfield
-              formControlName="firstName"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Фамилия</label>
-            <input
-              placeholder="Введите фамилию гостя"
-              tuiTextfield
-              formControlName="lastName"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Отчество</label>
-            <input
-              placeholder="Введите отчество гостя"
-              tuiTextfield
-              formControlName="middleName"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Почта</label>
-            <input
-              placeholder="Введите почту гостя"
-              tuiTextfield
-              formControlName="email"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Контактный телефон</label>
-            <input
-              placeholder="Введите телефон гостя"
-              tuiTextfield
-              formControlName="phoneNumber"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Гражданство</label>
-            <input
-              placeholder="Укажите гражданство гостя"
-              tuiTextfield
-              formControlName="citizenship"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Номер паспорта</label>
-            <input
-              placeholder="Введите номер паспорта"
-              tuiTextfield
-              formControlName="passportNumber"
-            />
-          </tui-textfield>
-          <tui-textfield iconEnd="@tui.hash">
-            <label tuiLabel>Серия паспорта</label>
-            <input
-              placeholder="Введите серию паспорта"
-              tuiTextfield
-              formControlName="passportSeries"
-            />
-          </tui-textfield>
-        </div>
-      </tui-expand>
-    </div>
 
-    <button
+      <button
         size="m"
         tuiButton
         type="button"
         iconStart="@tui.plus"
         [style.width]="'100%'"
-        [style.margin-top]="'2rem'"
         [style.background-color]="'#E4002B'"
-        [disabled]="guestForms.length >= (bookingForm.get('guests')?.value || 0)"
+        [disabled]="
+          guestForms.length >= (bookingForm.get('guests')?.value || 0)
+        "
         (click)="addGuest()"
       >
         Добавить гостя
       </button>
+    </section>
+
+    <section class="provided-amenities">
+      <h3>Дополнительные услуги</h3>
+
+      <table
+        *ngIf="providedAmenityForms.length > 0"
+        tuiTable
+        class="table tui-space_top-5"
+        [columns]="columns"
+        [style.width]="'100%'"
+        [style.border-top-left-radius]="'1rem'"
+        [style.border-top-right-radius]="'1rem'"
+        [style.overflow]="'hidden'"
+      >
+        <thead>
+          <tr>
+            <th
+              tuiTh
+              [resizable]="true"
+              [style.background-color]="'#E4002B'"
+              [style.color]="'#fff'"
+            >
+              Наименование
+            </th>
+            <th
+              tuiTh
+              [style.background-color]="'#E4002B'"
+              [style.color]="'#fff'"
+            >
+              Количество
+            </th>
+            <th
+              tuiTh
+              [style.background-color]="'#E4002B'"
+              [style.color]="'#fff'"
+            >
+              Цена
+            </th>
+            <th
+              tuiTh
+              [style.background-color]="'#E4002B'"
+              [style.color]="'#fff'"
+            >
+              Сумма
+            </th>
+            <th
+              tuiTh
+              [resizable]="true"
+              [style.background-color]="'#E4002B'"
+              [style.color]="'#fff'"
+            >
+              Действия
+            </th>
+          </tr>
+        </thead>
+        <tbody tuiTb>
+          <tr
+            *ngFor="let amenityForm of providedAmenityForms; let i = index"
+            [formGroup]="amenityForm"
+          >
+            <td tuiTd>
+              <tui-combo-box
+                formControlName="amenity"
+                [stringify]="stringify"
+                (ngModelChange)="onAmenityChange($event, i)"
+              >
+                Наименование
+                <tui-data-list-wrapper
+                  *tuiDataList
+                  emptyContent="Не удалось найти"
+                  [itemContent]="stringify | tuiStringifyContent"
+                  [items]="amenities$ | async | tuiFilterByInput"
+                />
+              </tui-combo-box>
+            </td>
+
+            <td tuiTd>
+              <tui-textfield>
+                <input
+                  tuiInputNumber
+                  formControlName="amenityQuantity"
+                  [min]="1"
+                  [max]="10"
+                  placeholder="Количество"
+                />
+              </tui-textfield>
+            </td>
+
+            <td tuiTd>
+              <tui-textfield>
+                <input
+                  tuiInputNumber
+                  formControlName="amenityPrice"
+                  [min]="0"
+                  placeholder="Цена"
+                  [postfix]="'RUB' | tuiCurrency"
+                />
+              </tui-textfield>
+            </td>
+
+            <td tuiTd>
+              <tui-textfield>
+                <input
+                  tuiInputNumber
+                  formControlName="amenitiesTotalPrice"
+                  placeholder="Сумма"
+                  [postfix]="'RUB' | tuiCurrency"
+                />
+              </tui-textfield>
+            </td>
+
+            <td tuiTd>
+              <button
+                appearance="action"
+                iconStart="@tui.trash"
+                size="s"
+                tuiIconButton
+                type="button"
+                [style.color]="'#E4002B'"
+                (click)="deleteProvidedAmenity(i)"
+              >
+                Удалить
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div [style.display]="'flex'" [style.justify-content]="'flex-end'">
+        <button
+          size="m"
+          tuiButton
+          type="button"
+          iconStart="@tui.plus"
+          [style.width]="'50%'"
+          [style.margin-top]="'2rem'"
+          [style.background-color]="'#E4002B'"
+          (click)="addProvidedAmenity()"
+        >
+          Добавить услугу
+        </button>
+      </div>
+    </section>
+
+    <h4
+      [style.display]="'flex'"
+      [style.justify-content]="'flex-end'"
+      [style.margin-top]="'2rem'"
+    >
+      Итоговая стоимость брони: {{ calculateTotalPrice() }}
+      {{ "RUB" | tuiCurrency }}
+    </h4>
 
     <div
       [style.display]="'flex'"
