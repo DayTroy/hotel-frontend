@@ -42,7 +42,7 @@ import { TuiAccordion, TuiExpand } from '@taiga-ui/experimental';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
 import { Observable } from 'rxjs';
-import { AmenitiesApiService } from '../amenities/amenities-api.service';
+import { AmenitiesApiService } from '../references/amenities/amenities-api.service';
 
 interface Room {
   roomId: string;

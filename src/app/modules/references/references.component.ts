@@ -42,7 +42,7 @@ import {
 import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { RoomCategoriesComponent } from './room-categories/room-categories.component';
 import { RoomsComponent } from './rooms/rooms.component';
-import { AmenitiesComponent } from '../amenities/amenities.component';
+import { AmenitiesComponent } from './amenities/amenities.component';
 interface RoomCategory {
   roomCategoryId: string;
   title: string;

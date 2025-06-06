@@ -1,15 +1,15 @@
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './modules/login/login.component';
 import { Routes } from '@angular/router';
-import { ProfileComponent } from './profile/profile.component';
-import DashboardComponent from './dashboard/dashboard.component';
-import { ReferencesComponent } from './references/references.component';
-import { HomeComponent } from './home/home.component';
-import { SearchRoomsComponent } from './search-rooms/search-rooms.component';
-import { AnalyticsComponent } from './analytics/analytics.component';
-import { RequestsComponent } from './requests/requests.component';
-import { BookingsComponent } from './bookings/bookings.component';
-import { CleaningComponent } from './cleaning/cleaning.component';import { RequestInfoComponent } from './request-info/request-info.component';
-import { BookingInfoComponent } from './booking-info/booking-info.component';
+import { ProfileComponent } from './modules/profile/profile.component';
+import DashboardComponent from './modules/dashboard/dashboard.component';
+import { ReferencesComponent } from './modules/references/references.component';
+import { HomeComponent } from './modules/home/home.component';
+import { SearchRoomsComponent } from './modules/search-rooms/search-rooms.component';
+import { AnalyticsComponent } from './modules/analytics/analytics.component';
+import { RequestsComponent } from './modules/requests/requests.component';
+import { BookingsComponent } from './modules/bookings/bookings.component';
+import { CleaningComponent } from './modules/cleaning/cleaning.component';import { RequestInfoComponent } from './modules/request-info/request-info.component';
+import { BookingInfoComponent } from './modules/booking-info/booking-info.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },

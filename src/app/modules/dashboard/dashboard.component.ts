@@ -8,9 +8,9 @@ import {
     TuiTabs,
     TuiDataListWrapper
 } from '@taiga-ui/kit';
-import NavHeaderComponent from '../navheader/navheader.component';
-import NavSidebarComponent from '../navsidebar/navsidebar.component';
 import { TuiNavigation } from '@taiga-ui/layout';
+import NavHeaderComponent from '../../components/navheader/navheader.component';
+import NavSidebarComponent from '../../components/navsidebar/navsidebar.component';
 
 @Component({
     selector: 'azim-dashboard',
