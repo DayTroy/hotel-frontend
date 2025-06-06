@@ -33,16 +33,19 @@ import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Subject, BehaviorSubject, of, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { tap } from 'rxjs/operators';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { RoomsApiService } from '../references/rooms/rooms-api.service';
 import { BookingsForms } from '../bookings/bookings-forms.service';
-import { PolymorpheusContent } from '@taiga-ui/polymorpheus';
-import { TuiAccordion, TuiExpand } from '@taiga-ui/experimental';
+import { injectContext, PolymorpheusContent } from '@taiga-ui/polymorpheus';
+import { TuiExpand } from '@taiga-ui/experimental';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
 import { Observable } from 'rxjs';
 import { AmenitiesApiService } from '../references/amenities/amenities-api.service';
+import { BookingsApiService } from '../bookings/bookings-api.service';
+import { GuestsForms } from '../references/guests/guests-forms.service';
+import { AmenitiesForms } from '../references/amenities/amenities-forms.service';
+import { Router } from '@angular/router';
 
 interface Room {
   roomId: string;
@@ -73,7 +76,6 @@ interface Room {
     NgFor,
     TuiExpand,
     TuiIcon,
-    TuiItem,
     TuiTextfieldDropdownDirective,
     TuiSelect,
     TuiDataListWrapper,
@@ -141,7 +143,11 @@ export class SearchRoomsComponent implements OnInit {
   constructor(
     private readonly _roomsApi: RoomsApiService,
     private readonly _bookingsForms: BookingsForms,
-    private readonly _amenitiesApi: AmenitiesApiService
+    private readonly _amenitiesApi: AmenitiesApiService,
+    private readonly _bookingsApi: BookingsApiService,
+    private readonly _guestsForms: GuestsForms,
+    private readonly _amenitiesForms: AmenitiesForms,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -184,7 +190,7 @@ export class SearchRoomsComponent implements OnInit {
 
     this.selectedRoomPricePerNight = room.roomCategory.pricePerNight;
 
-    this.guestForms = [this.createGuestForm()];
+    this.guestForms = [this._guestsForms.createGuestForm()];
     this.expandedStates = [true];
 
     this.dialogs.open(content).subscribe((observer) => {
@@ -192,23 +198,7 @@ export class SearchRoomsComponent implements OnInit {
     });
   }
 
-  private createGuestForm(): FormGroup {
-    return new FormGroup({
-      firstName: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
-      middleName: new FormControl(''),
-      email: new FormControl('', [Validators.required]),
-      phoneNumber: new FormControl('', [Validators.required]),
-      gender: new FormControl('', [Validators.required]),
-      citizenship: new FormControl('', [Validators.required]),
-      passportNumber: new FormControl('', [Validators.required]),
-      passportSeries: new FormControl('', [Validators.required]),
-      birthdate: new FormControl('', [Validators.required]),
-      birthplace: new FormControl('', [Validators.required]),
-    });
-  }
-
-  submit(): void {
+  searchAvailableRooms(): void {
     if (this.searchRoomsForm.valid) {
       const formValue = this.searchRoomsForm.value;
 
@@ -237,7 +227,7 @@ export class SearchRoomsComponent implements OnInit {
 
   addGuest(): void {
     if (this.guestForms.length < (this.bookingForm.get('guests')?.value || 0)) {
-      this.guestForms.push(this.createGuestForm());
+      this.guestForms.push(this._guestsForms.createGuestForm());
       this.expandedStates.push(true);
     }
   }
@@ -253,25 +243,8 @@ export class SearchRoomsComponent implements OnInit {
     }
   }
 
-  private createProvidedAmenityForm(): FormGroup {
-    const form = new FormGroup<{
-      amenity: FormControl<any>;
-      amenityQuantity: FormControl<number | null>;
-      amenityPrice: FormControl<string | null>;
-      amenitiesTotalPrice: FormControl<number | null>;
-    }>({
-      amenity: new FormControl(null, [Validators.required]),
-      amenityQuantity: new FormControl(0, [
-        Validators.required,
-        Validators.min(1),
-      ]),
-      amenityPrice: new FormControl({ value: null, disabled: true }, [
-        Validators.required,
-        Validators.min(0),
-      ]),
-      amenitiesTotalPrice: new FormControl({ value: null, disabled: true }),
-    });
-
+  createProvidedAmenityForm(): FormGroup {
+    const form = this._amenitiesForms.createProvidedAmenityForm();
     this.subscribeToFormChanges(form);
     return form;
   }
@@ -329,4 +302,58 @@ export class SearchRoomsComponent implements OnInit {
 
     return roomPrice + totalAmenityPrice;
   }
+
+  createBooking(observer: any): void {
+    if (this.bookingForm.valid && this.guestForms.every(form => form.valid)) {
+      this.trigger$.next();
+      this.isLoading = true;
+      this.error$.next(null);
+
+      const guests = this.guestForms.map(form => ({
+        firstName: form.get('firstName')?.value,
+        lastName: form.get('lastName')?.value,
+        middleName: form.get('middleName')?.value,
+        email: form.get('email')?.value,
+        phoneNumber: form.get('phoneNumber')?.value,
+        gender: form.get('gender')?.value,
+        citizenship: form.get('citizenship')?.value,
+        passportNumber: form.get('passportNumber')?.value,
+        passportSeries: form.get('passportSeries')?.value,
+        birthdate: form.get('birthdate')?.value,
+        birthplace: form.get('birthplace')?.value
+      }));
+
+      const providedAmenities = this.providedAmenityForms.map(form => ({
+        amenityId: form.get('amenity')?.value?.id,
+        quantity: form.get('amenityQuantity')?.value,
+        price: form.get('amenityPrice')?.value,
+        totalPrice: form.get('amenitiesTotalPrice')?.value
+      }));
+
+      const booking = {
+        checkInDate: this.bookingForm.get('checkInDate')?.value?.toJSON(),
+        checkOutDate: this.bookingForm.get('checkOutDate')?.value?.toJSON(),
+        roomId: this.bookingForm.get('roomId')?.value,
+        guests: guests,
+        providedAmenities: providedAmenities,
+        totalPrice: this.calculateTotalPrice()
+      };
+
+      this._bookingsApi.create(booking).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          observer.complete();
+          this.alerts.open('Бронирование успешно создано', { appearance: 'positive' }).subscribe();
+          this.router.navigate(['/dashboard/bookings', response.bookingId]);
+
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.error$.next('Произошла ошибка при создании бронирования');
+          console.error('Error creating booking:', error);
+        }
+      });
+    }
+  }
+
 }

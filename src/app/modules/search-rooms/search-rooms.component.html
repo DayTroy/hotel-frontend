@@ -167,7 +167,7 @@
       type="submit"
       [disabled]="searchRoomsForm.invalid"
       [loading]="loading$ | async"
-      (click)="submit()"
+      (click)="searchAvailableRooms()"
       [style.background-color]="'#EB3B43'"
       iconEnd="@tui.search"
     >
@@ -545,7 +545,7 @@
         [style.background-color]="'#E4002B'"
         [disabled]="bookingForm.invalid"
         [loading]="loading$ | async"
-        (click)="submit()"
+        (click)="createBooking(observer)"
       >
         Оформить
       </button>

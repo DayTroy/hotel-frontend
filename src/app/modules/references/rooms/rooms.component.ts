@@ -193,7 +193,7 @@ export class RoomsComponent implements OnInit {
     });
   }
 
-  protected submit(): void {
+  protected submit(observer: any): void {
     if (this.roomForm.valid) {
       const formValue = this.roomForm.getRawValue();
       this.loading$.next(true);
@@ -237,6 +237,7 @@ export class RoomsComponent implements OnInit {
               { appearance: 'positive' }
             )
             .subscribe();
+          observer.complete();
           this.loadRooms();
           this.currentDialogObserver?.complete();
           this.trigger$.next();

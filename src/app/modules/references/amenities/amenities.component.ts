@@ -156,7 +156,7 @@ export class AmenitiesComponent implements OnInit {
       });
     }
   
-    protected submit(): void {
+    protected submit(observer: any): void {
       if (this.amenityForm.valid) {
         const formValue = this.amenityForm.getRawValue();
         this.loading$.next(true);
@@ -192,6 +192,7 @@ export class AmenitiesComponent implements OnInit {
                 { appearance: 'positive' }
               )
               .subscribe();
+              observer.complete();
             this.loadAmenities();
             this.currentDialogObserver?.complete();
             this.dialogs

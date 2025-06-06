@@ -211,7 +211,7 @@
         [style.background-color]="'#E4002B'"
         [disabled]="roomForm.invalid"
         [loading]="loading$ | async"
-        (click)="submit()"
+        (click)="submit(observer)"
       >
         {{ isEditMode ? "Сохранить" : "Создать" }}
       </button>

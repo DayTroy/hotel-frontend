@@ -24,7 +24,7 @@ export const routes: Routes = [
       { path: 'requests', component: RequestsComponent },
       { path: 'requests/:id', component: RequestInfoComponent },  
       { path: 'bookings', component: BookingsComponent },
-      { path: 'bookings/1', component: BookingInfoComponent },  
+      { path: 'bookings/:id', component: BookingInfoComponent },  
       { path: 'cleaning', component: CleaningComponent },
       { path: 'analytics', component: AnalyticsComponent },
       { path: 'profile', component: ProfileComponent },
