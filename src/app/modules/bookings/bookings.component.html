@@ -1,60 +1,132 @@
 <div class="bookings-container">
-    <h1>Бронирования</h1>
-    <div class="bookings-header" [style.display]="'flex'" [style.align-items]="'center'" [style.margin-top]="'2rem'">
-        <tui-textfield iconEnd="@tui.search" [style.width]="'20rem'">
-            <label tuiLabel>Номер брони</label>
-            <input placeholder="Введите номер брони" tuiTextfield [(ngModel)]="value" />
-        </tui-textfield>
-        <!-- <button class="tui-space_left-5" size="l" tuiButton type="button" [style.background-color]="'#E4002B'" [style.color]="'#fff'" [style.aspect-ratio]="'1'">
-            <tui-icon icon="@tui.plus"></tui-icon>
-        </button> -->
-    </div>
+  <h1>Бронирования</h1>
+  <div
+    class="bookings-header"
+    [style.display]="'flex'"
+    [style.align-items]="'center'"
+    [style.margin-top]="'2rem'"
+  >
+    <tui-textfield iconEnd="@tui.search" [style.width]="'20rem'">
+      <label tuiLabel>Номер брони</label>
+      <input
+        placeholder="Введите номер брони"
+        tuiTextfield
+        [(ngModel)]="value"
+      />
+    </tui-textfield>
+  </div>
 </div>
 
-<table tuiTable class="table tui-space_top-5" [columns]="columns" [style.width]="'100%'"
-    [style.border-top-left-radius]="'1rem'" [style.border-top-right-radius]="'1rem'" [style.overflow]="'hidden'">
-    <thead>
-        <tr>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Номер брони</th>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Номер комнаты</th>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Статус</th>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Дата заезда
-            </th>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Дата выезда</th>
-            <th tuiTh [resizable]="true" [style.background-color]="'#E4002B'" [style.color]="'#fff'">Действия</th>
-        </tr>
-    </thead>
+<div *ngIf="error" class="error-message">
+  {{ error }}
+</div>
 
-    <tbody tuiTbody>
-        <tr *ngFor="let item of data" [routerLink]="['/booking', item.id]" [style.cursor]="'pointer'">
-            <td tuiTd>
-                <p>{{ item.id }}</p>
-            </td>
-            <td tuiTd>
-                <p>{{ item.roomId }}</p>
-            </td>
-            <td tuiTd>
-                <p>{{ item.status }}</p>
-            </td>
-            <td tuiTd>
-                <p>{{ item.dateIn }}</p>
-            </td>
-            <td tuiTd>
-                <p>{{ item.dateOut }}</p>
-            </td>
+<div *ngIf="notFound$$ | async" class="not-found-message">
+  Бронирования не найдены
+</div>
 
-            <td tuiTd>
-                <span tuiStatus>
-                    <button appearance="action" iconStart="@tui.pencil" size="s" tuiIconButton type="button"
-                        [style.color]="'#FFB134'">
-                        Изменить
-                    </button>
-                    <button appearance="action" iconStart="@tui.trash" size="s" tuiIconButton type="button"
-                        [style.color]="'#E4002B'">
-                        Удалить
-                    </button>
-                </span>
-            </td>
-        </tr>
-    </tbody>
+<div *ngIf="loading$$ | async" class="loading">Загрузка...</div>
+
+<table
+  tuiTable
+  *ngIf="!(loading$$ | async) && !error && !(notFound$$ | async)"
+  class="table tui-space_top-5"
+  [columns]="columns"
+  [style.width]="'100%'"
+  [style.border-top-left-radius]="'1rem'"
+  [style.border-top-right-radius]="'1rem'"
+  [style.overflow]="'hidden'"
+>
+  <thead>
+    <tr>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Номер брони
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Номер комнаты
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Статус
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Дата заезда
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Дата выезда
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Действия
+      </th>
+    </tr>
+  </thead>
+
+  <tbody tuiTbody>
+    <tr
+      *ngFor="let item of bookings$$ | async"
+      [routerLink]="['/dashboard/bookings', item.bookingId]"
+      style="cursor: pointer"
+    >
+      <td tuiTd>
+        <p>{{ item.bookingId }}</p>
+      </td>
+      <td tuiTd>
+        <p>{{ item.roomId }}</p>
+      </td>
+      <td tuiTd>
+        <p>{{ item.status }}</p>
+      </td>
+      <td tuiTd>
+        <p>{{ item.checkInDate }}</p>
+      </td>
+      <td tuiTd>
+        <p>{{ item.checkOutDate }}</p>
+      </td>
+
+      <td tuiTd (click)="$event.stopPropagation()" [style.cursor]="'default'">
+        <span tuiStatus>
+          <button
+            appearance="action"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#E4002B'"
+            (click)="confirmBookingRemove(item.bookingId)"
+          >
+            Удалить
+          </button>
+        </span>
+      </td>
+    </tr>
+  </tbody>
 </table>

@@ -1,10 +1,10 @@
-.request-info {
+.booking-info {
     &__header {
         display: flex;
         align-items: center;
     }
 
-    &__status {
+    &__status, &__main-switch {
         background: var(--tui-background-base);
 
         &::before {
@@ -17,7 +17,14 @@
         }
     }
 
-    &__date {
+    &__subheader {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    &__date-in, &__date-out, &__room {
         label {
             color: #E4002B;
         }
@@ -26,7 +33,10 @@
         background-color: #fff;
         color: #E4002B;
         width: 20rem;
-        margin-left: 2rem;
+    }
+
+    &__main-switch{
+        margin-top: 1rem;
     }
 
     &__submit {
@@ -52,3 +62,64 @@
     padding: 2rem;
     color: #666;
 }
+
+.guest {
+    &-block {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      background-color: #EEEEEE;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+  
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+      &__main {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+  
+      &__icon {
+        color: #E4002B;
+      }
+  
+      &__title {
+        margin: 0;
+        color: #000;
+      }
+  
+      &-expand {
+        display: flex;
+        gap: 0.5rem;
+        
+        button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+          transition: all 0.3s ease;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+  
+          &:hover {
+            background-color: rgba(228, 0, 43, 0.1);
+          }
+  
+          &.expanded {
+            transform: rotate(180deg);
+          }
+  
+          tui-icon {
+            color: #E4002B;
+          }
+        }
+      }
+    }
+  }
+  

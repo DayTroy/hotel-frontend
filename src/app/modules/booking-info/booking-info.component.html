@@ -1,4 +1,4 @@
-<form class="request-info" [formGroup]="form">
+<form class="booking-info" [formGroup]="form">
   <button
     iconStart="@tui.redo-2"
     tuiLink
@@ -18,49 +18,219 @@
   <ng-container *ngIf="!(loading$ | async) && !(error$ | async)">
     <ng-container *tuiLet="booking$ | async as booking">
       <ng-container *ngIf="booking">
-        <h1 class="request-info__title">Заявка № {{ booking.requestId }}</h1>
-        <div class="request-info__header">
+        <h1 class="booking-info__title">
+          Бронирование № {{ booking.bookingId }}
+        </h1>
+        <div class="booking-info__header">
           <tui-segmented
-            class="request-info__status"
+            class="booking-info__status"
             size="m"
             [style.border]="'1px solid #E4002B'"
-            [(activeItemIndex)]="active"
+            [(activeItemIndex)]="activeBookingStatus"
             [style.width]="'fit-content'"
-            (activeItemIndexChange)="setRequestStatus()"
+            (activeItemIndexChange)="setBookingStatus()"
           >
             <button
-              *ngFor="let requestStatus of requestStatuses; let index = index"
+              *ngFor="let bookingStatus of bookingStatuses; let index = index"
               type="button"
-              [class.active]="index === active"
+              [class.active]="index === activeBookingStatus"
             >
-              {{ requestStatus }}
+              {{ bookingStatus }}
             </button>
           </tui-segmented>
-          <tui-textfield class="request-info__date">
-            <label tuiLabel>Дата создания</label>
-            <input tuiInputDate formControlName="creationDate" />
+        </div>
+        <div class="booking-info__subheader">
+          <tui-textfield class="booking-info__date-in">
+            <label tuiLabel>Дата заезда</label>
+            <input tuiInputDate formControlName="checkInDate" />
             <tui-calendar *tuiTextfieldDropdown />
           </tui-textfield>
-        </div>
-        <div class="request-info__main">
-          <h3>Описание</h3>
-          <tui-textfield
-            [style.margin-block-end.rem]="1"
-            [style.margin-top]="'1rem'"
-          >
-            <label tuiLabel>Описание</label>
-            <textarea
-              placeholder="Введите описание"
-              tuiTextarea
-              formControlName="description"
-              [limit]="100"
-              [max]="6"
-              [min]="3"
-            ></textarea>
+          <tui-textfield class="booking-info__date-out">
+            <label tuiLabel>Дата выезда</label>
+            <input tuiInputDate formControlName="checkOutDate" />
+            <tui-calendar *tuiTextfieldDropdown />
+          </tui-textfield>
+          <tui-textfield class="booking-info__room">
+            <label tuiLabel>Гостиничный номер</label>
+            <input formControlName="roomId" />
           </tui-textfield>
         </div>
+        <tui-segmented
+          class="booking-info__main-switch"
+          size="m"
+          [style.border]="'1px solid #E4002B'"
+          [(activeItemIndex)]="activeBookingContentType"
+          [style.width]="'fit-content'"
+          (activeItemIndexChange)="setBookingMainContentType()"
+        >
+          <button
+            *ngFor="
+              let bookingMainContent of bookingMainContentTypes;
+              let index = index
+            "
+            type="button"
+            [class.active]="index === activeBookingContentType"
+          >
+            {{ bookingMainContent }}
+          </button>
+        </tui-segmented>
+
+        <ng-container [ngSwitch]="activeBookingContentType">
+          <ng-template [ngSwitchCase]="0">
+            <div
+              *ngFor="let guestForm of guestForms.controls; let i = index"
+              class="guest-block"
+            >
+              <div class="guest-header">
+                <div class="guest-header__main">
+                  <tui-icon
+                    icon="@tui.user-round"
+                    class="guest-header__icon"
+                  ></tui-icon>
+                  <h3 class="guest-header__title">Гость {{ i + 1 }}</h3>
+                </div>
+                <div class="guest-header-expand">
+                  <button
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'white'"
+                    (click)="toggleGuest(i)"
+                  >
+                    Выгрузить регистрационную карточку
+                  </button>
+                  <button
+                    [class.expanded]="expandedStates[i]"
+                    (click)="toggleGuest(i)"
+                  >
+                    <tui-icon icon="@tui.chevron-up"></tui-icon>
+                  </button>
+                </div>
+              </div>
+              <tui-expand [expanded]="expandedStates[i]">
+                <div
+                  [style.display]="'flex'"
+                  [style.flex-direction]="'column'"
+                  [style.gap]="'1rem'"
+                  [style.margin-top]="'1rem'"
+                  [formGroup]="asFormGroup(guestForm)"
+                >
+                  <tui-textfield>
+                    <label tuiLabel>Имя</label>
+                    <input
+                      placeholder="Введите имя гостя"
+                      tuiTextfield
+                      formControlName="firstName"
+                    />
+                  </tui-textfield>
+                  <tui-textfield>
+                    <label tuiLabel>Фамилия</label>
+                    <input
+                      placeholder="Введите фамилию гостя"
+                      tuiTextfield
+                      formControlName="lastName"
+                    />
+                  </tui-textfield>
+                  <tui-textfield>
+                    <label tuiLabel>Отчество</label>
+                    <input
+                      placeholder="Введите отчество гостя"
+                      tuiTextfield
+                      formControlName="middleName"
+                    />
+                  </tui-textfield>
+                  <tui-textfield iconEnd="@tui.at-sign">
+                    <label tuiLabel>Почта</label>
+                    <input
+                      placeholder="Введите почту гостя"
+                      tuiTextfield
+                      formControlName="email"
+                    />
+                  </tui-textfield>
+                  <tui-textfield iconEnd="@tui.phone">
+                    <label tuiLabel>Контактный телефон</label>
+                    <input
+                      placeholder="Введите телефон гостя"
+                      tuiTextfield
+                      formControlName="phoneNumber"
+                    />
+                  </tui-textfield>
+                  <div
+                    [style.display]="'grid'"
+                    [style.grid-template-columns]="'1fr 1fr'"
+                    [style.grid-template-rows]="'1fr 1fr 1fr'"
+                    [style.gap]="'1rem'"
+                  >
+                    <tui-textfield tuiChevron>
+                      <input
+                        tuiSelect
+                        placeholder="Выберите пол гостя"
+                        formControlName="gender"
+                      />
+                      <tui-data-list-wrapper
+                        *tuiTextfieldDropdown
+                        new
+                        [items]="genders"
+                      />
+                    </tui-textfield>
+                    <tui-textfield tuiChevron>
+                      <input
+                        tuiSelect
+                        placeholder="Гражданство гостя"
+                        formControlName="citizenship"
+                      />
+                      <tui-data-list-wrapper
+                        *tuiTextfieldDropdown
+                        new
+                        [items]="citizenships"
+                      />
+                    </tui-textfield>
+                    <tui-textfield>
+                      <label tuiLabel>Номер паспорта</label>
+                      <input
+                        placeholder="Введите номер паспорта"
+                        tuiTextfield
+                        formControlName="passportNumber"
+                      />
+                    </tui-textfield>
+                    <tui-textfield>
+                      <label tuiLabel>Серия паспорта</label>
+                      <input
+                        placeholder="Введите серию паспорта"
+                        tuiTextfield
+                        formControlName="passportSeries"
+                      />
+                    </tui-textfield>
+                    <tui-textfield>
+                      <label tuiLabel>Дата рождения</label>
+                      <input tuiInputDate formControlName="birthdate" />
+                      <tui-calendar *tuiTextfieldDropdown />
+                    </tui-textfield>
+                    <tui-textfield>
+                      <label tuiLabel>Место рождения</label>
+                      <input
+                        placeholder="Введите место рождения"
+                        tuiTextfield
+                        formControlName="birthplace"
+                      />
+                    </tui-textfield>
+                  </div>
+                </div>
+              </tui-expand>
+            </div>
+          </ng-template>
+
+          <ng-template [ngSwitchCase]="1"> Услуги </ng-template>
+        </ng-container>
+
+        <h3
+          [style.display]="'flex'"
+          [style.justify-content]="'flex-end'"
+          [style.margin-top]="'2rem'"
+        >
+          Итоговая стоимость брони: {{ booking.totalPrice }}
+          {{ "RUB" | tuiCurrency }}
+        </h3>
         <button
-          class="request-info__submit"
+          class="booking-info__submit"
           tuiButton
           type="submit"
           [disabled]="loading$ | async"

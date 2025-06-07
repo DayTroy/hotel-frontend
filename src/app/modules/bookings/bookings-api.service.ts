@@ -14,6 +14,10 @@ export class BookingsApiService {
     return this.httpClient.get(`${this.apiUrl}/bookings`);
   }
 
+  findBooking(bookingId: string): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}/bookings/${bookingId}`);
+  }
+
   delete(bookingId: string): Observable<any> {
     return this.httpClient.delete(`${this.apiUrl}/bookings/${bookingId}`);
   }
