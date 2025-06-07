@@ -278,7 +278,7 @@ export class EmployeesComponent implements OnInit {
             passportSeries: formValue.passportSeries,
             phoneNumber: formValue.phoneNumber,
             jobPositionId: formValue.jobPosition.jobPositionId,
-          })
+        })
         : this._employeesApi.create({
             firstName: formValue.firstName,
             lastName: formValue.lastName,
