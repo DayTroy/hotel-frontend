@@ -44,6 +44,7 @@ import { RoomCategoriesComponent } from './room-categories/room-categories.compo
 import { RoomsComponent } from './rooms/rooms.component';
 import { AmenitiesComponent } from './amenities/amenities.component';
 import { DepartmentsComponent } from './departments/departments.component';
+import { JobPositionsComponent } from './job-positions/job-positions.component';
 interface RoomCategory {
   roomCategoryId: string;
   title: string;
@@ -81,7 +82,8 @@ interface RoomCategoryForm {
     RoomCategoriesComponent,
     RoomsComponent,
     AmenitiesComponent,
-    DepartmentsComponent
+    DepartmentsComponent,
+    JobPositionsComponent
 ],
   templateUrl: './references.component.html',
   styleUrl: './references.component.scss',
@@ -91,6 +93,7 @@ export class ReferencesComponent {
   @ViewChild('roomDialog') roomDialog!: TemplateRef<any>;
   @ViewChild('amenityDialog') amenityDialog!: TemplateRef<any>;
   @ViewChild('departmentDialog') departmentDialog!: TemplateRef<any>;
+  @ViewChild('jobPositionDialog') jobPositionDialog!: TemplateRef<any>;
 
 
   @ViewChild('roomCategoriesComponent')
@@ -101,12 +104,15 @@ export class ReferencesComponent {
   amenitiesComponent!: AmenitiesComponent;
   @ViewChild('departmentsComponent')
   departmentsComponent!: DepartmentsComponent;
+  @ViewChild('jobPositionsComponent')
+  jobPositionsComponent!: JobPositionsComponent;
 
   protected readonly references = [
     'Гостиничные номера',
     'Типы гостиничных номеров',
     'Сотрудники',
     'Отделы',
+    'Должности',
     'Дополнительные услуги',
     'Гости',
   ] as const;
@@ -144,6 +150,13 @@ export class ReferencesComponent {
             departmentsComponent.addDepartment(departmentsComponent.departmentDialog);
           }
           break;
+
+          case 'Должности':
+            const jobPositionsComponent = this.jobPositionsComponent;
+            if (jobPositionsComponent) {
+              jobPositionsComponent.addJobPosition(jobPositionsComponent.jobPositionDialog);
+            }
+            break;
     }
   }
 }

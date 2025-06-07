@@ -1,0 +1,179 @@
+<div *ngIf="loading$ | async" class="tui-space_top-5 loading">Загрузка...</div>
+
+<div *ngIf="error$ | async" class="tui-space_top-5" [style.color]="'#E4002B'">
+  {{ error$ | async }}
+</div>
+
+<div *ngIf="(jobPositions$ | async)?.length === 0" class="not-found-message">
+  Справочник "Должности" пуст
+</div>
+
+<table
+  *ngIf="
+    !(loading$ | async) &&
+    !(error$ | async) &&
+    !((jobPositions$ | async)?.length === 0)
+  "
+  tuiTable
+  class="table tui-space_top-5"
+  [columns]="columns"
+  [style.width]="'100%'"
+  [style.border-top-left-radius]="'1rem'"
+  [style.border-top-right-radius]="'1rem'"
+  [style.overflow]="'hidden'"
+>
+  <thead>
+    <tr>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Отдел
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Должность
+      </th>
+
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Зарплата
+      </th>
+
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Действия
+      </th>
+    </tr>
+  </thead>
+  <tbody tuiTb>
+    <tr *ngFor="let item of jobPositions$ | async">
+
+    
+        <td tuiTd>
+            <p>{{ item.department.departmentTitle }}</p>
+          </td>  
+
+      <td tuiTd>
+        <p>{{ item.jobTitle }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.jobSalary }} {{ 'RUB' | tuiCurrency }}</p>
+      </td>
+
+      <td tuiTd>
+        <span tuiStatus>
+          <button
+            appearance="action"
+            iconStart="@tui.pencil"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#FFB134'"
+            (click)="editJobPosition(jobPositionDialog, item)"
+          >
+            Изменить
+          </button>
+          <button
+            appearance="action"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#E4002B'"
+            (click)="confirmJobPositionRemove(item.jobPositionId)"
+          >
+            Удалить
+          </button>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #jobPositionDialog let-observer>
+  <h1 tuiHeader>{{ isEditMode ? "Редактирование" : "Создание" }} должности</h1>
+  <form [formGroup]="jobPositionForm">
+    <div
+      [style.display]="'grid'"
+      [style.grid-template-rows]="'1fr 1fr 1fr'"
+      [style.gap]="'1rem'"
+      [style.margin-top]="'2rem'"
+    >
+      <tui-combo-box
+        [formControl]="jobPositionForm.get('department')"
+        [stringify]="stringify"
+      >
+        Отдел
+        <tui-data-list-wrapper
+          *tuiDataList
+          emptyContent="Не удалось найти"
+          [itemContent]="stringify | tuiStringifyContent"
+          [items]="departments$ | async | tuiFilterByInput"
+        />
+      </tui-combo-box>
+
+      <tui-textfield iconEnd="@tui.hash">
+        <label tuiLabel>Код должности</label>
+        <input
+          placeholder="Введите код должности"
+          tuiTextfield
+          formControlName="jobPositionId"
+        />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Наименование</label>
+        <input
+          placeholder="Введите наименование должности"
+          tuiTextfield
+          formControlName="jobTitle"
+        />
+      </tui-textfield>
+      <tui-textfield iconEnd="@tui.badge-russian-ruble">
+        <label tuiLabel>Зарплата</label>
+        <input
+          placeholder="Введите зарплату"
+          tuiInputNumber
+          [postfix]="' ' + ('RUB' | tuiCurrency)"
+          formControlName="jobSalary"
+          
+        />
+      </tui-textfield>
+
+    </div>
+    <div
+      [style.display]="'flex'"
+      [style.align-items]="'center'"
+      [style.justify-content]="'space-between'"
+      [style.margin-top]="'2rem'"
+    >
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+        [style.width]="'45%'"
+        [style.background-color]="'#F74C54'"
+      >
+        Закрыть
+      </button>
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        [style.width]="'45%'"
+        [style.background-color]="'#E4002B'"
+        [disabled]="jobPositionForm.invalid"
+        [loading]="loading$ | async"
+        (click)="submit(observer)"
+      >
+        {{ isEditMode ? "Сохранить" : "Создать" }}
+      </button>
+    </div>
+  </form>
+</ng-template>

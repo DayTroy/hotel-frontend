@@ -107,8 +107,8 @@
               </div>
               <tui-expand [expanded]="expandedStates[i]">
                 <div
-                  [style.display]="'flex'"
-                  [style.flex-direction]="'column'"
+                  [style.display]="'grid'"
+                  [style.grid-template-columns]="'1fr 1fr 1fr'"
                   [style.gap]="'1rem'"
                   [style.margin-top]="'1rem'"
                   [formGroup]="asFormGroup(guestForm)"
@@ -153,66 +153,59 @@
                       formControlName="phoneNumber"
                     />
                   </tui-textfield>
-                  <div
-                    [style.display]="'grid'"
-                    [style.grid-template-columns]="'1fr 1fr'"
-                    [style.grid-template-rows]="'1fr 1fr 1fr'"
-                    [style.gap]="'1rem'"
-                  >
-                    <tui-textfield tuiChevron>
-                      <input
-                        tuiSelect
-                        placeholder="Выберите пол гостя"
-                        formControlName="gender"
-                      />
-                      <tui-data-list-wrapper
-                        *tuiTextfieldDropdown
-                        new
-                        [items]="genders"
-                      />
-                    </tui-textfield>
-                    <tui-textfield tuiChevron>
-                      <input
-                        tuiSelect
-                        placeholder="Гражданство гостя"
-                        formControlName="citizenship"
-                      />
-                      <tui-data-list-wrapper
-                        *tuiTextfieldDropdown
-                        new
-                        [items]="citizenships"
-                      />
-                    </tui-textfield>
-                    <tui-textfield>
-                      <label tuiLabel>Номер паспорта</label>
-                      <input
-                        placeholder="Введите номер паспорта"
-                        tuiTextfield
-                        formControlName="passportNumber"
-                      />
-                    </tui-textfield>
-                    <tui-textfield>
-                      <label tuiLabel>Серия паспорта</label>
-                      <input
-                        placeholder="Введите серию паспорта"
-                        tuiTextfield
-                        formControlName="passportSeries"
-                      />
-                    </tui-textfield>
-                    <tui-textfield>
-                      <label tuiLabel>Дата рождения</label>
-                      <input tuiInputDate formControlName="birthdate" />
-                      <tui-calendar *tuiTextfieldDropdown />
-                    </tui-textfield>
-                    <tui-textfield>
-                      <label tuiLabel>Место рождения</label>
-                      <input
-                        placeholder="Введите место рождения"
-                        tuiTextfield
-                        formControlName="birthplace"
-                      />
-                    </tui-textfield>
-                  </div>
+                  <tui-textfield tuiChevron>
+                    <input
+                      tuiSelect
+                      placeholder="Выберите пол гостя"
+                      formControlName="gender"
+                    />
+                    <tui-data-list-wrapper
+                      *tuiTextfieldDropdown
+                      new
+                      [items]="genders"
+                    />
+                  </tui-textfield>
+                  <tui-textfield tuiChevron>
+                    <input
+                      tuiSelect
+                      placeholder="Гражданство гостя"
+                      formControlName="citizenship"
+                    />
+                    <tui-data-list-wrapper
+                      *tuiTextfieldDropdown
+                      new
+                      [items]="citizenships"
+                    />
+                  </tui-textfield>
+                  <tui-textfield>
+                    <label tuiLabel>Номер паспорта</label>
+                    <input
+                      placeholder="Введите номер паспорта"
+                      tuiTextfield
+                      formControlName="passportNumber"
+                    />
+                  </tui-textfield>
+                  <tui-textfield>
+                    <label tuiLabel>Серия паспорта</label>
+                    <input
+                      placeholder="Введите серию паспорта"
+                      tuiTextfield
+                      formControlName="passportSeries"
+                    />
+                  </tui-textfield>
+                  <tui-textfield>
+                    <label tuiLabel>Дата рождения</label>
+                    <input tuiInputDate formControlName="birthdate" />
+                    <tui-calendar *tuiTextfieldDropdown />
+                  </tui-textfield>
+                  <tui-textfield>
+                    <label tuiLabel>Место рождения</label>
+                    <input
+                      placeholder="Введите место рождения"
+                      tuiTextfield
+                      formControlName="birthplace"
+                    />
+                  </tui-textfield>
                 </div>
               </tui-expand>
             </div>

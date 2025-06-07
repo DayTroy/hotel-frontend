@@ -5,44 +5,47 @@ import { TuiTable } from '@taiga-ui/addon-table';
 import { TUI_FALSE_HANDLER, tuiTakeUntilDestroyed, TuiTime } from '@taiga-ui/cdk';
 import { timer, catchError, map, startWith, Subject, switchMap, BehaviorSubject, finalize, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TUI_CONFIRM, TuiButtonLoading, TuiConfirmData, TuiInputDate, TuiInputNumber, TuiStatus, TuiTextarea, TuiTextareaLimit } from '@taiga-ui/kit';
+import { TUI_CONFIRM, TuiButtonLoading, TuiConfirmData, TuiDataListWrapper, TuiFilterByInputPipe, TuiInputDate, TuiInputNumber, TuiStatus, TuiStringifyContentPipe, TuiTextarea, TuiTextareaLimit } from '@taiga-ui/kit';
 import { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DepartmentsApiService } from './departments-api.service';
-import { DepartmentsForms } from './departments-forms.service';
 import {
     TuiInputTimeModule,
     TuiTextfieldControllerModule,
+    TuiUnfinishedValidator,
 } from '@taiga-ui/legacy';
+import { JobPositionsApiService } from './job-positions-api.service';
+import { JobPositionsForms } from './job-positions-forms.service';
+import { Department } from '../departments/departments.component';
+import { TuiComboBoxModule } from '@taiga-ui/legacy';
+import { DepartmentsApiService } from '../departments/departments-api.service';
 
-export interface Department {
-    departmentId: string;
-    departmentTitle: string;
-    departmentCabinet: string;
-    workingHours: string;
+export interface JobPosition {
+    jobPositionId: string;
+    jobTitle: string;
+    jobSalary: string;
+    department: Department;
   }
   
-  interface DepartmentForm {
-    departmentId: string;
-    departmentTitle: string;
-    departmentCabinet: string;
-    workingHoursStart: string;
-    workingHoursEnd: string;
+  interface JobPositionForm {
+    jobPositionId: string;
+    jobTitle: string;
+    jobSalary: string;
+    department: Department;
   }
 
 @Component({
-    selector: 'app-departments',
+    selector: 'app-job-positions',
     standalone: true,
-    imports: [NgIf, TuiTable, AsyncPipe, NgFor, TuiButton, TuiStatus, TuiTextfield, FormsModule, ReactiveFormsModule, TuiInputNumber,  TuiButtonLoading, TuiInputDate, TuiInputTimeModule, TuiTextfieldControllerModule],
-    templateUrl: './departments.component.html',
-    styleUrl: './departments.component.scss',
+    imports: [NgIf, TuiTable, AsyncPipe, NgFor, TuiCurrencyPipe, TuiButton, TuiStatus, TuiTextfield, FormsModule, ReactiveFormsModule, TuiInputNumber, TuiTextarea, TuiTextareaLimit, TuiButtonLoading, TuiCalendar, TuiDataListWrapper, TuiComboBoxModule, TuiStringifyContentPipe, TuiFilterByInputPipe ],
+    templateUrl: './job-positions.component.html',
+    styleUrl: './job-positions.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DepartmentsComponent implements OnInit {
-    @ViewChild('departmentDialog') departmentDialog!: TemplateRef<any>;
+export class JobPositionsComponent implements OnInit {
+    @ViewChild('jobPositionDialog') jobPositionDialog!: TemplateRef<any>;
   
-    departmentForm = this._departmentsForms.createDepartmentForm();
+    jobPositionForm = this._jobPositionsForms.createJobPositionForm();
   
     destroyRef = inject(DestroyRef);
     private readonly dialogs = inject(TuiDialogService);
@@ -53,6 +56,7 @@ export class DepartmentsComponent implements OnInit {
     protected selectedReference: string | null = 'Выберите справочник...';
     protected readonly loading$ = new BehaviorSubject<boolean>(false);
     protected readonly error$ = new BehaviorSubject<string | null>(null);
+    protected readonly jobPositions$ = new BehaviorSubject<JobPosition[]>([]);
     protected readonly departments$ = new BehaviorSubject<Department[]>([]);
     protected isEditMode = false;
     protected readonly trigger$ = new Subject<void>();
@@ -63,23 +67,43 @@ export class DepartmentsComponent implements OnInit {
     );
   
     protected readonly columns = [
-      'departmenTitle',
-      'departmentCabinet',
-      'workingHours',
+      'jobTitle',
+      'jobSalary',
+      'departmentTitle',
       'actions',
     ];
   
-    constructor(private readonly _departmentsApi: DepartmentsApiService, private readonly _departmentsForms: DepartmentsForms) {}
+    constructor(private readonly _jobPositionsApi: JobPositionsApiService, private readonly _jobPositionsForms: JobPositionsForms, private readonly _departmentsApi: DepartmentsApiService) {}
   
     ngOnInit(): void {
+      this.loadJobPositions();
       this.loadDepartments();
     }
   
     protected loadDepartments(): void {
+        this.loading$.next(true);
+        this.error$.next(null);
+    
+        this._departmentsApi
+          .getAll()
+          .pipe(
+            takeUntilDestroyed(this.destroyRef),
+            catchError((error) => {
+              this.error$.next('Ошибка при загрузке данных отделов');
+              return of([]);
+            }),
+            finalize(() => this.loading$.next(false))
+          )
+          .subscribe((departments) => {
+            this.departments$.next(departments);
+          });
+      }
+  
+    protected loadJobPositions(): void {
       this.loading$.next(true);
       this.error$.next(null);
   
-      this._departmentsApi
+      this._jobPositionsApi
         .getAll()
         .pipe(
           takeUntilDestroyed(this.destroyRef),
@@ -89,21 +113,21 @@ export class DepartmentsComponent implements OnInit {
           }),
           finalize(() => this.loading$.next(false))
         )
-        .subscribe((departments) => {
-          this.departments$.next(departments);
+        .subscribe((jobPositions) => {
+          this.jobPositions$.next(jobPositions);
         });
     }
   
-    protected confirmDepartmentRemove(categoryId: string): void {
+    protected confirmJobPositionRemove(jobPositionId: string): void {
       const data: TuiConfirmData = {
-        content: 'Вы действительно хотите удалить отдел',
+        content: 'Вы действительно хотите удалить должность',
         yes: 'Подтвердить',
         no: 'Отменить',
       };
   
       this.dialogs
         .open<boolean>(TUI_CONFIRM, {
-          label: 'Удалить отдел',
+          label: 'Удалить должность',
           size: 'l',
           data,
         })
@@ -115,9 +139,9 @@ export class DepartmentsComponent implements OnInit {
             }
   
             this.loading$.next(true);
-            return this._departmentsApi.delete(categoryId).pipe(
+            return this._jobPositionsApi.delete(jobPositionId).pipe(
               catchError((error) => {
-                this.alerts.open('Ошибка при удалении отдела', {
+                this.alerts.open('Ошибка при удалении должности', {
                   appearance: 'negative',
                 });
                 return of(null);
@@ -130,70 +154,60 @@ export class DepartmentsComponent implements OnInit {
         )
         .subscribe(() => {
           this.alerts
-            .open('Отдел успешно создан', { appearance: 'positive' })
+            .open('Должность успешно создана', { appearance: 'positive' })
             .subscribe();
-          this.loadDepartments();
+          this.loadJobPositions();
         });
     }
   
-    protected editDepartment(
+    protected editJobPosition(
       content: PolymorpheusContent<TuiDialogContext>,
-      department: Department
+      jobPosition: JobPosition
     ): void {
       this.isEditMode = true;
 
-      let workingHoursStart = '';
-      let workingHoursEnd = '';
-      if (department.workingHours) {
-        const times = department.workingHours.split(' - ');
-        if (times.length === 2) {
-          workingHoursStart = times[0];
-          workingHoursEnd = times[1];
-        }
-      }
 
-      this.departmentForm.patchValue({
-        departmentId: department.departmentId,
-        departmentTitle: department.departmentTitle,
-        departmentCabinet: department.departmentCabinet,
-        workingHoursStart: workingHoursStart,
-        workingHoursEnd: workingHoursEnd,
+      this.jobPositionForm.patchValue({
+        jobPositionId: jobPosition.jobPositionId,
+        jobTitle: jobPosition.jobTitle,
+        jobSalary: jobPosition.jobSalary,
+        department: jobPosition.department,
       });
       this.dialogs.open(content).subscribe((observer) => {
         this.currentDialogObserver = observer;
       });
     }
   
-    public addDepartment(
+    public addJobPosition(
       content: PolymorpheusContent<TuiDialogContext>
     ): void {
       this.isEditMode = false;
-      this.departmentForm.reset();
+      this.jobPositionForm.reset();
       this.dialogs.open(content).subscribe((observer) => {
         this.currentDialogObserver = observer;
       });
     }
   
     protected submit(observer: any): void {
-      if (this.departmentForm.valid) {
-        const formValue = this.departmentForm.getRawValue();
+      if (this.jobPositionForm.valid) {
+        const formValue = this.jobPositionForm.getRawValue();
         this.loading$.next(true);
   
         const request$ = this.isEditMode
-          ? this._departmentsApi.update(
-              formValue.departmentId,
+          ? this._jobPositionsApi.update(
+              formValue.jobPositionId,
               {
-                departmentId: formValue.departmentId,
-                departmentTitle: formValue.departmentTitle,
-                departmentCabinet: formValue.departmentCabinet,
-                workingHours: `${formValue.workingHoursStart} - ${formValue.workingHoursEnd}`,
+                jobPositionId: formValue.jobPositionId,
+                jobTitle: formValue.jobTitle,
+                jobSalary: formValue.jobSalary,
+                departmentId: formValue.department.departmentId,
               }
             )
-          : this._departmentsApi.create({
-              departmentId: formValue.departmentId,
-              departmentTitle: formValue.departmentTitle,
-              departmentCabinet: formValue.departmentCabinet,
-              workingHours: `${formValue.workingHoursStart} - ${formValue.workingHoursEnd}`,
+          : this._jobPositionsApi.create({
+            jobPositionId: formValue.jobPositionId,
+              jobTitle: formValue.jobTitle,
+              jobSalary: formValue.jobSalary,
+              departmentId: formValue.department.departmentId,
             });
   
         request$
@@ -203,7 +217,7 @@ export class DepartmentsComponent implements OnInit {
               this.alerts.open(
                 `Ошибка при ${
                   this.isEditMode ? 'обновлении' : 'создании'
-                } отдела`,
+                } должности`,
                 { appearance: 'negative' }
               );
               return of(null);
@@ -215,23 +229,25 @@ export class DepartmentsComponent implements OnInit {
           .subscribe(() => {
             this.alerts
               .open(
-                `Отдел успешно ${this.isEditMode ? 'обновлен' : 'создан'}`,
+                `Должность успешно ${this.isEditMode ? 'обновлена' : 'создана'}`,
                 { appearance: 'positive' }
               )
               .subscribe();
               observer.complete();
-            this.loadDepartments();
+            this.loadJobPositions();
             this.currentDialogObserver?.complete();
             this.dialogs
             this.trigger$.next();
           });
       } else {
-        Object.keys(this.departmentForm.controls).forEach((key) => {
-          const control = this.departmentForm.get(key);
+        Object.keys(this.jobPositionForm.controls).forEach((key) => {
+          const control = this.jobPositionForm.get(key);
           if (control?.invalid) {
             control.markAsTouched();
           }
         });
       }
     }
+    protected readonly stringify = (item: Department | null | undefined) =>
+        item && typeof item === 'object' ? item.departmentTitle : item ? String(item) : '';
 }
