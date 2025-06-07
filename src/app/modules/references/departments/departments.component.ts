@@ -94,7 +94,7 @@ export class DepartmentsComponent implements OnInit {
         });
     }
   
-    protected confirmDepartmentRemove(categoryId: string): void {
+    protected confirmDepartmentRemove(departmentId: string): void {
       const data: TuiConfirmData = {
         content: 'Вы действительно хотите удалить отдел',
         yes: 'Подтвердить',
@@ -115,7 +115,7 @@ export class DepartmentsComponent implements OnInit {
             }
   
             this.loading$.next(true);
-            return this._departmentsApi.delete(categoryId).pipe(
+            return this._departmentsApi.delete(departmentId).pipe(
               catchError((error) => {
                 this.alerts.open('Ошибка при удалении отдела', {
                   appearance: 'negative',

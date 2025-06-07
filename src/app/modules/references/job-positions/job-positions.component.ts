@@ -26,13 +26,7 @@ export interface JobPosition {
     jobSalary: string;
     department: Department;
   }
-  
-  interface JobPositionForm {
-    jobPositionId: string;
-    jobTitle: string;
-    jobSalary: string;
-    department: Department;
-  }
+
 
 @Component({
     selector: 'app-job-positions',

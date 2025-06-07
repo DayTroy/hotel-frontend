@@ -45,6 +45,7 @@ import { RoomsComponent } from './rooms/rooms.component';
 import { AmenitiesComponent } from './amenities/amenities.component';
 import { DepartmentsComponent } from './departments/departments.component';
 import { JobPositionsComponent } from './job-positions/job-positions.component';
+import { EmployeesComponent } from './employees/employees.component';
 interface RoomCategory {
   roomCategoryId: string;
   title: string;
@@ -83,8 +84,9 @@ interface RoomCategoryForm {
     RoomsComponent,
     AmenitiesComponent,
     DepartmentsComponent,
-    JobPositionsComponent
-],
+    JobPositionsComponent,
+    EmployeesComponent,
+  ],
   templateUrl: './references.component.html',
   styleUrl: './references.component.scss',
 })
@@ -94,7 +96,7 @@ export class ReferencesComponent {
   @ViewChild('amenityDialog') amenityDialog!: TemplateRef<any>;
   @ViewChild('departmentDialog') departmentDialog!: TemplateRef<any>;
   @ViewChild('jobPositionDialog') jobPositionDialog!: TemplateRef<any>;
-
+  @ViewChild('employeeDialog') employeeDialog!: TemplateRef<any>;
 
   @ViewChild('roomCategoriesComponent')
   roomCategoriesComponent!: RoomCategoriesComponent;
@@ -106,6 +108,8 @@ export class ReferencesComponent {
   departmentsComponent!: DepartmentsComponent;
   @ViewChild('jobPositionsComponent')
   jobPositionsComponent!: JobPositionsComponent;
+  @ViewChild('employeesComponent')
+  employeesComponent!: EmployeesComponent;
 
   protected readonly references = [
     'Гостиничные номера',
@@ -145,18 +149,29 @@ export class ReferencesComponent {
         break;
 
       case 'Отделы':
-          const departmentsComponent = this.departmentsComponent;
-          if (departmentsComponent) {
-            departmentsComponent.addDepartment(departmentsComponent.departmentDialog);
-          }
-          break;
+        const departmentsComponent = this.departmentsComponent;
+        if (departmentsComponent) {
+          departmentsComponent.addDepartment(
+            departmentsComponent.departmentDialog
+          );
+        }
+        break;
 
-          case 'Должности':
-            const jobPositionsComponent = this.jobPositionsComponent;
-            if (jobPositionsComponent) {
-              jobPositionsComponent.addJobPosition(jobPositionsComponent.jobPositionDialog);
-            }
-            break;
+      case 'Должности':
+        const jobPositionsComponent = this.jobPositionsComponent;
+        if (jobPositionsComponent) {
+          jobPositionsComponent.addJobPosition(
+            jobPositionsComponent.jobPositionDialog
+          );
+        }
+        break;
+
+      case 'Сотрудники':
+        const employeesComponent = this.employeesComponent;
+        if (employeesComponent) {
+          employeesComponent.addEmployee(employeesComponent.employeeDialog);
+        }
+        break;
     }
   }
 }

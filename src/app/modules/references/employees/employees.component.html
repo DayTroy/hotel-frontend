@@ -1,0 +1,237 @@
+<div *ngIf="loading$ | async" class="tui-space_top-5 loading">Загрузка...</div>
+
+<div *ngIf="error$ | async" class="tui-space_top-5" [style.color]="'#E4002B'">
+  {{ error$ | async }}
+</div>
+
+<div *ngIf="(employees$ | async)?.length === 0" class="not-found-message">
+  Справочник "Сотрудники" пуст
+</div>
+
+<table
+  *ngIf="
+    !(loading$ | async) &&
+    !(error$ | async) &&
+    !((employees$ | async)?.length === 0)
+  "
+  tuiTable
+  class="table tui-space_top-5"
+  [columns]="columns"
+  [style.width]="'100%'"
+  [style.border-top-left-radius]="'1rem'"
+  [style.border-top-right-radius]="'1rem'"
+  [style.overflow]="'hidden'"
+>
+  <thead>
+    <tr>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Имя
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Фамилия
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Контактный телефон
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Должность
+      </th>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Действия
+      </th>
+    </tr>
+  </thead>
+  <tbody tuiTb>
+    <tr *ngFor="let item of employees$ | async">
+      <td tuiTd>
+        <p>{{ item.firstName }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.lastName }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.phoneNumber }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.jobPosition.jobTitle }}</p>
+      </td>
+      <td tuiTd>
+        <span tuiStatus>
+          <button
+            appearance="action"
+            iconStart="@tui.pencil"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#FFB134'"
+            (click)="editEmployee(employeeDialog, item)"
+          >
+            Изменить
+          </button>
+          <!-- <button
+            appearance="action"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#E4002B'"
+            (click)="confirmEmployeeRemove(item.employeeId)"
+          >
+            Удалить
+          </button> -->
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #employeeDialog let-observer>
+  <h1 tuiHeader>{{ isEditMode ? "Редактирование" : "Создание" }} сотрудника</h1>
+  <form [formGroup]="employeeForm">
+    <div
+      [style.display]="'grid'"
+      [style.grid-template-rows]="'1fr 1fr 1fr'"
+      [style.gap]="'1rem'"
+      [style.margin-top]="'2rem'"
+    >
+      <tui-textfield>
+        <label tuiLabel>Имя</label>
+        <input
+          placeholder="Введите имя сотрудника"
+          tuiTextfield
+          formControlName="firstName"
+        />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Фамилия</label>
+        <input
+          placeholder="Введите фамилию сотрудника"
+          tuiTextfield
+          formControlName="lastName"
+        />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Отчество</label>
+        <input
+          placeholder="Введите отчество сотрудника"
+          tuiTextfield
+          formControlName="middleName"
+        />
+      </tui-textfield>
+
+      <tui-combo-box
+        [formControl]="employeeForm.get('jobPosition')"
+        [stringify]="stringify"
+      >
+        Должность
+        <tui-data-list-wrapper
+          *tuiDataList
+          emptyContent="Не удалось найти"
+          [itemContent]="stringify | tuiStringifyContent"
+          [items]="jobPositions$ | async | tuiFilterByInput"
+        />
+      </tui-combo-box>
+
+      <tui-textfield iconEnd="@tui.mail">
+        <label tuiLabel>Почта</label>
+        <input
+          placeholder="Введите почту сотрудника"
+          tuiTextfield
+          formControlName="email"
+        />
+      </tui-textfield>
+      <tui-textfield iconEnd="@tui.phone">
+        <label tuiLabel>Контактный телефон</label>
+        <input
+          placeholder="Введите контактный телефон сотрудника"
+          tuiTextfield
+          formControlName="phoneNumber"
+        />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Дата рождения</label>
+        <input
+          placeholder="Укажите дату трудоустройства"
+          tuiInputDate
+          formControlName="birthdate"
+        />
+        <tui-calendar *tuiTextfieldDropdown />
+      </tui-textfield>
+
+      <div
+        [style.display]="'grid'"
+        [style.grid-template-columns]="'1fr 1fr'"
+        [style.gap]="'1rem'"
+      >
+        <tui-textfield>
+          <label tuiLabel>Серия паспорта</label>
+          <input
+            placeholder="Введите серию паспорта"
+            tuiTextfield
+            formControlName="passportSeries"
+          />
+        </tui-textfield>
+
+        <tui-textfield>
+          <label tuiLabel>Номер паспорта</label>
+          <input
+            placeholder="Введите номер паспорта"
+            tuiTextfield
+            formControlName="passportNumber"
+          />
+        </tui-textfield>
+      </div>
+      <tui-textfield>
+        <label tuiLabel>Дата трудоустройства</label>
+        <input
+          placeholder="Укажите дату трудоустройства"
+          tuiInputDate
+          formControlName="dateOfEmployment"
+        />
+        <tui-calendar *tuiTextfieldDropdown />
+      </tui-textfield>
+    </div>
+    <div
+      [style.display]="'flex'"
+      [style.align-items]="'center'"
+      [style.justify-content]="'space-between'"
+      [style.margin-top]="'2rem'"
+    >
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+        [style.width]="'45%'"
+        [style.background-color]="'#F74C54'"
+      >
+        Закрыть
+      </button>
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        [style.width]="'45%'"
+        [style.background-color]="'#E4002B'"
+        [disabled]="employeeForm.invalid"
+        [loading]="loading$ | async"
+        (click)="submit(observer)"
+      >
+        {{ isEditMode ? "Сохранить" : "Создать" }}
+      </button>
+    </div>
+  </form>
+</ng-template>

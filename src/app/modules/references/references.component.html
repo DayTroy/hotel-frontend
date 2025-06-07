@@ -43,6 +43,10 @@
     <app-job-positions #jobPositionsComponent></app-job-positions>
   </ng-template>
 
+  <ng-template [ngSwitchCase]="'Сотрудники'">
+    <app-employees #employeesComponent></app-employees>
+  </ng-template>
+
   <ng-template ngSwitchDefault>
     <div class="not-found-message">Справочник не найден</div>
   </ng-template>
