@@ -1,0 +1,121 @@
+<form class="cleaning-info" [formGroup]="cleaningTaskForm">
+  <button
+    iconStart="@tui.redo-2"
+    tuiLink
+    type="button"
+    routerLink=".."
+    [style.color]="'#E4002B'"
+    [textContent]="'Назад'"
+    [style.margin-bottom]="'1rem'"
+  ></button>
+
+  <div *ngIf="error$ | async as error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading$ | async" class="loading">Загрузка...</div>
+
+  <ng-container *ngIf="!(loading$ | async) && !(error$ | async)">
+    <ng-container *tuiLet="cleaningTask$ | async as cleaningTask">
+      <ng-container *ngIf="cleaningTask">
+        <h1 class="cleaning-info__title">
+          Задание на уборку № {{ cleaningTask.cleaningId }}
+        </h1>
+        <div class="cleaning-info__header">
+          <tui-segmented
+            class="cleaning-info__status"
+            size="m"
+            [style.border]="'1px solid #E4002B'"
+            [(activeItemIndex)]="active"
+            [style.width]="'fit-content'"
+            (activeItemIndexChange)="setCleaningTaskStatus()"
+          >
+            <button
+              *ngFor="
+                let cleaningTaskStatus of cleaningTaskStatuses;
+                let index = index
+              "
+              type="button"
+              [class.active]="index === active"
+            >
+              {{ cleaningTaskStatus }}
+            </button>
+          </tui-segmented>
+          <tui-textfield [style.margin-left]="'2rem'">
+            <label tuiLabel>Срок выполнения</label>
+            <input tuiInputDate formControlName="scheduledDate" />
+            <tui-calendar *tuiTextfieldDropdown />
+          </tui-textfield>
+          <tui-combo-box
+            [formControl]="cleaningTaskForm.get('room')"
+            [stringify]="stringifyRoom"
+            [style.margin-left]="'2rem'"
+          >
+            Гостиничный номер
+            <tui-data-list-wrapper
+              *tuiDataList
+              emptyContent="Не удалось найти"
+              [itemContent]="stringifyRoom | tuiStringifyContent"
+              [items]="rooms$ | async | tuiFilterByInput"
+            />
+          </tui-combo-box>
+        </div>
+        <div class="cleaning-info__subheader">
+            <tui-combo-box
+            [formControl]="cleaningTaskForm.get('employee')"
+            [stringify]="stringifyEmployee"
+          >
+            Горничная
+            <tui-data-list-wrapper
+              *tuiDataList
+              emptyContent="Не удалось найти"
+              [itemContent]="stringifyEmployee | tuiStringifyContent"
+              [items]="employees$ | async | tuiFilterByInput"
+            />
+          </tui-combo-box>
+
+          <tui-textfield tuiChevron>
+        <input
+          tuiSelect
+          placeholder="Выберите вид уборки"
+          formControlName="cleaningType"
+        />
+        <tui-data-list-wrapper
+          *tuiTextfieldDropdown
+          new
+          [items]="cleaningTypes"
+        />
+      </tui-textfield>
+        </div>
+        <div class="cleaning-info__main">
+          <h3>Описание</h3>
+          <tui-textfield
+            [style.margin-block-end.rem]="1"
+            [style.margin-top]="'1rem'"
+          >
+            <label tuiLabel>Описание</label>
+            <textarea
+              placeholder="Введите описание"
+              tuiTextarea
+              formControlName="description"
+              [limit]="100"
+              [max]="6"
+              [min]="3"
+            ></textarea>
+          </tui-textfield>
+        </div>
+        <button
+          class="cleaning-info__submit"
+          tuiButton
+          type="submit"
+          [disabled]="loading$ | async"
+          [loading]="loading$ | async"
+          size="m"
+          (click)="submit()"
+        >
+          Сохранить
+        </button>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</form>

@@ -33,7 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, catchError, finalize, of } from 'rxjs';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
 import { CleaningForms } from './cleanings-forms.service';
-import { CleaingsApiService } from './cleanings-api.service';
+import { CleaningsApiService } from './cleanings-api.service';
 import {TuiChip} from '@taiga-ui/kit';
 
 export interface CleaningTask {
@@ -119,41 +119,11 @@ export class CleaningsComponent implements OnInit {
   protected readonly employees$ = new BehaviorSubject<Employee[]>([]);
   cleaningTypes = ['Регулярная', 'Генеральная', 'После ремонта'];
 
-  cleaningTasks = [
-    {
-      id: 'CT-123456',
-      roomId: 'R405',
-      employeeId: 'EMP-123456',
-      type: 'regular',
-      status: 'Новый',
-      description: 'Выполнить уборку',
-      time: '12-12-2025',
-    },
-    {
-      id: 'CT-123456',
-      roomId: 'R405',
-      employeeId: 'EMP-123456',
-      type: 'regular',
-      status: 'В работе',
-      description: 'Выполнить уборку',
-      time: '12-12-2025',
-    },
-    {
-      id: 'CT-123456',
-      roomId: 'R405',
-      employeeId: 'EMP-123456',
-      type: 'regular',
-      status: 'Готов',
-      description: 'Выполнить уборку',
-      time: '12-12-2025',
-    },
-  ];
-
   constructor(
     private readonly _employeesApi: EmployeesApiService,
     private readonly _roomsApi: RoomsApiService,
     private readonly _cleaningsForms: CleaningForms,
-    private readonly _cleaningsApi: CleaingsApiService
+    private readonly _cleaningsApi: CleaningsApiService
   ) {}
 
   ngOnInit(): void {

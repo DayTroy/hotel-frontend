@@ -15,6 +15,7 @@ export class CleaningForms {
       description: FormControl<string>;
       cleaningType: FormControl<string>;
       scheduledDate: FormControl<Date | null>;
+      status: FormControl<string | null>;
       employee: FormControl<Employee>;
       room: FormControl<Room>;
     }>({
@@ -33,6 +34,7 @@ export class CleaningForms {
         nonNullable: true,
         validators: [Validators.required],
       }),
+      status: new FormControl(''),
       employee: new FormControl({
         employeeId: '',
         firstName: '',

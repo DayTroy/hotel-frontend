@@ -11,6 +11,7 @@ import { BookingsComponent } from './modules/bookings/bookings.component';
 import { RequestInfoComponent } from './modules/request-info/request-info.component';
 import { BookingInfoComponent } from './modules/booking-info/booking-info.component';
 import { CleaningsComponent } from './modules/cleanings/cleanings.component';
+import { CleaningInfoComponent } from './modules/cleaning-info/cleaning-info.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -27,7 +28,7 @@ export const routes: Routes = [
       { path: 'bookings', component: BookingsComponent },
       { path: 'bookings/:id', component: BookingInfoComponent },  
       { path: 'cleanings', component: CleaningsComponent },
-      // { path: 'cleanings/:id', component: CleaningComponent },
+      { path: 'cleanings/:id', component: CleaningInfoComponent },
       { path: 'analytics', component: AnalyticsComponent },
       { path: 'profile', component: ProfileComponent },
     ]
