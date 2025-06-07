@@ -35,6 +35,10 @@
     <app-amenities #amenitiesComponent></app-amenities>
   </ng-template>
 
+  <ng-template [ngSwitchCase]="'Отделы'">
+    <app-departments #departmentsComponent></app-departments>
+  </ng-template>
+
   <ng-template ngSwitchDefault>
     <div class="not-found-message">Справочник не найден</div>
   </ng-template>

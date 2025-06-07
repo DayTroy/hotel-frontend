@@ -43,6 +43,7 @@ import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { RoomCategoriesComponent } from './room-categories/room-categories.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { AmenitiesComponent } from './amenities/amenities.component';
+import { DepartmentsComponent } from './departments/departments.component';
 interface RoomCategory {
   roomCategoryId: string;
   title: string;
@@ -79,7 +80,8 @@ interface RoomCategoryForm {
     TuiInputNumber,
     RoomCategoriesComponent,
     RoomsComponent,
-    AmenitiesComponent
+    AmenitiesComponent,
+    DepartmentsComponent
 ],
   templateUrl: './references.component.html',
   styleUrl: './references.component.scss',
@@ -88,6 +90,8 @@ export class ReferencesComponent {
   @ViewChild('roomCategoryDialog') roomCategoryDialog!: TemplateRef<any>;
   @ViewChild('roomDialog') roomDialog!: TemplateRef<any>;
   @ViewChild('amenityDialog') amenityDialog!: TemplateRef<any>;
+  @ViewChild('departmentDialog') departmentDialog!: TemplateRef<any>;
+
 
   @ViewChild('roomCategoriesComponent')
   roomCategoriesComponent!: RoomCategoriesComponent;
@@ -95,6 +99,8 @@ export class ReferencesComponent {
   roomsComponent!: RoomsComponent;
   @ViewChild('amenitiesComponent')
   amenitiesComponent!: AmenitiesComponent;
+  @ViewChild('departmentsComponent')
+  departmentsComponent!: DepartmentsComponent;
 
   protected readonly references = [
     'Гостиничные номера',
@@ -131,6 +137,13 @@ export class ReferencesComponent {
           amenitiesComponent.addAmenity(amenitiesComponent.amenityDialog);
         }
         break;
+
+      case 'Отделы':
+          const departmentsComponent = this.departmentsComponent;
+          if (departmentsComponent) {
+            departmentsComponent.addDepartment(departmentsComponent.departmentDialog);
+          }
+          break;
     }
   }
 }

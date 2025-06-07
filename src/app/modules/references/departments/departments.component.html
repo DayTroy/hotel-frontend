@@ -1,0 +1,177 @@
+<div *ngIf="loading$ | async" class="tui-space_top-5 loading">Загрузка...</div>
+
+<div *ngIf="error$ | async" class="tui-space_top-5" [style.color]="'#E4002B'">
+  {{ error$ | async }}
+</div>
+
+<div *ngIf="(departments$ | async)?.length === 0" class="not-found-message">
+  Справочник "Отделы" пуст
+</div>
+
+<table
+  *ngIf="
+    !(loading$ | async) &&
+    !(error$ | async) &&
+    !((departments$ | async)?.length === 0)
+  "
+  tuiTable
+  class="table tui-space_top-5"
+  [columns]="columns"
+  [style.width]="'100%'"
+  [style.border-top-left-radius]="'1rem'"
+  [style.border-top-right-radius]="'1rem'"
+  [style.overflow]="'hidden'"
+>
+  <thead>
+    <tr>
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Наименование
+      </th>
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Кабинет
+      </th>
+
+      <th tuiTh [style.background-color]="'#E4002B'" [style.color]="'#fff'">
+        Время работы
+      </th>
+
+      <th
+        tuiTh
+        [resizable]="true"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+      >
+        Действия
+      </th>
+    </tr>
+  </thead>
+  <tbody tuiTb>
+    <tr *ngFor="let item of departments$ | async">
+      <td tuiTd>
+        <p>{{ item.departmentTitle }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.departmentCabinet }}</p>
+      </td>
+
+      <td tuiTd>
+        <p>{{ item.workingHours }}</p>
+      </td>
+
+      <td tuiTd>
+        <span tuiStatus>
+          <button
+            appearance="action"
+            iconStart="@tui.pencil"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#FFB134'"
+            (click)="editDepartment(departmentDialog, item)"
+          >
+            Изменить
+          </button>
+          <button
+            appearance="action"
+            iconStart="@tui.trash"
+            size="s"
+            tuiIconButton
+            type="button"
+            [style.color]="'#E4002B'"
+            (click)="confirmDepartmentRemove(item.departmentId)"
+          >
+            Удалить
+          </button>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #departmentDialog let-observer>
+  <h1 tuiHeader>{{ isEditMode ? "Редактирование" : "Создание" }} отдела</h1>
+  <form [formGroup]="departmentForm">
+    <div
+      [style.display]="'grid'"
+      [style.grid-template-rows]="'1fr 1fr 1fr'"
+      [style.gap]="'1rem'"
+      [style.margin-top]="'2rem'"
+    >
+      <tui-textfield iconEnd="@tui.hash">
+        <label tuiLabel>Код отдела</label>
+        <input
+          placeholder="Введите код отдела"
+          tuiTextfield
+          formControlName="departmentId"
+        />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Наименование</label>
+        <input
+          placeholder="Введите наименование отдела"
+          tuiTextfield
+          formControlName="departmentTitle"
+        />
+      </tui-textfield>
+      <tui-textfield iconEnd="@tui.captions">
+        <label tuiLabel>Номер кабинета</label>
+        <input
+          placeholder="Введите номер кабинета"
+          tuiTextfield
+          formControlName="departmentCabinet"
+        />
+      </tui-textfield>
+
+      <div [style.display]="'grid'" [style.grid-template-columns]="'1fr 1fr'" [style.gap]="'1rem'">
+        <tui-input-time
+          placeholder="Укажите время начала работы"
+          formControlName="workingHoursStart"
+        >
+          Время начала работы
+        </tui-input-time>
+
+        <tui-input-time
+          placeholder="Укажите время окончания работы"
+          formControlName="workingHoursEnd"
+        >
+          Время окончания работы
+        </tui-input-time>
+      </div>
+    </div>
+    <div
+      [style.display]="'flex'"
+      [style.align-items]="'center'"
+      [style.justify-content]="'space-between'"
+      [style.margin-top]="'2rem'"
+    >
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+        [style.width]="'45%'"
+        [style.background-color]="'#F74C54'"
+      >
+        Закрыть
+      </button>
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        [style.width]="'45%'"
+        [style.background-color]="'#E4002B'"
+        [disabled]="departmentForm.invalid"
+        [loading]="loading$ | async"
+        (click)="submit(observer)"
+      >
+        {{ isEditMode ? "Сохранить" : "Создать" }}
+      </button>
+    </div>
+  </form>
+</ng-template>
