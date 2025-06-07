@@ -117,8 +117,8 @@ export class RoomsComponent implements OnInit {
         }),
         finalize(() => this.loading$.next(false))
       )
-      .subscribe((categories) => {
-        this.rooms$.next(categories);
+      .subscribe((rooms) => {
+        this.rooms$.next(rooms);
       });
   }
 

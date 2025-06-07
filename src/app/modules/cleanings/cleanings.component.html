@@ -1,0 +1,188 @@
+<div class="cleaning-container">
+  <h1>Уборка гостиничных номеров</h1>
+  <div
+    [style.color]="'#fff'"
+    [style.background-color]="'#E4002B'"
+    [style.display]="'flex'"
+    [style.align-items]="'center'"
+    [style.border-radius]="'.5rem'"
+    [style.width]="'40rem'"
+    [style.margin-top]="'1rem'"
+  >
+    <tui-icon icon="@tui.info" [style.margin-left]="'1rem'" />
+    <p [style.margin-left]="'1rem'">
+      Здесь вы можете просмотреть задания на уборку гостиничных номеров,
+      назначенные на вас. После исполнения уборки, обязательно проставьте
+      отметку о выполнении.
+    </p>
+  </div>
+  <div
+    class="cleaning-header"
+    [style.display]="'flex'"
+    [style.align-items]="'center'"
+    [style.margin-top]="'2rem'"
+  >
+    <tui-textfield iconEnd="@tui.search" [style.width]="'20rem'">
+      <label tuiLabel>Номер задания</label>
+      <input
+        placeholder="Введите номер задания на уборку"
+        tuiTextfield
+        [(ngModel)]="value"
+      />
+    </tui-textfield>
+    <button
+      class="tui-space_left-5"
+      size="l"
+      tuiButton
+      type="button"
+      [style.background-color]="'#E4002B'"
+      [style.color]="'#fff'"
+      [style.aspect-ratio]="'1'"
+      (click)="openDialog(createCleanTaskDialog)"
+    >
+      <tui-icon icon="@tui.plus"></tui-icon>
+    </button>
+  </div>
+
+  <div class="cleaning-tasks-list" [style.margin-top]="'2rem'">
+    @for (cleaningTask of cleaningTasks$ | async; track cleaningTask.cleaningId) {
+      <div tuiCardLarge tuiAppearance="floating">
+        <div
+          tuiHeader
+          [style.display]="'flex'"
+          [style.justify-content]="'space-between'"
+          [style.align-items]="'center'"
+        >
+          <h2 tuiTitle>{{ cleaningTask.cleaningId }}</h2>
+          <tui-chip [appearance]="getStatusAppearance(cleaningTask.status)">{{ cleaningTask.status }}</tui-chip>
+        </div>
+        <div
+          [style.display]="'grid'"
+          [style.grid-template-columns]="'2fr 1fr'"
+          [style.align-items]="'end'"
+        >
+          <div>
+            <div [style.margin-top]="'0.5rem'" [style.font-size]="'0.95em'" [style.color]="'#666'">
+              <div>Номер комнаты: <b>{{ cleaningTask.room.roomId }}</b></div>
+              <div>Тип уборки: <b>{{ cleaningTask.cleaningType }}</b></div>
+              <div>Дата: <b>{{ cleaningTask.scheduledDate | date:'dd.MM.yyyy' }}</b></div>
+              <div>Горничная: <b>{{ cleaningTask.employee.lastName }} {{ cleaningTask.employee.firstName }}</b></div>
+            </div>
+          </div>
+        </div>
+        <button
+            size="m"
+            tuiButton
+            type="button"
+            [style.color]="'#fff'"
+            [style.background-color]="'#EB3B43'"
+            [routerLink]="['/cleanings', cleaningTask.cleaningId]"
+          >
+            Открыть
+          </button>
+      </div>
+    }
+  </div>
+</div>
+
+<ng-template #createCleanTaskDialog let-observer>
+  <h1 tuiHeader>Создания задания на уборку</h1>
+  <form [formGroup]="cleaningTaskForm">
+    <div
+      [style.display]="'grid'"
+      [style.grid-template-columns]="'1fr'"
+      [style.gap]="'1rem'"
+      [style.margin-top]="'2rem'"
+    >
+      <tui-combo-box
+        [formControl]="cleaningTaskForm.get('room')"
+        [stringify]="stringifyRoom"
+      >
+        Гостиничный номер
+        <tui-data-list-wrapper
+          *tuiDataList
+          emptyContent="Не удалось найти"
+          [itemContent]="stringifyRoom | tuiStringifyContent"
+          [items]="rooms$ | async | tuiFilterByInput"
+        />
+      </tui-combo-box>
+
+      <tui-combo-box
+        [formControl]="cleaningTaskForm.get('employee')"
+        [stringify]="stringifyEmployee"
+      >
+        Горничная
+        <tui-data-list-wrapper
+          *tuiDataList
+          emptyContent="Не удалось найти"
+          [itemContent]="stringifyEmployee | tuiStringifyContent"
+          [items]="employees$ | async | tuiFilterByInput"
+        />
+      </tui-combo-box>
+
+      <tui-textfield tuiChevron>
+        <input
+          tuiSelect
+          placeholder="Выберите вид уборки"
+          formControlName="cleaningType"
+        />
+        <tui-data-list-wrapper
+          *tuiTextfieldDropdown
+          new
+          [items]="cleaningTypes"
+        />
+      </tui-textfield>
+
+
+      <tui-textfield>
+        <label tuiLabel>Дата уборки</label>
+        <input
+          placeholder="Укажите дата уборки"
+          tuiInputDate
+          formControlName="scheduledDate"
+        />
+        <tui-calendar *tuiTextfieldDropdown />
+      </tui-textfield>
+    </div>
+
+    <tui-textfield [style.margin-block-end.rem]="1" [style.margin-top]="'2rem'">
+      <label tuiLabel>Описание</label>
+      <textarea
+        placeholder="Введите описание"
+        formControlName="description"
+        tuiTextarea
+        [limit]="100"
+        [max]="6"
+        [min]="3"
+      ></textarea>
+    </tui-textfield>
+    <div
+      [style.display]="'flex'"
+      [style.align-items]="'center'"
+      [style.justify-content]="'space-between'"
+    >
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        (click)="observer.complete()"
+        [style.width]="'45%'"
+        [style.background-color]="'#F74C54'"
+      >
+        Закрыть
+      </button>
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        class="tui-space_right-3"
+        [disabled]="cleaningTaskForm.invalid"
+        [style.width]="'45%'"
+        [style.background-color]="'#E4002B'"
+        (click)="submit(observer)"
+      >
+        Создать
+      </button>
+    </div>
+  </form>
+</ng-template>

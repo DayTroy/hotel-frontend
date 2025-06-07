@@ -12,9 +12,9 @@ export class EmployeesForms {
       phoneNumber: FormControl<string>;
       passportNumber: FormControl<string>;
       passportSeries: FormControl<string>;
-      birthdate: FormControl<string>;
+      birthdate: FormControl<Date | null>
       email: FormControl<string>;
-      dateOfEmployment: FormControl<string>;
+      dateOfEmployment: FormControl<Date | null>;
       jobPosition: FormControl<JobPosition>;
     }>({
       firstName: new FormControl('', {
@@ -38,7 +38,7 @@ export class EmployeesForms {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      birthdate: new FormControl('', {
+      birthdate: new FormControl<Date | null>(null, {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -46,7 +46,7 @@ export class EmployeesForms {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      dateOfEmployment: new FormControl('', {
+      dateOfEmployment: new FormControl<Date | null>(null, {
         nonNullable: true,
         validators: [Validators.required],
       }),

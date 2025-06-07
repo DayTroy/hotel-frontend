@@ -21,7 +21,6 @@ import { TuiTable } from '@taiga-ui/addon-table';
 import {
   TUI_FALSE_HANDLER,
   tuiTakeUntilDestroyed,
-  TuiTime,
 } from '@taiga-ui/cdk';
 import {
   timer,
@@ -45,21 +44,10 @@ import {
   TuiInputNumber,
   TuiStatus,
   TuiStringifyContentPipe,
-  TuiTextarea,
-  TuiTextareaLimit,
 } from '@taiga-ui/kit';
 import { PolymorpheusContent } from '@taiga-ui/polymorpheus';
-import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  TuiInputTimeModule,
-  TuiTextfieldControllerModule,
-  TuiUnfinishedValidator,
-} from '@taiga-ui/legacy';
-
-import { Department } from '../departments/departments.component';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
-import { DepartmentsApiService } from '../departments/departments-api.service';
 import { EmployeesApiService } from './employees-api.service';
 import { EmployeesForms } from './employees-forms.service';
 import { JobPositionsApiService } from '../job-positions/job-positions-api.service';
@@ -73,9 +61,9 @@ export interface Employee {
   phoneNumber: string;
   passportNumber: string;
   passportSeries: string;
-  birthdate: string;
+  birthdate: Date;
   email: string;
-  dateOfEmployment: string;
+  dateOfEmployment: Date;
   jobPosition: JobPosition;
 }
 @Component({

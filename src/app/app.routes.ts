@@ -8,8 +8,9 @@ import { SearchRoomsComponent } from './modules/search-rooms/search-rooms.compon
 import { AnalyticsComponent } from './modules/analytics/analytics.component';
 import { RequestsComponent } from './modules/requests/requests.component';
 import { BookingsComponent } from './modules/bookings/bookings.component';
-import { CleaningComponent } from './modules/cleaning/cleaning.component';import { RequestInfoComponent } from './modules/request-info/request-info.component';
+import { RequestInfoComponent } from './modules/request-info/request-info.component';
 import { BookingInfoComponent } from './modules/booking-info/booking-info.component';
+import { CleaningsComponent } from './modules/cleanings/cleanings.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -25,7 +26,8 @@ export const routes: Routes = [
       { path: 'requests/:id', component: RequestInfoComponent },  
       { path: 'bookings', component: BookingsComponent },
       { path: 'bookings/:id', component: BookingInfoComponent },  
-      { path: 'cleaning', component: CleaningComponent },
+      { path: 'cleanings', component: CleaningsComponent },
+      // { path: 'cleanings/:id', component: CleaningComponent },
       { path: 'analytics', component: AnalyticsComponent },
       { path: 'profile', component: ProfileComponent },
     ]
