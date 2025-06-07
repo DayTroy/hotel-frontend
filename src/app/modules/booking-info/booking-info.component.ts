@@ -11,6 +11,7 @@ import {
   TuiAlertService,
   TuiButton,
   TuiCalendar,
+  TuiFormatNumberPipe,
   TuiIcon,
   TuiLabel,
   TuiLink,
@@ -69,6 +70,7 @@ import html2canvas from 'html2canvas';
     TuiTextfieldDropdownDirective,
     TuiInputDate,
     TuiCurrencyPipe,
+    TuiFormatNumberPipe
   ],
   templateUrl: './booking-info.component.html',
   styleUrl: './booking-info.component.scss',

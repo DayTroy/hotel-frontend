@@ -255,6 +255,8 @@
                 placeholder="Введите имя гостя"
                 tuiTextfield
                 formControlName="firstName"
+                maxlength="30"
+                [maskito]="nameOptions"
               />
             </tui-textfield>
             <tui-textfield>
@@ -263,6 +265,8 @@
                 placeholder="Введите фамилию гостя"
                 tuiTextfield
                 formControlName="lastName"
+                maxlength="30"
+                [maskito]="nameOptions"
               />
             </tui-textfield>
             <tui-textfield>
@@ -271,6 +275,8 @@
                 placeholder="Введите отчество гостя"
                 tuiTextfield
                 formControlName="middleName"
+                maxlength="30"
+                [maskito]="nameOptions"
               />
             </tui-textfield>
             <tui-textfield iconEnd="@tui.at-sign">
@@ -287,6 +293,7 @@
                 placeholder="Введите телефон гостя"
                 tuiTextfield
                 formControlName="phoneNumber"
+                [maskito]="phoneOptions"
               />
             </tui-textfield>
             <div
@@ -320,19 +327,21 @@
                 />
               </tui-textfield>
               <tui-textfield>
-                <label tuiLabel>Номер паспорта</label>
-                <input
-                  placeholder="Введите номер паспорта"
-                  tuiTextfield
-                  formControlName="passportNumber"
-                />
-              </tui-textfield>
-              <tui-textfield>
                 <label tuiLabel>Серия паспорта</label>
                 <input
                   placeholder="Введите серию паспорта"
                   tuiTextfield
                   formControlName="passportSeries"
+                  [maskito]="passportSeriesOptions"
+                />
+              </tui-textfield>
+              <tui-textfield>
+                <label tuiLabel>Номер паспорта</label>
+                <input
+                  placeholder="Введите номер паспорта"
+                  tuiTextfield
+                  formControlName="passportNumber"
+                  [maskito]="passportNumberOptions"
                 />
               </tui-textfield>
               <tui-textfield>
@@ -346,6 +355,7 @@
                   placeholder="Введите место рождения"
                   tuiTextfield
                   formControlName="birthplace"
+                  maxlength="30"
                 />
               </tui-textfield>
             </div>
@@ -517,7 +527,7 @@
       [style.justify-content]="'flex-end'"
       [style.margin-top]="'2rem'"
     >
-      Итоговая стоимость брони: {{ calculateTotalPrice() }}
+      Итоговая стоимость брони: {{ calculateTotalPrice() | tuiFormatNumber | async }}
       {{ "RUB" | tuiCurrency }}
     </h4>
 

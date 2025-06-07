@@ -1,27 +1,221 @@
 <div class="analytics-container">
-    <h1 [style.margin-bottom]="'2rem'">Аналитика</h1>
-    <form [formGroup]="testForm" class="analytics-container-header" [style.display]="'flex'"
-        [style.align-items]="'center'" [style.gap]="'2rem'">
-        <tui-segmented class="colors" size="l" [style.border]="'1px solid #E4002B'" [(activeItemIndex)]="active"
-            [style.width]="'fit-content'">
-            <button *ngFor="let button of buttons; let index = index" type="button" [class.active]="index === active">
-                {{ button }}
-            </button>
-        </tui-segmented>
-        <tui-input-date-range [style.width]="'20rem'" formControlName="testValue"
-            tuiUnfinishedValidator="Finish filling the field" [max]="max" [min]="min">
-            Выберите период
-            <input placeholder="From - To" tuiTextfieldLegacy />
-        </tui-input-date-range>
-        <button size="m" tuiButton type="button" [style.background-color]="'#E4002B'"
-            [style.color]="'#fff'">Сгенерировать отчет
-        </button>
-        <button size="m" tuiButton type="button" [style.background-color]="'#E4002B'"
-            [style.color]="'#fff'">Экспортировать отчет
-        </button>
-    </form>
-    <tui-pie-chart [size]="'xl'" [value]="pie"></tui-pie-chart>
-    <tui-axes class="axes" [axisXLabels]="labelsX" [axisYLabels]="labelsY">
-        <tui-bar-chart [size]="'l'" [max]="10000" [value]="bar" />
-    </tui-axes>
+  <h1 [style.margin-bottom]="'2rem'">Аналитика</h1>
+  <form
+    [formGroup]="reportForm"
+    class="analytics-container-header"
+    [style.display]="'flex'"
+    [style.align-items]="'center'"
+    [style.gap]="'2rem'"
+  >
+    <tui-segmented
+      class="colors"
+      size="l"
+      [style.border]="'1px solid #E4002B'"
+      [(activeItemIndex)]="activeReportType"
+      (activeItemIndexChange)="onReportTypeChange($event)"
+      [style.width]="'fit-content'"
+    >
+      <button
+        *ngFor="let button of buttons; let index = index"
+        type="button"
+        [class.active]="index === activeReportType"
+      >
+        {{ button }}
+      </button>
+    </tui-segmented>
+    <tui-input-date-range
+      [style.width]="'20rem'"
+      formControlName="period"
+      tuiUnfinishedValidator="Finish filling the field"
+      [max]="max"
+      [min]="min"
+    >
+      Выберите период
+      <input placeholder="From - To" tuiTextfieldLegacy />
+    </tui-input-date-range>
+    <button
+      size="m"
+      tuiButton
+      type="button"
+      [style.background-color]="'#E4002B'"
+      [style.color]="'#fff'"
+      (click)="generateReport()"
+    >
+      Сгенерировать отчет
+    </button>
+    <ng-container *ngIf="showCharts">
+      <button
+        size="m"
+        tuiButton
+        type="button"
+        [style.background-color]="'#E4002B'"
+        [style.color]="'#fff'"
+        (click)="exportReport()"
+      >
+        Экспортировать отчет
+      </button>
+    </ng-container>
+  </form>
+
+  <ng-container *ngIf="showCharts">
+    <ng-container [ngSwitch]="activeReportType">
+      <ng-template [ngSwitchCase]="0">
+        <!-- TODO: Подумать как убрать мокку -->
+        <h2 [style.margin-top]="'2rem'">Отчет по гостиничным услугам</h2>
+        <div
+          [style.display]="'grid'"
+          [style.grid-template-columns]="'2fr 1fr'"
+          [style.gap]="'5rem'"
+          [style.align-items]="'center'"
+          
+        >
+          <table
+            id="report-table"
+            tuiTable
+            class="table tui-space_top-5"
+            [columns]="columns"
+            [style.width]="'100%'"
+            [style.border-top-left-radius]="'1rem'"
+            [style.border-top-right-radius]="'1rem'"
+            [style.overflow]="'hidden'"
+          >
+            <thead>
+              <tr>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  №
+                </th>
+                <th
+                  tuiTh
+                  [resizable]="true"
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  Услуга
+                </th>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  Кол-во заказов
+                </th>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  Общая сумма (₽)
+                </th>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  Доля от общего (%)
+                </th>
+              </tr>
+            </thead>
+
+            <tbody tuiTb>
+              <tr *ngFor="let item of data">
+                <td tuiTd>{{ item.hotelServiceId }}</td>
+                <td tuiTd>{{ item.hotelService }}</td>
+                <td tuiTd>{{ item.hotelServiceCount }}</td>
+                <td tuiTd>
+                  {{ item.totalAmount | tuiFormatNumber | async }}
+                  {{ "RUB" | tuiCurrency }}
+                </td>
+                <td tuiTd>{{ item.hotelServiceFraction }}%</td>
+              </tr>
+              <tr>
+                <td tuiTd>Итого</td>
+                <td tuiTd></td>
+                <td tuiTd>280</td>
+                <td tuiTd>830 000</td>
+                <td tuiTd>100%</td>
+              </tr>
+            </tbody>
+          </table>
+          <tui-pie-chart
+            id="report-pie-chart"
+            [tuiHintContent]="content"
+            [size]="'xl'"
+            [value]="pie"
+          ></tui-pie-chart>
+        </div>
+      </ng-template>
+      <ng-template [ngSwitchCase]="1">
+        <h2 [style.margin-top]="'2rem'">Отчет об уборке гостиничных номеров</h2>
+
+        <div
+          [style.display]="'grid'"
+          [style.grid-template-columns]="'2fr 1fr'"
+          [style.gap]="'5rem'"
+          [style.align-items]="'center'"
+        >
+          <table
+            id="cleaning-report-table"
+            tuiTable
+            class="table tui-space_top-5"
+            [columns]="cleaningColumns"
+            [style.width]="'100%'"
+            [style.border-top-left-radius]="'1rem'"
+            [style.border-top-right-radius]="'1rem'"
+            [style.overflow]="'hidden'"
+          >
+            <thead>
+              <tr>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  №
+                </th>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  Дата
+                </th>
+                <th
+                  tuiTh
+                  [style.background-color]="'#E4002B'"
+                  [style.color]="'#fff'"
+                >
+                  Количество уборок
+                </th>
+              </tr>
+            </thead>
+
+            <tbody tuiTb>
+              <tr *ngFor="let item of cleaningData">
+                <td tuiTd>{{ item.id }}</td>
+                <td tuiTd>{{ item.date }}</td>
+                <td tuiTd>{{ item.count }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <tui-axes
+            id="cleaning-report-bar-chart"
+            class="axes"
+            [axisXLabels]="labelsX"
+            [axisYLabels]="labelsY"
+          >
+            <tui-bar-chart [size]="'l'" [max]="17" [value]="bar" />
+          </tui-axes>
+        </div>
+      </ng-template>
+    </ng-container>
+  </ng-container>
 </div>
+
+<ng-template #content let-index>
+  <span>{{ pieLabels[index] }}</span>
+  <div>{{ pie[index] }}%</div>
+</ng-template>

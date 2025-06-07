@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TuiAlertService, TuiButton, TuiCalendar, TuiDialogContext, TuiDialogService, TuiTextfield, TuiTextfieldDropdownDirective } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiCalendar, TuiDialogContext, TuiDialogService, TuiFormatNumberPipe, TuiTextfield, TuiTextfieldDropdownDirective } from '@taiga-ui/core';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TUI_FALSE_HANDLER, tuiTakeUntilDestroyed, TuiTime } from '@taiga-ui/cdk';
@@ -31,7 +31,7 @@ export interface JobPosition {
 @Component({
     selector: 'app-job-positions',
     standalone: true,
-    imports: [NgIf, TuiTable, AsyncPipe, NgFor, TuiCurrencyPipe, TuiButton, TuiStatus, TuiTextfield, FormsModule, ReactiveFormsModule, TuiInputNumber, TuiTextarea, TuiTextareaLimit, TuiButtonLoading, TuiCalendar, TuiDataListWrapper, TuiComboBoxModule, TuiStringifyContentPipe, TuiFilterByInputPipe ],
+    imports: [NgIf, TuiTable, AsyncPipe, NgFor, TuiCurrencyPipe, TuiButton, TuiStatus, TuiTextfield, FormsModule, ReactiveFormsModule, TuiInputNumber, TuiTextarea, TuiTextareaLimit, TuiButtonLoading, TuiCalendar, TuiDataListWrapper, TuiComboBoxModule, TuiStringifyContentPipe, TuiFilterByInputPipe, TuiFormatNumberPipe ],
     templateUrl: './job-positions.component.html',
     styleUrl: './job-positions.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,6 +9,7 @@ import {
   TuiDialogContext,
   TuiIcon,
   TuiTextfieldDropdownDirective,
+  TuiFormatNumberPipe,
 } from '@taiga-ui/core';
 import {
   TuiInputDate,
@@ -46,7 +47,11 @@ import { BookingsApiService } from '../bookings/bookings-api.service';
 import { GuestsForms } from '../references/guests/guests-forms.service';
 import { AmenitiesForms } from '../references/amenities/amenities-forms.service';
 import { Router } from '@angular/router';
-
+import {MaskitoDirective} from '@maskito/angular';
+import type {MaskitoOptions} from '@maskito/core';
+import phoneMask from '../../shared/masks/phoneMask';
+import { passportNumberMask, passportSeriesMask } from '../../shared/masks/passportMask';
+import { nameMask } from '../../shared/masks/nameMask';
 interface Room {
   roomId: string;
   stage: string;
@@ -84,6 +89,8 @@ interface Room {
     TuiComboBoxModule,
     TuiFilterByInputPipe,
     TuiStringifyContentPipe,
+    TuiFormatNumberPipe,
+    MaskitoDirective
   ],
   templateUrl: './search-rooms.component.html',
   styleUrl: './search-rooms.component.scss',
@@ -100,7 +107,11 @@ export class SearchRoomsComponent implements OnInit {
   private readonly alerts = inject(TuiAlertService);
   private currentDialogObserver: any;
   genders = ['Мужской', 'Женский'];
-  citizenships = ['Россия', 'Другое'];
+  citizenships = ['Россия', 'Беларусь', 'Казахстан', 'Другое'];
+  readonly phoneOptions: MaskitoOptions = phoneMask;
+  readonly passportSeriesOptions: MaskitoOptions = passportSeriesMask;
+  readonly passportNumberOptions: MaskitoOptions = passportNumberMask;
+  readonly nameOptions: MaskitoOptions = nameMask;
 
   protected searchRoomsForm: FormGroup = new FormGroup({
     guests: new FormControl(null, [

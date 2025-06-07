@@ -113,6 +113,8 @@
           placeholder="Введите имя сотрудника"
           tuiTextfield
           formControlName="firstName"
+          maxlength="30"
+          [maskito]="nameOptions"
         />
       </tui-textfield>
       <tui-textfield>
@@ -121,6 +123,8 @@
           placeholder="Введите фамилию сотрудника"
           tuiTextfield
           formControlName="lastName"
+          maxlength="30"
+          [maskito]="nameOptions"
         />
       </tui-textfield>
       <tui-textfield>
@@ -129,6 +133,8 @@
           placeholder="Введите отчество сотрудника"
           tuiTextfield
           formControlName="middleName"
+          maxlength="30"
+          [maskito]="nameOptions"
         />
       </tui-textfield>
 
@@ -159,12 +165,13 @@
           placeholder="Введите контактный телефон сотрудника"
           tuiTextfield
           formControlName="phoneNumber"
+          [maskito]="phoneOptions"
         />
       </tui-textfield>
       <tui-textfield>
         <label tuiLabel>Дата рождения</label>
         <input
-          placeholder="Укажите дату трудоустройства"
+          placeholder="Укажите дату рождения"
           tuiInputDate
           formControlName="birthdate"
         />
@@ -182,6 +189,7 @@
             placeholder="Введите серию паспорта"
             tuiTextfield
             formControlName="passportSeries"
+            [maskito]="passportSeriesOptions"
           />
         </tui-textfield>
 
@@ -191,6 +199,7 @@
             placeholder="Введите номер паспорта"
             tuiTextfield
             formControlName="passportNumber"
+            [maskito]="passportNumberOptions"
           />
         </tui-textfield>
       </div>

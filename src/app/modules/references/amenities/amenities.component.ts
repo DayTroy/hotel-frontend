@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TuiAlertService, TuiButton, TuiDialogContext, TuiDialogService, TuiTextfield } from '@taiga-ui/core';
+import { TuiAlertService, TuiButton, TuiDialogContext, TuiDialogService, TuiFormatNumberPipe, TuiTextfield } from '@taiga-ui/core';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TUI_FALSE_HANDLER, tuiTakeUntilDestroyed } from '@taiga-ui/cdk';
@@ -27,7 +27,7 @@ export interface Amenity {
 @Component({
     selector: 'app-amenities',
     standalone: true,
-    imports: [NgIf, TuiTable, AsyncPipe, NgFor, TuiCurrencyPipe, TuiButton, TuiStatus, TuiTextfield, FormsModule, ReactiveFormsModule, TuiInputNumber, TuiTextarea, TuiTextareaLimit, TuiButtonLoading],
+    imports: [NgIf, TuiTable, AsyncPipe, NgFor, TuiCurrencyPipe, TuiButton, TuiStatus, TuiTextfield, FormsModule, ReactiveFormsModule, TuiInputNumber, TuiTextarea, TuiTextareaLimit, TuiButtonLoading, TuiFormatNumberPipe],
     templateUrl: './amenities.component.html',
     styleUrl: './amenities.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

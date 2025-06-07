@@ -36,7 +36,7 @@ export class EmployeesForms {
       }),
       passportSeries: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required],
+        validators: [Validators.required, ],
       }),
       birthdate: new FormControl<Date | null>(null, {
         nonNullable: true,

@@ -42,6 +42,7 @@ import {
   TuiFilterByInputPipe,
   TuiInputDate,
   TuiInputNumber,
+  tuiMaskito,
   TuiStatus,
   TuiStringifyContentPipe,
 } from '@taiga-ui/kit';
@@ -52,6 +53,11 @@ import { EmployeesApiService } from './employees-api.service';
 import { EmployeesForms } from './employees-forms.service';
 import { JobPositionsApiService } from '../job-positions/job-positions-api.service';
 import { JobPosition } from '../job-positions/job-positions.component';
+import {MaskitoDirective} from '@maskito/angular';
+import type {MaskitoOptions} from '@maskito/core';
+import phoneMask from '../../../shared/masks/phoneMask';
+import {passportSeriesMask, passportNumberMask} from '../../../shared/masks/passportMask';
+import {nameMask} from '../../../shared/masks/nameMask';
 
 export interface Employee {
   employeeId: string;
@@ -88,7 +94,8 @@ export interface Employee {
     TuiFilterByInputPipe,
     TuiInputDate,
     TuiCalendar,
-    TuiTextfieldDropdownDirective
+    TuiTextfieldDropdownDirective,
+    MaskitoDirective
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
@@ -98,6 +105,10 @@ export class EmployeesComponent implements OnInit {
   @ViewChild('employeeDialog') employeeDialog!: TemplateRef<any>;
 
   employeeForm = this._employeesForms.createEmployeeForm();
+  readonly phoneOptions: MaskitoOptions = phoneMask;
+  readonly passportSeriesOptions: MaskitoOptions = passportSeriesMask;
+  readonly passportNumberOptions: MaskitoOptions = passportNumberMask;
+  readonly nameOptions: MaskitoOptions = nameMask;
   protected currentEmployeeId: string | null = null;
 
   destroyRef = inject(DestroyRef);

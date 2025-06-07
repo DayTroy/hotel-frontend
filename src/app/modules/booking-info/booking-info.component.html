@@ -219,7 +219,7 @@
           [style.justify-content]="'flex-end'"
           [style.margin-top]="'2rem'"
         >
-          Итоговая стоимость брони: {{ booking.totalPrice }}
+          Итоговая стоимость брони: {{ booking.totalPrice | tuiFormatNumber | async }}
           {{ "RUB" | tuiCurrency }}
         </h3>
         <button

@@ -63,7 +63,7 @@
       </td>
 
       <td tuiTd>
-        <p>{{ item.jobSalary }} {{ 'RUB' | tuiCurrency }}</p>
+        <p>{{ +item.jobSalary | tuiFormatNumber | async }} {{ 'RUB' | tuiCurrency }}</p>
       </td>
 
       <td tuiTd>
