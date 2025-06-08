@@ -1,8 +1,25 @@
 <header class="navheader">
-  <tui-textfield [style.width]="'40rem'">
-    <input [tuiInputSearch]="results" placeholder="Поиск..." />
+  <tui-textfield [style.width]="'100%'" [style.margin-right]="'2rem'">
+    <input 
+      [tuiInputSearch]="results" 
+      placeholder="Поиск..." 
+      (input)="onSearchChange($any($event).target.value)"
+    />
     <ng-template #results>
-      <!-- ... -->
+      <tui-data-list>
+        @for (result of searchResults$ | async; track result.name) {
+          <button 
+            tuiOption 
+            [routerLink]="[result.url]"
+            type="button"
+            [style.background-color]="'#BC565B'"
+            [style.justify-content]="'flex-start'"
+          >
+            <tui-icon [icon]="'@tui.' + result.icon" class="tui-space_right-2"></tui-icon>
+            <span>{{ result.name }}</span>
+          </button>
+        }
+      </tui-data-list>
     </ng-template>
   </tui-textfield>
   <hr />
@@ -14,37 +31,31 @@
       type="button"
       size="m"
       tuiDropdownAlign="center"
-    [tuiAppearanceState]="open ? 'active' : null"
-    [tuiDropdown]="dropdown"
-    [tuiDropdownSided]="true"
-    [(tuiDropdownOpen)]="open"
+      [tuiAppearanceState]="open ? 'active' : null"
+      [tuiDropdown]="dropdown"
+      [tuiDropdownSided]="true"
+      [(tuiDropdownOpen)]="open"
     >
       More
     </button>
-    <tui-avatar [src]="avatarText$ | async" size="m" [routerLink]="['/dashboard/profile']" [style.cursor]="'pointer'"/>
+    <tui-avatar
+      [src]="avatarText$ | async"
+      size="m"
+      [routerLink]="['/dashboard/profile']"
+      [style.cursor]="'pointer'"
+    />
   </div>
 </header>
 
-<ng-template
-#dropdown
-let-close
->
-<tui-data-list>
+<ng-template #dropdown let-close>
+  <tui-data-list>
     <tui-opt-group>
-        <button
-            tuiOption
-            [routerLink]="['/dashboard/profile']"
-            type="button"
-        >
-            Перейти в профиль
-        </button>
-        <button
-            tuiOption
-            type="button"
-            (click)="logout()"
-        >
-            Выйти из системы
-        </button>
+      <button tuiOption [routerLink]="['/dashboard/profile']" type="button">
+        Перейти в профиль
+      </button>
+      <button tuiOption type="button" (click)="logout()">
+        Выйти из системы
+      </button>
     </tui-opt-group>
-</tui-data-list>
+  </tui-data-list>
 </ng-template>
