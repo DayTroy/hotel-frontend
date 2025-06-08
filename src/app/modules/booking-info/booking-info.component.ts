@@ -12,6 +12,7 @@ import {
   TuiFormatNumberPipe,
   TuiCalendar,
   TuiLink,
+  TuiLabel,
 } from '@taiga-ui/core';
 import {
   TuiInputDate,
@@ -107,7 +108,8 @@ interface Booking {
     TuiLink,
     RouterLink,
     TuiInputDate,
-    MaskitoDirective
+    MaskitoDirective,
+    TuiLabel
   ],
   templateUrl: './booking-info.component.html',
   styleUrl: './booking-info.component.scss',
@@ -304,24 +306,13 @@ export class BookingInfoComponent implements OnInit {
   protected onAmenityChange(amenity: Amenity | null, index: number): void {
     if (!amenity) return;
     
-    const amenityForm = this.providedAmenityForms[index];
-    const currentQuantity = amenityForm.get('amenityQuantity')?.value || 0;
+    const currentQuantity = this.providedAmenitiesArray.at(index)?.get('amenityQuantity')?.value || 0;
     
-    // Отключаем подписку на изменения временно
-    const subscription = this.subscribeToFormChanges(amenityForm);
-    if (subscription) {
-      subscription.unsubscribe();
-    }
-    
-    // Устанавливаем новые значения
-    amenityForm.patchValue({
+    this.providedAmenitiesArray.at(index)?.patchValue({
       amenity: amenity,
       amenityPrice: amenity.amenityPrice,
       amenitiesTotalPrice: currentQuantity * amenity.amenityPrice
-    }, { emitEvent: false });
-    
-    // Восстанавливаем подписку
-    this.subscribeToFormChanges(amenityForm);
+    });
   }
 
   protected subscribeToFormChanges(form: FormGroup) {

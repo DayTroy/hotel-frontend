@@ -99,33 +99,33 @@ export class AnalyticsComponent {
     },
     {
       id: 2,
-      date: '19.05.2025',
-      count: 12,
+      date: '20.05.2025',
+      count: 14,
     },
     {
       id: 3,
-      date: '19.05.2025',
-      count: 12,
+      date: '21.05.2025',
+      count: 17,
     },
     {
       id: 4,
-      date: '19.05.2025',
-      count: 12,
+      date: '22.05.2025',
+      count: 13,
     },
     {
       id: 5,
-      date: '19.05.2025',
-      count: 12,
+      date: '23.05.2025',
+      count: 20,
     },
     {
       id: 6,
-      date: '19.05.2025',
-      count: 12,
+      date: '24.05.2025',
+      count: 18,
     },
     {
       id: 7,
-      date: '19.05.2025',
-      count: 12,
+      date: '25.05.2025',
+      count: 16,
     },
   ];
 
@@ -143,7 +143,7 @@ export class AnalyticsComponent {
   protected readonly pie = [66.7, 19, 4.8, 9.5];
   protected readonly bar = [
     [
-      12, 14, 11, 11, 16, 9, 8
+      12, 14, 17, 13, 20, 18, 16
     ],
   ];
   protected readonly pieLabels = this.data.map(item => item.hotelService);
