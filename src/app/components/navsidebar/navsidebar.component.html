@@ -3,7 +3,7 @@
   [style.z-index]="'0'"
   [tuiNavigationAside]="true">
   <header>
-    <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin]="'1rem'">
+    <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin]="'1rem'" [routerLink]="'/dashboard/home'" [style.cursor]="'pointer'">
   </header>
 
   <a *ngIf="isMenuItemVisible('Заявки')" iconStart="@tui.send" tuiAsideItem [routerLink]="'/dashboard/requests'">Заявки</a>

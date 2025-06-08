@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { map, take, filter } from 'rxjs/operators';
+import { map, take, filter, switchMap } from 'rxjs/operators';
 import { TuiAlertService } from '@taiga-ui/core';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,87 +16,65 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot) {
+    // Сначала проверяем, есть ли токен
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return of(false);
+    }
+
+    // Если токен есть, но пользователь еще не загружен, загружаем его
     return this.authService.currentUser$.pipe(
-      filter(user => user !== undefined), // Ждем, пока профиль загрузится
+      filter(user => user !== undefined),
       take(1),
-      map(user => {
+      switchMap(user => {
         if (!user) {
-          this.router.navigate(['/']);
-          return false;
+          // Если пользователь не загружен, пробуем загрузить его
+          return this.authService.getProfile().pipe(
+            map(profile => {
+              const jobTitle = profile.jobPosition.jobTitle;
+              const path = route.routeConfig?.path;
+              return this.checkAccess(jobTitle, path);
+            })
+          );
         }
 
         const jobTitle = user.jobPosition.jobTitle;
         const path = route.routeConfig?.path;
-
-        // Если это корневой путь dashboard, перенаправляем на нужный модуль
-        if (path === 'dashboard' || path === '') {
-          switch (jobTitle) {
-            case 'Менеджер':
-              this.router.navigate(['/dashboard/requests']);
-              return false;
-            case 'Портье':
-              this.router.navigate(['/dashboard/bookings']);
-              return false;
-            case 'Управляющий':
-              this.router.navigate(['/dashboard/search-rooms']);
-              return false;
-            case 'Горничная':
-              this.router.navigate(['/dashboard/cleanings']);
-              return false;
-            default:
-              this.router.navigate(['/dashboard/profile']);
-              return false;
-          }
-        }
-
-        // Разрешаем доступ к профилю всем пользователям
-        if (path === 'profile') {
-          return true;
-        }
-
-        // Проверяем доступ в зависимости от должности
-        let hasAccess = false;
-        const basePath = path?.split('/')[0] || '';
-
-        switch (jobTitle) {
-          case 'Менеджер':
-            hasAccess = ['requests', 'bookings', 'search-rooms', 'profile'].includes(basePath);
-            break;
-          case 'Портье':
-            hasAccess = ['bookings', 'search-rooms', 'references', 'profile'].includes(basePath);
-            break;
-          case 'Управляющий':
-            hasAccess = true; // Доступ ко всем модулям
-            break;
-          case 'Горничная':
-            hasAccess = ['cleanings', 'profile'].includes(basePath);
-            break;
-          default:
-            hasAccess = false;
-        }
-
-        if (!hasAccess) {
-          this.alerts
-            .open('У вас нет доступа к этому модулю', {
-              label: 'Доступ запрещен',
-              appearance: 'negative',
-              autoClose: 3000,
-            })
-            .subscribe();
-          this.router.navigate(['/dashboard/profile']);
-          return false;
-        }
-
-        return true;
+        return of(this.checkAccess(jobTitle, path));
       })
     );
   }
 
-  private checkAccess(jobTitle: string, path: string | null): boolean {
+  private checkAccess(jobTitle: string, path: string | undefined): boolean {
+    if (path === 'dashboard' || path === '') {
+      switch (jobTitle) {
+        case 'Менеджер':
+          this.router.navigate(['/dashboard/requests']);
+          return false;
+        case 'Портье':
+          this.router.navigate(['/dashboard/bookings']);
+          return false;
+        case 'Управляющий':
+          this.router.navigate(['/dashboard/search-rooms']);
+          return false;
+        case 'Горничная':
+          this.router.navigate(['/dashboard/cleanings']);
+          return false;
+        default:
+          this.router.navigate(['/dashboard/profile']);
+          return false;
+      }
+    }
+
+    if (path === 'profile') {
+      return true;
+    }
+
+    // Проверяем доступ в зависимости от должности
     let hasAccess = false;
-    const pathParts = path?.split('/') || [];
-    const basePath = pathParts[pathParts.length - 1] || '';
-    
+    // Получаем базовый путь без параметров
+    const basePath = path?.split('/')[0] || '';
+
     switch (jobTitle) {
       case 'Менеджер':
         hasAccess = ['requests', 'bookings', 'search-rooms', 'profile'].includes(basePath);
@@ -112,6 +91,19 @@ export class RoleGuard implements CanActivate {
       default:
         hasAccess = false;
     }
-    return hasAccess;
+
+    if (!hasAccess) {
+      this.alerts
+        .open('У вас нет доступа к этому модулю', {
+          label: 'Доступ запрещен',
+          appearance: 'negative',
+          autoClose: 3000,
+        })
+        .subscribe();
+      this.router.navigate(['/dashboard/profile']);
+      return false;
+    }
+
+    return true;
   }
 } 
