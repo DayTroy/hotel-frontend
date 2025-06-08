@@ -46,6 +46,5 @@ export default class NavHeaderComponent {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/']);
   }
 }

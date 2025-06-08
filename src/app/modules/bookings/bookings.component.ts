@@ -92,7 +92,7 @@ export class BookingsComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.alerts.open('Заявка успешна удалена', { appearance: 'positive' }).subscribe();
+        this.alerts.open('Бронь успешна удалена', { appearance: 'positive' }).subscribe();
         this.loadBookings();
       });
   }

@@ -13,7 +13,6 @@ import { NgFor } from '@angular/common';
     TuiHeader,
     TuiButton,
     RouterLink,
-    NgFor,
     TuiTitle,
     TuiCard,
   ],

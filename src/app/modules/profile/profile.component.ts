@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TuiAvatar, TuiInputPassword } from '@taiga-ui/kit';
 import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import {MaskitoDirective} from '@maskito/angular';
 import type {MaskitoOptions} from '@maskito/core';
 import phoneMask from '../../shared/masks/phoneMask';
 import { nameMask } from '../../shared/masks/nameMask';
+import { ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -35,18 +36,22 @@ export class ProfileComponent implements OnInit {
   readonly nameOptions: MaskitoOptions = nameMask;
 
   constructor(
+    private fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly alerts: TuiAlertService
   ) {
     this.profileForm = new FormGroup({
-      firstName: new FormControl('', [Validators.required]),
-      lastName: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      phoneNumber: new FormControl('', [Validators.required]),
-      currentPassword: new FormControl(''),
-      newPassword: new FormControl(''),
-      confirmPassword: new FormControl('')
-    });
+      firstName: new FormControl({value: '', disabled: true}),
+      lastName: new FormControl({value: '', disabled: true}),
+      email: new FormControl({value: '', disabled: true}),
+      phoneNumber: new FormControl({value: '', disabled: true}),
+      currentPassword: new FormControl('', [Validators.required]),
+      newPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(12)
+      ]),
+      confirmPassword: new FormControl('', [Validators.required])
+    }, { validators: [this.passwordMatchValidator] });
   }
 
   ngOnInit(): void {
@@ -90,7 +95,67 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    // TODO: Implement profile update
-    console.log(this.profileForm.value);
+    this.authService.updateProfile(this.profileForm.value).subscribe({
+      next: () => {
+        this.alerts
+          .open('Профиль успешно обновлен', {
+            label: 'Успех',
+            appearance: 'positive',
+            autoClose: 3000,
+          })
+          .subscribe();
+        this.profileForm.patchValue({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+        this.profileForm.get('currentPassword')?.markAsUntouched();
+        this.profileForm.get('newPassword')?.markAsUntouched();
+        this.profileForm.get('confirmPassword')?.markAsUntouched();
+      },
+      error: (error) => {
+        this.alerts
+          .open(error.error.message, {
+            label: 'Ошибка',
+            appearance: 'negative',
+            autoClose: 3000,
+          })
+          .subscribe();
+      }
+    });
+  }
+
+  passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const form = control as FormGroup;
+    const newPassword = form.get('newPassword')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+      form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    }
+    return null;
+  };
+
+  getPasswordErrorMessage(): string {
+    const control = this.profileForm.get('newPassword');
+    if (control?.hasError('required')) {
+      return 'Пароль обязателен';
+    }
+    if (control?.hasError('minlength')) {
+      return 'Пароль должен быть не менее 12 символов';
+    }
+    return '';
+  }
+
+  getConfirmPasswordErrorMessage(): string {
+    const control = this.profileForm.get('confirmPassword');
+    if (control?.hasError('required')) {
+      return 'Подтверждение пароля обязательно';
+    }
+    if (control?.hasError('passwordMismatch')) {
+      return 'Пароли не совпадают';
+    }
+    return '';
   }
 }

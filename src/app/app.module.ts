@@ -4,10 +4,10 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { LoginComponent } from './modules/login/login.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -20,7 +20,6 @@ export function tokenGetter() {
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     JwtModule.forRoot({

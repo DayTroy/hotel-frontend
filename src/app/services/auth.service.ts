@@ -40,7 +40,6 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.API_URL}/auth/login`, { email, password })
       .pipe(
         tap(response => {
-          console.log('Login response:', response);
           localStorage.setItem(this.TOKEN_KEY, response.token);
           this.currentUserSubject.next(response.employee);
         })
@@ -50,7 +49,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
@@ -86,6 +85,14 @@ export class AuthService {
 
   getProfile(): Observable<Employee> {
     return this.http.get<Employee>(`${this.API_URL}/auth/profile`).pipe(
+      tap(profile => {
+        this.currentUserSubject.next(profile);
+      })
+    );
+  }
+
+  updateProfile(profileData: any) {
+    return this.http.patch<Employee>(`${this.API_URL}/auth/profile/update`, profileData).pipe(
       tap(profile => {
         this.currentUserSubject.next(profile);
       })
