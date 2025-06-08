@@ -21,7 +21,7 @@
     >
       More
     </button>
-    <tui-avatar src="AI" size="m" [routerLink]="['/dashboard/profile']" [style.cursor]="'pointer'"/>
+    <tui-avatar [src]="avatarText$ | async" size="m" [routerLink]="['/dashboard/profile']" [style.cursor]="'pointer'"/>
   </div>
 </header>
 

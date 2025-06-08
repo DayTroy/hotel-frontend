@@ -41,7 +41,7 @@
               {{ cleaningTaskStatus }}
             </button>
           </tui-segmented>
-          <tui-textfield [style.margin-left]="'2rem'">
+          <tui-textfield [style.margin-left]="'2rem'" [style.width]="'20rem'">
             <label tuiLabel>Срок выполнения</label>
             <input tuiInputDate formControlName="scheduledDate" />
             <tui-calendar *tuiTextfieldDropdown />
@@ -50,6 +50,7 @@
             [formControl]="cleaningTaskForm.get('room')"
             [stringify]="stringifyRoom"
             [style.margin-left]="'2rem'"
+            [style.width]="'20rem'"
           >
             Гостиничный номер
             <tui-data-list-wrapper

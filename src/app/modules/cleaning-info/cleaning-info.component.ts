@@ -136,7 +136,11 @@ export class CleaningInfoComponent implements OnInit {
 
   ngOnInit() {
     if(this.isMaid()) {
-      this.cleaningTaskForm.disable();
+      this.cleaningTaskForm.get('room')?.disable();
+      this.cleaningTaskForm.get('employee')?.disable();
+      this.cleaningTaskForm.get('scheduledDate')?.disable();
+      this.cleaningTaskForm.get('cleaningType')?.disable();
+      this.cleaningTaskForm.get('description')?.disable();
     }
     this.loadRooms();
     this.loadEmployees();
