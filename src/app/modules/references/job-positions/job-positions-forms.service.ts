@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Department } from '../departments/departments.component';
+import { Department } from '../../../interfaces/department.interface';
 
 @Injectable({ providedIn: 'root' })
 export class JobPositionsForms {

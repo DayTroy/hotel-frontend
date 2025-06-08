@@ -11,9 +11,9 @@ import { TuiNavigation } from '@taiga-ui/layout';
 import { RouterLink, Router } from '@angular/router';
 import { TuiIcon } from '@taiga-ui/core';
 import { AuthService } from '../../services/auth.service';
-import { Employee } from '../../modules/references/employees/employees.component';
 import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
+import { Employee } from '../../interfaces/employee.interface';
 
 @Component({
   standalone: true,

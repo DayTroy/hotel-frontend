@@ -1,12 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TUI_FALSE_HANDLER, TuiDay, TuiLet } from '@taiga-ui/cdk';
+import { TuiLet } from '@taiga-ui/cdk';
 import {
   TuiTextfield,
   TuiButton,
   TuiLoader,
   TuiAlertService,
   TuiDialogService,
-  TuiDialogContext,
   TuiIcon,
   TuiTextfieldDropdownDirective,
   TuiFormatNumberPipe,
@@ -35,11 +34,8 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { NgIf, AsyncPipe, NgFor, NgSwitch, NgSwitchCase, formatDate } from '@angular/common';
-import { startWith } from 'rxjs/operators';
-import { timer, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Subject, BehaviorSubject, of } from 'rxjs';
-import { switchMap, catchError, finalize, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
@@ -57,22 +53,8 @@ import type {MaskitoOptions} from '@maskito/core';
 import phoneMask from '../../shared/masks/phoneMask';
 import { passportNumberMask, passportSeriesMask } from '../../shared/masks/passportMask';
 import { nameMask } from '../../shared/masks/nameMask';
-interface Amenity {
-  amenityId: string;
-  amenityTitle: string;
-  amenityPrice: number;
-}
-
-interface Booking {
-  bookingId: string;
-  checkInDate: Date;
-  checkOutDate: Date;
-  roomId: string;
-  status: string;
-  guests: any[];
-  providedAmenities: any[];
-  totalPrice: number;
-}
+import { Booking } from '../../interfaces/booking.interface';
+import { Amenity } from '../../interfaces/amenity.interface';
 
 @Component({
   selector: 'app-booking-info',
@@ -126,7 +108,7 @@ export class BookingInfoComponent implements OnInit {
   protected readonly _amenitiesForms = inject(AmenitiesForms);
   protected readonly fb = inject(FormBuilder);
 
-  protected readonly booking$ = new BehaviorSubject<Booking | null>(null);
+  protected readonly booking$ = new BehaviorSubject<Booking| null>(null);
   protected readonly error$ = new BehaviorSubject<string | null>(null);
   protected readonly loading$ = new BehaviorSubject<boolean>(false);
 

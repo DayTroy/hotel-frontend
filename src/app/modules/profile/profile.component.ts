@@ -5,13 +5,13 @@ import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TuiButton, TuiLabel, TuiTextfield } from '@taiga-ui/core';
 import { AuthService } from '../../services/auth.service';
-import { Employee } from '../references/employees/employees.component';
 import { TuiAlertService } from '@taiga-ui/core';
 import {MaskitoDirective} from '@maskito/angular';
 import type {MaskitoOptions} from '@maskito/core';
 import phoneMask from '../../shared/masks/phoneMask';
 import { nameMask } from '../../shared/masks/nameMask';
 import { ValidatorFn } from '@angular/forms';
+import { Employee } from '../../interfaces/employee.interface';
 
 @Component({
   selector: 'app-profile',

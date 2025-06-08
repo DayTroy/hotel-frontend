@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Room } from '../references/rooms/rooms.component';
-import { Employee } from '../references/employees/employees.component';
+import { Employee } from '../../interfaces/employee.interface';
+import { Room } from '../../interfaces/room.interface';
+
 
 @Injectable({ providedIn: 'root' })
 export class CleaningForms {

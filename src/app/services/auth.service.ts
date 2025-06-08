@@ -1,23 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { User } from '../interfaces/user.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Employee } from '../modules/references/employees/employees.component';
 import { Router } from '@angular/router';
-
-interface LoginResponse {
-  token: string;
-  employee: Employee;
-}
-
-interface DecodedToken {
-  email: string;
-  exp: number;
-  iat: number;
-  jobPositionId: string;
-  sub: string;
-}
+import { Employee } from '../interfaces/employee.interface';
+import { LoginResponse } from '../interfaces/login-response.interface';
 
 @Injectable({
   providedIn: 'root'

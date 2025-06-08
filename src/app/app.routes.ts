@@ -21,14 +21,14 @@ export const routes: Routes = [
   { 
     path: 'dashboard', 
     component: DashboardComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { 
         path: 'references', 
         component: ReferencesComponent,
-        canActivate: [RoleGuard]
+        // canActivate: [RoleGuard]
       },
       { 
         path: 'search-rooms', 

@@ -25,8 +25,6 @@ import {
 } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiHeader } from '@taiga-ui/layout';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
-import { Room } from '../references/rooms/rooms.component';
-import { Employee } from '../references/employees/employees.component';
 import { EmployeesApiService } from '../references/employees/employees-api.service';
 import { RoomsApiService } from '../references/rooms/rooms-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -36,45 +34,9 @@ import { CleaningForms } from './cleanings-forms.service';
 import { CleaningsApiService } from './cleanings-api.service';
 import {TuiChip} from '@taiga-ui/kit';
 import { AuthService } from '../../services/auth.service';
-
-export interface CleaningTask {
-  cleaningId: string;
-  room: Room;
-  employee: Employee;
-  cleaningType: string;
-  scheduledDate: string;
-  description: string;
-  status: string;
-}
-
-export interface CleaningTaskResponse {
-  cleaningId: string;
-  scheduledDate: string;
-  status: string;
-  description: string;
-  cleaningType: string;
-  room: {
-    roomId: string;
-    stage: number;
-    status: string;
-    roomCategoryId: string;
-  };
-  roomId: string;
-  employee: {
-    employeeId: string;
-    lastName: string;
-    firstName: string;
-    middleName: string;
-    birthdate: string;
-    dateOfEmployment: string;
-    phoneNumber: string;
-    email: string;
-    passportNumber: string;
-    passportSeries: string;
-    jobPositionId: string;
-  };
-  employeeId: string;
-}
+import { Room } from '../../interfaces/room.interface';
+import { Employee } from '../../interfaces/employee.interface';
+import { CleaningTask } from '../../interfaces/cleaning.interface';
 
 @Component({
   selector: 'app-cleanings',
@@ -115,8 +77,8 @@ export class CleaningsComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   protected readonly loading$ = new BehaviorSubject<boolean>(false);
   protected readonly error$ = new BehaviorSubject<string | null>(null);
-  protected readonly cleaningTasks$ = new BehaviorSubject<CleaningTaskResponse[]>([]);
-  protected readonly allCleaningTasks$ = new BehaviorSubject<CleaningTaskResponse[]>([]);
+  protected readonly cleaningTasks$ = new BehaviorSubject<any[]>([]);
+  protected readonly allCleaningTasks$ = new BehaviorSubject<any[]>([]);
   protected readonly notFound$ = new BehaviorSubject<boolean>(false);
   protected readonly rooms$ = new BehaviorSubject<Room[]>([]);
   protected readonly employees$ = new BehaviorSubject<Employee[]>([]);
@@ -245,7 +207,7 @@ export class CleaningsComponent implements OnInit {
           this.allCleaningTasks$.next(tasks);
         } else {
           const currentUserId = this.authService.currentUserSubject.value?.employeeId;
-          const filteredTasks = tasks.filter(task => task.employee.employeeId === currentUserId);
+          const filteredTasks = tasks.filter(task => task?.employee.employeeId === currentUserId);
           this.cleaningTasks$.next(filteredTasks);
           this.allCleaningTasks$.next(filteredTasks);
         }

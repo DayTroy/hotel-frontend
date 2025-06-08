@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { JobPosition } from "../job-positions/job-positions.component";
+import { JobPosition } from "../../../interfaces/job-position.interface";
 
 @Injectable({ providedIn: 'root' })
 export class EmployeesForms {

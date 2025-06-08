@@ -18,10 +18,7 @@ import {
 } from '@taiga-ui/core';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { TuiTable } from '@taiga-ui/addon-table';
-import {
-  TUI_FALSE_HANDLER,
-  tuiTakeUntilDestroyed,
-} from '@taiga-ui/cdk';
+import { TUI_FALSE_HANDLER, tuiTakeUntilDestroyed } from '@taiga-ui/cdk';
 import {
   timer,
   catchError,
@@ -32,6 +29,7 @@ import {
   BehaviorSubject,
   finalize,
   of,
+  tap,
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -51,26 +49,18 @@ import { TuiComboBoxModule } from '@taiga-ui/legacy';
 import { EmployeesApiService } from './employees-api.service';
 import { EmployeesForms } from './employees-forms.service';
 import { JobPositionsApiService } from '../job-positions/job-positions-api.service';
-import { JobPosition } from '../job-positions/job-positions.component';
-import {MaskitoDirective} from '@maskito/angular';
-import type {MaskitoOptions} from '@maskito/core';
+import { MaskitoDirective } from '@maskito/angular';
+import type { MaskitoOptions } from '@maskito/core';
 import phoneMask from '../../../shared/masks/phoneMask';
-import {passportSeriesMask, passportNumberMask} from '../../../shared/masks/passportMask';
-import {nameMask} from '../../../shared/masks/nameMask';
+import {
+  passportSeriesMask,
+  passportNumberMask,
+} from '../../../shared/masks/passportMask';
+import { nameMask } from '../../../shared/masks/nameMask';
+import { Employee } from '../../../interfaces/employee.interface';
+import { JobPosition } from '../../../interfaces/job-position.interface';
 
-export interface Employee {
-  employeeId: string;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  phoneNumber: string;
-  passportNumber: string;
-  passportSeries: string;
-  birthdate: Date;
-  email: string;
-  dateOfEmployment: Date;
-  jobPosition: JobPosition;
-}
+
 @Component({
   selector: 'app-employees',
   standalone: true,
@@ -93,7 +83,7 @@ export interface Employee {
     TuiInputDate,
     TuiCalendar,
     TuiTextfieldDropdownDirective,
-    MaskitoDirective
+    MaskitoDirective,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.scss',
@@ -206,6 +196,11 @@ export class EmployeesComponent implements OnInit {
 
           this.loading$.next(true);
           return this._employeesApi.delete(employeeId).pipe(
+            tap(() => {
+              this.alerts
+                .open('Сотрудник успешно создана', { appearance: 'positive' })
+                .subscribe();
+            }),
             catchError((error) => {
               this.alerts.open('Ошибка при удалении сотрудника', {
                 appearance: 'negative',
@@ -219,9 +214,6 @@ export class EmployeesComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.alerts
-          .open('Сотрудник успешно создана', { appearance: 'positive' })
-          .subscribe();
         this.loadEmployees();
       });
   }
@@ -275,7 +267,7 @@ export class EmployeesComponent implements OnInit {
             passportSeries: formValue.passportSeries,
             phoneNumber: formValue.phoneNumber,
             jobPositionId: formValue.jobPosition.jobPositionId,
-        })
+          })
         : this._employeesApi.create({
             firstName: formValue.firstName,
             lastName: formValue.lastName,

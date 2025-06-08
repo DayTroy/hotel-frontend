@@ -65,13 +65,13 @@
     </ng-container>
 
     <ng-container *ngIf="error$ | async">
-      <div
+      <h2
         class="search-rooms-error"
         [style.color]="'#E4002B'"
         [style.text-align]="'center'"
       >
         {{ error$ | async }}
-      </div>
+      </h2>
     </ng-container>
 
     <ng-container *ngIf="!isLoading && !(error$ | async)">
@@ -128,7 +128,9 @@
                   [style.font-weight]="'bold'"
                   [style.color]="'#E4002B'"
                 >
-                  {{ room?.roomCategory?.pricePerNight }}
+                  {{
+                    room?.roomCategory?.pricePerNight! | tuiFormatNumber | async
+                  }}
                   {{ "RUB" | tuiCurrency }}
                 </p>
                 <p [style.margin]="'0.5rem 0'" [style.color]="'#666'">
@@ -527,7 +529,8 @@
       [style.justify-content]="'flex-end'"
       [style.margin-top]="'2rem'"
     >
-      Итоговая стоимость брони: {{ calculateTotalPrice() | tuiFormatNumber | async }}
+      Итоговая стоимость брони:
+      {{ calculateTotalPrice() | tuiFormatNumber | async }}
       {{ "RUB" | tuiCurrency }}
     </h4>
 

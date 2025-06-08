@@ -1,37 +1,58 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { TuiAlertService, TuiButton, TuiDialogContext, TuiDialogService, TuiTextfield } from '@taiga-ui/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import {
+  TuiAlertService,
+  TuiButton,
+  TuiDialogContext,
+  TuiDialogService,
+  TuiTextfield,
+} from '@taiga-ui/core';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { TuiTable } from '@taiga-ui/addon-table';
 import { TUI_FALSE_HANDLER, tuiTakeUntilDestroyed } from '@taiga-ui/cdk';
-import { timer, catchError, map, startWith, Subject, switchMap, BehaviorSubject, finalize, of } from 'rxjs';
+import {
+  timer,
+  catchError,
+  map,
+  startWith,
+  Subject,
+  switchMap,
+  BehaviorSubject,
+  finalize,
+  of,
+  tap,
+} from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TUI_CONFIRM, TuiButtonLoading, TuiComboBox, TuiConfirmData, TuiDataListWrapper, TuiFilterByInputPipe, TuiInputNumber, TuiSelect, TuiStatus, TuiStringifyContentPipe, TuiTextarea, TuiTextareaLimit } from '@taiga-ui/kit';
+import {
+  TUI_CONFIRM,
+  TuiButtonLoading,
+  TuiComboBox,
+  TuiConfirmData,
+  TuiDataListWrapper,
+  TuiFilterByInputPipe,
+  TuiInputNumber,
+  TuiSelect,
+  TuiStatus,
+  TuiStringifyContentPipe,
+  TuiTextarea,
+  TuiTextareaLimit,
+} from '@taiga-ui/kit';
 import { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RoomsApiService } from './rooms-api.service';
 import { RoomForms } from './rooms-forms.service';
-import { RoomCategory } from '../room-categories/room-categories.component';
 import { RoomCategoriesApiService } from '../room-categories/room-categories-api.service';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
-
-export interface Room {
-  roomId: string;
-  status: string;
-  stage: string;
-  roomCategory: RoomCategory;
-}
-
-interface RoomForm {
-  roomId: string;
-  stage: number;
-  roomCategory: {
-    id: string;
-    title: string;
-  }
-  pricePerNight: number;
-  capacity: number;
-}
+import { Room } from '../../../interfaces/room.interface';
+import { RoomCategory } from '../../../interfaces/room-category.interface';
 
 @Component({
   selector: 'app-rooms',
@@ -144,6 +165,13 @@ export class RoomsComponent implements OnInit {
 
           this.loading$.next(true);
           return this._roomsApi.delete(roomId).pipe(
+            tap(() => {
+              this.alerts
+                .open('Гостиничный номер успешно удален', {
+                  appearance: 'positive',
+                })
+                .subscribe();
+            }),
             catchError((error) => {
               this.alerts.open('Ошибка при удалении номера', {
                 appearance: 'negative',
@@ -158,9 +186,6 @@ export class RoomsComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.alerts
-          .open('Гостиничный номер успешно удален', { appearance: 'positive' })
-          .subscribe();
         this.loadRooms();
       });
   }
@@ -199,18 +224,15 @@ export class RoomsComponent implements OnInit {
       this.loading$.next(true);
 
       const request$ = this.isEditMode
-        ? this._roomsApi.update(
-            formValue.roomId,
-            {
-              roomId: formValue.roomId,
-              stage: formValue.stage,
-              roomCategoryId: formValue.roomCategory.id
-            }
-          )
+        ? this._roomsApi.update(formValue.roomId, {
+            roomId: formValue.roomId,
+            stage: formValue.stage,
+            roomCategoryId: formValue.roomCategory.id,
+          })
         : this._roomsApi.create({
             roomId: formValue.roomId,
             stage: formValue.stage,
-            roomCategoryId: formValue.roomCategory.id
+            roomCategoryId: formValue.roomCategory.id,
           });
 
       request$
@@ -233,7 +255,9 @@ export class RoomsComponent implements OnInit {
         .subscribe(() => {
           this.alerts
             .open(
-              `Гостиничный номер успешно ${this.isEditMode ? 'обновлен' : 'создан'}`,
+              `Гостиничный номер успешно ${
+                this.isEditMode ? 'обновлен' : 'создан'
+              }`,
               { appearance: 'positive' }
             )
             .subscribe();
@@ -278,7 +302,7 @@ export class RoomsComponent implements OnInit {
         pricePerNight: category.pricePerNight,
         roomCategory: {
           id: category.roomCategoryId,
-        }
+        },
       });
     }
   }

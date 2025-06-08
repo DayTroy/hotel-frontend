@@ -43,13 +43,12 @@ import {
 import { CleaningsApiService } from '../cleanings/cleanings-api.service';
 import { CleaningForms } from '../cleanings/cleanings-forms.service';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
-import { Employee } from '../references/employees/employees.component';
-import { Room } from '../references/rooms/rooms.component';
-import { CleaningTask } from '../cleanings/cleanings.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RoomsApiService } from '../references/rooms/rooms-api.service';
 import { EmployeesApiService } from '../references/employees/employees-api.service';
 import { AuthService } from '../../services/auth.service';
+import { Employee } from '../../interfaces/employee.interface';
+import { Room } from '../../interfaces/room.interface';
 
 @Component({
   selector: 'app-request-info',

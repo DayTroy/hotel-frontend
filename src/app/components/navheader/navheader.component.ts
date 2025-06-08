@@ -13,13 +13,8 @@ import { TuiInputSearch, TuiNavigation } from '@taiga-ui/layout';
 import { AuthService } from '../../services/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { Employee } from '../../modules/references/employees/employees.component';
-
-interface SearchResult {
-  name: string;
-  url: string;
-  icon: string;
-}
+import { Employee } from '../../interfaces/employee.interface';
+import { SearchResult } from '../../interfaces/search-result.interface';
 
 @Component({
   standalone: true,

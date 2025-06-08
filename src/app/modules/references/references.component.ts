@@ -46,21 +46,6 @@ import { AmenitiesComponent } from './amenities/amenities.component';
 import { DepartmentsComponent } from './departments/departments.component';
 import { JobPositionsComponent } from './job-positions/job-positions.component';
 import { EmployeesComponent } from './employees/employees.component';
-interface RoomCategory {
-  roomCategoryId: string;
-  title: string;
-  pricePerNight: number;
-  capacity: number;
-  description: string;
-}
-
-interface RoomCategoryForm {
-  roomCategoryId: string;
-  title: string;
-  pricePerNight: number;
-  capacity: number;
-  description: string;
-}
 
 @Component({
   selector: 'app-references',
@@ -118,7 +103,6 @@ export class ReferencesComponent {
     'Отделы',
     'Должности',
     'Дополнительные услуги',
-    'Гости',
   ] as const;
 
   protected selectedReference: string | null = 'Выберите справочник...';

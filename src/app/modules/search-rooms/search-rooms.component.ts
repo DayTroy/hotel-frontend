@@ -53,16 +53,7 @@ import type {MaskitoOptions} from '@maskito/core';
 import phoneMask from '../../shared/masks/phoneMask';
 import { passportNumberMask, passportSeriesMask } from '../../shared/masks/passportMask';
 import { nameMask } from '../../shared/masks/nameMask';
-interface Room {
-  roomId: string;
-  stage: string;
-  roomCategory: {
-    title: string;
-    pricePerNight: number;
-    capacity: number;
-    description: string;
-  };
-}
+import { Room } from '../../interfaces/room.interface';
 
 @Component({
   selector: 'app-search-rooms',
@@ -93,6 +84,7 @@ interface Room {
     TuiFormatNumberPipe,
     MaskitoDirective,
     TuiCalendar,
+    TuiFormatNumberPipe,
   ],
   templateUrl: './search-rooms.component.html',
   styleUrl: './search-rooms.component.scss',
@@ -233,6 +225,15 @@ export class SearchRoomsComponent implements OnInit {
         error: (error) => {
           this.error$.next('Произошла ошибка при поиске номеров');
           this.isLoading = false;
+          this.alerts
+        .open(error.error.message,
+          {
+            label: 'Ошибка' ,
+            appearance: 'negative',
+            autoClose: 3000,
+          }
+        )
+        .subscribe();
         },
       });
     }

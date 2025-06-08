@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { CleaningTask, CleaningTaskResponse } from "./cleanings.component";
+import { CleaningTask } from "../../interfaces/cleaning.interface";
 
 @Injectable({ providedIn: "root" })
 export class CleaningsApiService {
@@ -11,23 +11,23 @@ export class CleaningsApiService {
     private readonly httpClient: HttpClient 
   ) {}
 
-  getAll(): Observable<CleaningTaskResponse[]> {
-    return this.httpClient.get<CleaningTaskResponse[]>(`${this.apiUrl}/cleanings`);
+  getAll(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.apiUrl}/cleanings`);
   }
 
-  findCleaning(cleaningId: string): Observable<CleaningTaskResponse> {
-    return this.httpClient.get<CleaningTaskResponse>(`${this.apiUrl}/cleanings/${cleaningId}`);
+  findCleaning(cleaningId: string): Observable<any> {
+    return this.httpClient.get<any>(`${this.apiUrl}/cleanings/${cleaningId}`);
   }
 
-  editCleaning(cleaningId: string, updatedRequest: CleaningTask): Observable<CleaningTaskResponse> {
-    return this.httpClient.patch<CleaningTaskResponse>(`${this.apiUrl}/cleanings/${cleaningId}`, updatedRequest);
+  editCleaning(cleaningId: string, updatedRequest: CleaningTask): Observable<any> {
+    return this.httpClient.patch<any>(`${this.apiUrl}/cleanings/${cleaningId}`, updatedRequest);
   }
 
   deleteCleaning(cleaningId: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}/cleanings/${cleaningId}`);
   }
 
-  createCleaning(cleaningTask: CleaningTask): Observable<CleaningTaskResponse> {
-    return this.httpClient.post<CleaningTaskResponse>(`${this.apiUrl}/cleanings`, cleaningTask);
+  createCleaning(cleaningTask: CleaningTask): Observable<any> {
+    return this.httpClient.post<any>(`${this.apiUrl}/cleanings`, cleaningTask);
   }
 }
