@@ -53,7 +53,7 @@ export class EmployeesForms {
       jobPosition: new FormControl({
         jobPositionId: '',
         jobTitle: '',
-        jobSalary: '',
+        jobSalary: 0,
       } as JobPosition, {
         nonNullable: true,
         validators: [Validators.required],

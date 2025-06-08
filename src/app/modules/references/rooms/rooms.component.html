@@ -160,6 +160,7 @@
           placeholder="Введите стоимость проживания"
           tuiInputNumber
           [postfix]="' ' + ('RUB' | tuiCurrency)"
+          [tuiTextfieldCleaner]="true"
           formControlName="pricePerNight"
         />
       </tui-textfield>

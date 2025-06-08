@@ -13,7 +13,7 @@ export class JobPositionsForms {
       departmentId: FormControl<string>;
       jobPositionId: FormControl<string>;
       jobTitle: FormControl<string>;
-      jobSalary: FormControl<string>;
+      jobSalary: FormControl<number>;
       department: FormControl<Department>;
     }>({
       departmentId: new FormControl('', {
@@ -27,7 +27,7 @@ export class JobPositionsForms {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      jobSalary: new FormControl('', {
+      jobSalary: new FormControl(0, {
         nonNullable: true,
         validators: [Validators.required],
       }),

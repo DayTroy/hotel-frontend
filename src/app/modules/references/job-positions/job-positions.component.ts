@@ -23,7 +23,7 @@ import { DepartmentsApiService } from '../departments/departments-api.service';
 export interface JobPosition {
     jobPositionId: string;
     jobTitle: string;
-    jobSalary: string;
+    jobSalary: number;
     department: Department;
   }
 

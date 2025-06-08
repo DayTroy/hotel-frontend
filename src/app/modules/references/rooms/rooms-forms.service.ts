@@ -12,7 +12,7 @@ export class RoomForms {
       roomId: FormControl<string>;
       stage: FormControl<number>;
       roomCategory: FormGroup<any>;
-      pricePerNight: FormControl<string>;
+      pricePerNight: FormControl<number>;
       capacity: FormControl<number>;
     }>({
       roomId: new FormControl('', {
@@ -32,7 +32,7 @@ export class RoomForms {
         }),
       }),
       pricePerNight: new FormControl(
-        { value: '', disabled: true },
+        { value: 0, disabled: true },
         {
           nonNullable: true,
         }

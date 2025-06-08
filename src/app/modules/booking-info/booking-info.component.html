@@ -77,6 +77,7 @@
 
         <ng-container [ngSwitch]="activeBookingContentType">
           <ng-template [ngSwitchCase]="0">
+            <h2>Гости</h2>
             <div
               *ngFor="let guestForm of guestForms.controls; let i = index"
               class="guest-block"
@@ -211,7 +212,9 @@
             </div>
           </ng-template>
 
-          <ng-template [ngSwitchCase]="1"> Услуги </ng-template>
+          <ng-template [ngSwitchCase]="1">
+            <h2>Дополнительные услуги</h2>
+          </ng-template>
         </ng-container>
 
         <h3
@@ -219,7 +222,8 @@
           [style.justify-content]="'flex-end'"
           [style.margin-top]="'2rem'"
         >
-          Итоговая стоимость брони: {{ booking.totalPrice | tuiFormatNumber | async }}
+          Итоговая стоимость брони:
+          {{ booking.totalPrice | tuiFormatNumber | async }}
           {{ "RUB" | tuiCurrency }}
         </h3>
         <button
