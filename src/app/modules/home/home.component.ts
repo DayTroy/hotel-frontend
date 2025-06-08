@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { TuiButton, TuiIcon } from '@taiga-ui/core';
-import { TuiCardLarge, TuiHeader } from '@taiga-ui/layout';
+import { TuiButton, TuiIcon, TuiTitle } from '@taiga-ui/core';
+import { TuiCard, TuiCardLarge, TuiHeader } from '@taiga-ui/layout';
 import { RouterLink } from '@angular/router';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,10 @@ import { RouterLink } from '@angular/router';
     TuiCardLarge,
     TuiHeader,
     TuiButton,
-    RouterLink
+    RouterLink,
+    NgFor,
+    TuiTitle,
+    TuiCard,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -21,7 +25,7 @@ export class HomeComponent {
     {
       name: 'Заявки',
       icon: 'send',
-      description: 'Просмотр списка из поступающих заявок клиентами',
+      description: 'Просмотр списка из поступающих заявок клиентами c разных источников',
       url: 'requests'
     },
     {
@@ -40,12 +44,12 @@ export class HomeComponent {
       name: 'Уборка',
       icon: 'paintbrush',
       description: 'Модуль для просмотра заданий на уборке гостиничных номеров',
-      url: 'cleaning'
+      url: 'cleanings'
     },
     {
       name: 'Аналитика',
       icon: 'chart-line',
-      description: 'Генерация и экспорт аналитических отчетов',
+      description: 'Формирование и выгрузка (экспорт) аналитических отчетов',
       url: 'analytics'
     },
     {

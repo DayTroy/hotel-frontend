@@ -1,4 +1,3 @@
-import { AuthApiService } from './auth-api.service';
 import { AuthFormService } from './auth-forms.service';
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
@@ -16,6 +15,7 @@ import type { MaskitoOptions } from '@maskito/core';
 import { TUI_FALSE_HANDLER } from '@taiga-ui/cdk';
 import { TuiButtonLoading } from '@taiga-ui/kit';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 import mask from './mask';
 
@@ -50,48 +50,58 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private readonly authForms: AuthFormService,
-    private readonly authApi: AuthApiService,
+    private readonly authService: AuthService,
     private readonly alerts: TuiAlertService,
     private readonly router: Router
   ) { }
 
   ngOnInit(): void {
-    this.initForm();
-  }
-
-  private initForm(): void {
     this.form = this.authForms.createLoginForm();
-  }
-
-  initSubscriptions() {
-
   }
 
   submit(): void {
     if (this.form.invalid) {
       this.alerts
-        .open('При загрузке приложения возникли ошибки. Приложение может работать не корректно. Пожалуйста попробуйте снова или перезагрузите страницу',
+        .open('Пожалуйста, заполните все поля формы',
           {
             label: 'Ошибка',
             appearance: 'negative',
-            autoClose: 0,
+            autoClose: 3000,
           }
         )
         .subscribe();
-      return
-    } else {
-      this.alerts
-        .open('Вход в систему выполнен успешно',
-          {
-            label: 'Авторизация пройдена',
-            appearance: 'positive',
-            autoClose: 0,
-          }
-        )
-        .subscribe();
-      this.router.navigate(['/dashboard', 'home'])
-      this.trigger$.next()
-      // this.authApi.
+      return;
     }
+
+    this.trigger$.next();
+    
+    this.authService.login(this.form.value.email, this.form.value.password).subscribe({
+      next: (response) => {
+        this.alerts
+          .open('Вход в систему выполнен успешно',
+            {
+              label: 'Авторизация пройдена',
+              appearance: 'positive',
+              autoClose: 3000,
+            }
+          )
+          .subscribe();
+
+        // Перенаправляем на dashboard, а RoleGuard сам определит нужный модуль
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        this.alerts
+          .open('Неверное имя пользователя или пароль',
+            {
+              label: 'Ошибка',
+              appearance: 'negative',
+              autoClose: 3000,
+            }
+          )
+          .subscribe();
+        console.error('Login error:', error);
+      }
+    });
   }
 }

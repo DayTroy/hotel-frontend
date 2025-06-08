@@ -1,15 +1,98 @@
-<div class=""></div>
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="avatar-section">
+      <input
+        type="file"
+        accept="image/jpeg,image/png"
+        #fileInput
+        style="display: none"
+      />
+      <tui-avatar
+        [src]="avatar$ | async"
+        [size]="'xxl'"
+      ></tui-avatar>
+    </div>
+    <div class="user-info">
+      <h2>{{ (currentUser$ | async)?.firstName }} {{ (currentUser$ | async)?.lastName }}</h2>
+      <p class="position">{{ (currentUser$ | async)?.jobPosition?.jobTitle }}</p>
+    </div>
+  </div>
 
-<input
-  type="file"
-  accept="image/jpeg"
-  #fileInput
-  (change)="onFileSelected($event)"
-  style="display: none"
-/>
-<tui-avatar
-  [src]="avatar$ | async"
-  [size]="'xxl'"
-  (click)="fileInput.click()"
-  style="cursor: pointer"
-></tui-avatar>
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+    <div class="form-section">
+      <h3>Основная информация</h3>
+      <div class="form-row">
+        <tui-textfield>
+          <label tuiLabel>Имя</label>
+          <input
+            placeholder="Введите имя сотрудника"
+            tuiTextfield
+            formControlName="firstName"
+            maxlength="30"
+            [maskito]="nameOptions"
+          />
+        </tui-textfield>
+        <tui-textfield>
+          <label tuiLabel>Фамилия</label>
+          <input
+            placeholder="Введите фамилию сотрудника"
+            tuiTextfield
+            formControlName="lastName"
+            maxlength="30"
+            [maskito]="nameOptions"
+          />
+        </tui-textfield>
+      </div>
+      <div class="form-row">
+        <tui-textfield iconEnd="@tui.mail">
+          <label tuiLabel>Почта</label>
+          <input
+            placeholder="Введите почту сотрудника"
+            tuiTextfield
+            formControlName="email"
+          />
+        </tui-textfield>
+        <tui-textfield iconEnd="@tui.phone">
+          <label tuiLabel>Контактный телефон</label>
+          <input
+            placeholder="Введите контактный телефон сотрудника"
+            tuiTextfield
+            formControlName="phoneNumber"
+            [maskito]="phoneOptions"
+          />
+        </tui-textfield>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Изменение пароля</h3>
+      <div class="form-row">
+        <tui-textfield iconEnd="@tui.lock-keyhole">
+          <label tuiLabel>Текущий пароль</label>
+          <input formControlName="currentPassword" tuiTextfield type="password" placeholder="Введите текущий пароль"/>
+        </tui-textfield>
+      </div>
+      <div class="form-row">
+        <tui-textfield iconEnd="@tui.lock-keyhole">
+          <label tuiLabel>Новый пароль</label>
+          <input formControlName="newPassword" tuiTextfield type="password" placeholder="Введите новый пароль" />
+        </tui-textfield>
+        <tui-textfield iconEnd="@tui.lock-keyhole">
+          <label tuiLabel>Подтверждение пароля</label>
+          <input formControlName="confirmPassword" tuiTextfield type="password" placeholder="Подтвердите новый пароль"/>
+        </tui-textfield>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button
+        tuiButton
+        type="submit"
+        appearance="primary"
+        [style.background-color]="'#E4002B'"
+      >
+        Сохранить изменения
+      </button>
+    </div>
+  </form>
+</div>

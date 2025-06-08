@@ -6,17 +6,17 @@
     <img src="../../assets/images/company-logo.svg" alt="logo" class="logo" [style.margin]="'1rem'">
   </header>
 
-  <a iconStart="@tui.send" tuiAsideItem [routerLink]="'/dashboard/requests'">Заявки</a>
+  <a *ngIf="isMenuItemVisible('Заявки')" iconStart="@tui.send" tuiAsideItem [routerLink]="'/dashboard/requests'">Заявки</a>
 
-  <a iconStart="@tui.book-open-check" tuiAsideItem [routerLink]="'/dashboard/bookings'">Бронирования</a>
+  <a *ngIf="isMenuItemVisible('Бронирования')" iconStart="@tui.book-open-check" tuiAsideItem [routerLink]="'/dashboard/bookings'">Бронирования</a>
 
-  <a iconStart="@tui.key-round" tuiAsideItem [routerLink]="'/dashboard/search-rooms'">Номера</a>
+  <a *ngIf="isMenuItemVisible('Номера')" iconStart="@tui.key-round" tuiAsideItem [routerLink]="'/dashboard/search-rooms'">Номера</a>
 
-  <a iconStart="@tui.paintbrush" tuiAsideItem [routerLink]="'/dashboard/cleanings'">Уборка</a>
+  <a *ngIf="isMenuItemVisible('Уборка')" iconStart="@tui.paintbrush" tuiAsideItem [routerLink]="'/dashboard/cleanings'">Уборка</a>
 
-  <a iconStart="@tui.chart-line" tuiAsideItem [routerLink]="'/dashboard/analytics'">Аналитика</a>
+  <a *ngIf="isMenuItemVisible('Аналитика')" iconStart="@tui.chart-line" tuiAsideItem [routerLink]="'/dashboard/analytics'">Аналитика</a>
 
-  <a iconStart="@tui.book-marked" tuiAsideItem [routerLink]="'/dashboard/references'">Справочники</a>
+  <a *ngIf="isMenuItemVisible('Справочники')" iconStart="@tui.book-marked" tuiAsideItem [routerLink]="'/dashboard/references'">Справочники</a>
   <hr />
     <tui-aside-group>
       <button automation-id="setting" iconStart="@tui.settings" tuiAsideItem tuiChevron type="button">
@@ -34,7 +34,7 @@
           <tui-icon icon="@tui.user-round" [style.font-size.rem]="2"/>
         </div>
         <div class="role__name">
-          Управляющий
+          {{ (currentUser$ | async)?.jobPosition?.jobTitle }}
         </div>
       </div>
     </footer>
