@@ -17,6 +17,7 @@ export class BookingsForms {
       guests: FormControl<any[] | null>;
       providedAmenities: FormControl<any[] | null>;
       roomId: FormControl<string | null>;
+      status: FormControl<string | null>;
     }>({
       bookingId: new FormControl('', {
         nonNullable: true,
@@ -36,6 +37,7 @@ export class BookingsForms {
       roomId: new FormControl({value: null, disabled: true}, {
         nonNullable: true,
       }),
+      status: new FormControl('', {}),
     });
   }
 }

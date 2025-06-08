@@ -7,7 +7,7 @@ import { TuiAlertService, TuiButton, TuiDialogService, TuiIcon, TuiTextfield } f
 import { TUI_CONFIRM, TuiConfirmData, TuiStatus } from '@taiga-ui/kit'; 
 import { BookingsApiService } from './bookings-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, catchError, finalize, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, of, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-bookings',
@@ -80,6 +80,9 @@ export class BookingsComponent implements OnInit {
           
           this.loading$$.next(true);
           return this._bookingsApiService.delete(bookingId).pipe(
+            tap(() => {
+              this.alerts.open('Бронь успешна удалена', { appearance: 'positive' }).subscribe();
+            }),
             catchError(error => {
               this.alerts.open('Ошибка при удалении брони', { appearance: 'negative' });
               console.error('Error deleting booking:', error);
@@ -92,7 +95,6 @@ export class BookingsComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.alerts.open('Бронь успешна удалена', { appearance: 'positive' }).subscribe();
         this.loadBookings();
       });
   }

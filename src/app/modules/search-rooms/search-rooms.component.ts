@@ -337,7 +337,7 @@ export class SearchRoomsComponent implements OnInit {
       }));
 
       const providedAmenities = this.providedAmenityForms.map(form => ({
-        amenityId: form.get('amenity')?.value?.id,
+        amenityId: form.get('amenity')?.value?.amenityId,
         quantity: form.get('amenityQuantity')?.value,
         price: form.get('amenityPrice')?.value,
         totalPrice: form.get('amenitiesTotalPrice')?.value

@@ -1,4 +1,4 @@
-<form class="booking-info" [formGroup]="form">
+<form class="booking-info" [formGroup]="bookingForm">
   <button
     iconStart="@tui.redo-2"
     tuiLink
@@ -94,6 +94,13 @@
                   <button
                     [style.background-color]="'#E4002B'"
                     [style.color]="'white'"
+                    (click)="exportAgreement(guestForm)"
+                  >
+                    Выгрузить договор
+                  </button>
+                  <button
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'white'"
                     (click)="exportRegistrationCard(guestForm)"
                   >
                     Выгрузить регистрационную карточку
@@ -120,6 +127,7 @@
                       placeholder="Введите имя гостя"
                       tuiTextfield
                       formControlName="firstName"
+                      [maskito]="nameOptions"
                     />
                   </tui-textfield>
                   <tui-textfield>
@@ -128,6 +136,7 @@
                       placeholder="Введите фамилию гостя"
                       tuiTextfield
                       formControlName="lastName"
+                      [maskito]="nameOptions"
                     />
                   </tui-textfield>
                   <tui-textfield>
@@ -136,6 +145,7 @@
                       placeholder="Введите отчество гостя"
                       tuiTextfield
                       formControlName="middleName"
+                      [maskito]="nameOptions"
                     />
                   </tui-textfield>
                   <tui-textfield iconEnd="@tui.at-sign">
@@ -152,6 +162,8 @@
                       placeholder="Введите телефон гостя"
                       tuiTextfield
                       formControlName="phoneNumber"
+                      ot
+                      [maskito]="phoneOptions"
                     />
                   </tui-textfield>
                   <tui-textfield tuiChevron>
@@ -184,6 +196,7 @@
                       placeholder="Введите номер паспорта"
                       tuiTextfield
                       formControlName="passportNumber"
+                      [maskito]="passportNumberOptions"
                     />
                   </tui-textfield>
                   <tui-textfield>
@@ -192,6 +205,7 @@
                       placeholder="Введите серию паспорта"
                       tuiTextfield
                       formControlName="passportSeries"
+                      [maskito]="passportSeriesOptions"
                     />
                   </tui-textfield>
                   <tui-textfield>
@@ -213,7 +227,146 @@
           </ng-template>
 
           <ng-template [ngSwitchCase]="1">
-            <h2>Дополнительные услуги</h2>
+            <table
+              *ngIf="providedAmenityForms.length > 0"
+              tuiTable
+              class="table tui-space_top-5"
+              [columns]="columns"
+              [style.width]="'100%'"
+              [style.border-top-left-radius]="'1rem'"
+              [style.border-top-right-radius]="'1rem'"
+              [style.overflow]="'hidden'"
+            >
+              <thead>
+                <tr>
+                  <th
+                    tuiTh
+                    [resizable]="true"
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'#fff'"
+                  >
+                    Наименование
+                  </th>
+                  <th
+                    tuiTh
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'#fff'"
+                  >
+                    Количество
+                  </th>
+                  <th
+                    tuiTh
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'#fff'"
+                  >
+                    Цена
+                  </th>
+                  <th
+                    tuiTh
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'#fff'"
+                  >
+                    Сумма
+                  </th>
+                  <th
+                    tuiTh
+                    [resizable]="true"
+                    [style.background-color]="'#E4002B'"
+                    [style.color]="'#fff'"
+                  >
+                    Действия
+                  </th>
+                </tr>
+              </thead>
+              <tbody tuiTb>
+                <tr
+                  *ngFor="
+                    let amenityForm of providedAmenityForms;
+                    let i = index
+                  "
+                  [formGroup]="amenityForm"
+                >
+                  <td tuiTd>
+                    <tui-combo-box
+                      formControlName="amenity"
+                      [stringify]="stringify"
+                      (ngModelChange)="onAmenityChange($event, i)"
+                    >
+                      Наименование
+                      <tui-data-list-wrapper
+                        *tuiDataList
+                        emptyContent="Не удалось найти"
+                        [itemContent]="stringify | tuiStringifyContent"
+                        [items]="amenities$ | async | tuiFilterByInput"
+                      />
+                    </tui-combo-box>
+                  </td>
+
+                  <td tuiTd>
+                    <tui-textfield>
+                      <input
+                        tuiInputNumber
+                        formControlName="amenityQuantity"
+                        [min]="1"
+                        [max]="10"
+                        placeholder="Количество"
+                      />
+                    </tui-textfield>
+                  </td>
+
+                  <td tuiTd>
+                    <tui-textfield>
+                      <input
+                        tuiInputNumber
+                        formControlName="amenityPrice"
+                        [min]="0"
+                        placeholder="Цена"
+                        [postfix]="'RUB' | tuiCurrency"
+                      />
+                    </tui-textfield>
+                  </td>
+
+                  <td tuiTd>
+                    <tui-textfield>
+                      <input
+                        tuiInputNumber
+                        formControlName="amenitiesTotalPrice"
+                        placeholder="Сумма"
+                        [postfix]="'RUB' | tuiCurrency"
+                      />
+                    </tui-textfield>
+                  </td>
+
+                  <td tuiTd>
+                    <button
+                      appearance="action"
+                      iconStart="@tui.trash"
+                      size="s"
+                      tuiIconButton
+                      type="button"
+                      [style.color]="'#E4002B'"
+                      (click)="deleteProvidedAmenity(i)"
+                    >
+                      Удалить
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div [style.display]="'flex'" [style.justify-content]="'flex-end'">
+              <button
+                size="m"
+                tuiButton
+                type="button"
+                iconStart="@tui.plus"
+                [style.width]="'50%'"
+                [style.margin-top]="'2rem'"
+                [style.background-color]="'#E4002B'"
+                (click)="addProvidedAmenity()"
+              >
+                Добавить услугу
+              </button>
+            </div>
           </ng-template>
         </ng-container>
 
@@ -230,7 +383,7 @@
           class="booking-info__submit"
           tuiButton
           type="submit"
-          [disabled]="loading$ | async"
+          [disabled]="(loading$ | async) || bookingForm.invalid"
           [loading]="loading$ | async"
           size="m"
           (click)="submit()"

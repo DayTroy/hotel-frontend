@@ -7,7 +7,7 @@ import { TUI_CONFIRM, TuiConfirmData, TuiStatus } from '@taiga-ui/kit';
 import { TuiButton } from '@taiga-ui/core';
 import { RouterLink } from '@angular/router';
 import { RequestsApiService } from './request-api.service';
-import { BehaviorSubject, Observable, catchError, finalize, of, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, finalize, of, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TuiThemeColorService } from '@taiga-ui/cdk';
 
@@ -83,6 +83,9 @@ export class RequestsComponent implements OnInit {
           
           this.loading$$.next(true);
           return this._requestsApiService.deleteRequest(requestId).pipe(
+            tap(() => {
+              this.alerts.open('Заявка успешна удалена', { appearance: 'positive' }).subscribe();
+            }),
             catchError(error => {
               this.alerts.open('Ошибка при удалении заявки', { appearance: 'negative' });
               console.error('Error deleting request:', error);
@@ -95,7 +98,6 @@ export class RequestsComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        this.alerts.open('Заявка успешна удалена', { appearance: 'positive' }).subscribe();
         this.loadRequests();
       });
   }
