@@ -60,12 +60,12 @@ export default class NavSidebarComponent implements OnInit {
         const jobTitle = currentUser.jobPosition.jobTitle;
 
         switch (jobTitle) {
-            case 'Менеджер по бронированию':
+            case 'Менеджер':
                 return ['Заявки', 'Бронирования', 'Номера'].includes(menuItem);
             case 'Портье':
                 return ['Бронирования', 'Номера', 'Справочники'].includes(menuItem);
             case 'Управляющий':
-                return true; // Все модули доступны
+                return true; 
             case 'Горничная':
                 return ['Уборка'].includes(menuItem);
             default:

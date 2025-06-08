@@ -14,7 +14,7 @@ export class GuestsForms {
       citizenship: new FormControl('', [Validators.required]),
       passportNumber: new FormControl('', [Validators.required]),
       passportSeries: new FormControl('', [Validators.required]),
-      birthdate: new FormControl('', [Validators.required]),
+      birthdate: new FormControl(null, [Validators.required]),
       birthplace: new FormControl('', [Validators.required]),
     });
   }

@@ -5,9 +5,10 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   TuiAppearance,
   TuiButton,
-  TuiTextfield,
   TuiTitle,
   TuiAlertService,
+  TuiTextfield,
+  TuiIcon,
 } from '@taiga-ui/core';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { map, startWith, Subject, switchMap, timer } from 'rxjs';
@@ -30,9 +31,10 @@ import mask from './mask';
     TuiCardLarge,
     TuiForm,
     TuiHeader,
-    TuiTextfield,
     TuiTitle,
-    TuiButtonLoading
+    TuiButtonLoading,
+    TuiTextfield,
+    TuiIcon
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

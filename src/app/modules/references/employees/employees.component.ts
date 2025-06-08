@@ -42,7 +42,6 @@ import {
   TuiFilterByInputPipe,
   TuiInputDate,
   TuiInputNumber,
-  tuiMaskito,
   TuiStatus,
   TuiStringifyContentPipe,
 } from '@taiga-ui/kit';
@@ -87,7 +86,6 @@ export interface Employee {
     ReactiveFormsModule,
     TuiInputNumber,
     TuiButtonLoading,
-    TuiCalendar,
     TuiDataListWrapper,
     TuiComboBoxModule,
     TuiStringifyContentPipe,

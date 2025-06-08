@@ -30,7 +30,7 @@ export class RoleGuard implements CanActivate {
         // Если это корневой путь dashboard, перенаправляем на нужный модуль
         if (path === 'dashboard' || path === '') {
           switch (jobTitle) {
-            case 'Менеджер по бронированию':
+            case 'Менеджер':
               this.router.navigate(['/dashboard/requests']);
               return false;
             case 'Портье':
@@ -55,18 +55,20 @@ export class RoleGuard implements CanActivate {
 
         // Проверяем доступ в зависимости от должности
         let hasAccess = false;
+        const basePath = path?.split('/')[0] || '';
+
         switch (jobTitle) {
-          case 'Менеджер по бронированию':
-            hasAccess = ['requests', 'bookings', 'search-rooms', 'profile'].includes(path || '');
+          case 'Менеджер':
+            hasAccess = ['requests', 'bookings', 'search-rooms', 'profile'].includes(basePath);
             break;
           case 'Портье':
-            hasAccess = ['bookings', 'search-rooms', 'references', 'profile'].includes(path || '');
+            hasAccess = ['bookings', 'search-rooms', 'references', 'profile'].includes(basePath);
             break;
           case 'Управляющий':
             hasAccess = true; // Доступ ко всем модулям
             break;
           case 'Горничная':
-            hasAccess = ['cleanings', 'profile'].includes(path || '');
+            hasAccess = ['cleanings', 'profile'].includes(basePath);
             break;
           default:
             hasAccess = false;
@@ -87,5 +89,29 @@ export class RoleGuard implements CanActivate {
         return true;
       })
     );
+  }
+
+  private checkAccess(jobTitle: string, path: string | null): boolean {
+    let hasAccess = false;
+    const pathParts = path?.split('/') || [];
+    const basePath = pathParts[pathParts.length - 1] || '';
+    
+    switch (jobTitle) {
+      case 'Менеджер':
+        hasAccess = ['requests', 'bookings', 'search-rooms', 'profile'].includes(basePath);
+        break;
+      case 'Портье':
+        hasAccess = ['bookings', 'search-rooms', 'references', 'profile'].includes(basePath);
+        break;
+      case 'Управляющий':
+        hasAccess = true;
+        break;
+      case 'Горничная':
+        hasAccess = ['cleanings', 'profile'].includes(basePath);
+        break;
+      default:
+        hasAccess = false;
+    }
+    return hasAccess;
   }
 } 

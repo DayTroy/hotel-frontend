@@ -11,9 +11,7 @@
   >
     <tui-icon icon="@tui.info" [style.margin-left]="'1rem'" />
     <p [style.margin-left]="'1rem'">
-      Здесь вы можете просмотреть задания на уборку гостиничных номеров,
-      назначенные на вас. После исполнения уборки, обязательно проставьте
-      отметку о выполнении.
+      {{ getDescriptionText() }}
     </p>
   </div>
   <div
@@ -31,6 +29,7 @@
       />
     </tui-textfield>
     <button
+      *ngIf="isAdmin()"
       class="tui-space_left-5"
       size="l"
       tuiButton

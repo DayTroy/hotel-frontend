@@ -30,11 +30,12 @@ import { Employee } from '../references/employees/employees.component';
 import { EmployeesApiService } from '../references/employees/employees-api.service';
 import { RoomsApiService } from '../references/rooms/rooms-api.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { BehaviorSubject, catchError, finalize, of } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, of, map } from 'rxjs';
 import { TuiComboBoxModule } from '@taiga-ui/legacy';
 import { CleaningForms } from './cleanings-forms.service';
 import { CleaningsApiService } from './cleanings-api.service';
 import {TuiChip} from '@taiga-ui/kit';
+import { AuthService } from '../../services/auth.service';
 
 export interface CleaningTask {
   cleaningId: string;
@@ -118,12 +119,14 @@ export class CleaningsComponent implements OnInit {
   protected readonly rooms$ = new BehaviorSubject<Room[]>([]);
   protected readonly employees$ = new BehaviorSubject<Employee[]>([]);
   cleaningTypes = ['Регулярная', 'Генеральная', 'После ремонта'];
+  protected currentUser$ = this.authService.currentUser$;
 
   constructor(
     private readonly _employeesApi: EmployeesApiService,
     private readonly _roomsApi: RoomsApiService,
     private readonly _cleaningsForms: CleaningForms,
-    private readonly _cleaningsApi: CleaningsApiService
+    private readonly _cleaningsApi: CleaningsApiService,
+    public readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -160,6 +163,7 @@ export class CleaningsComponent implements OnInit {
       .getAll()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
+        map(employees => employees.filter((employee: Employee) => employee.jobPosition.jobTitle === 'Горничная')),
         catchError((error) => {
           this.error$.next('Ошибка при загрузке данных сотрудников');
           return of([]);
@@ -232,22 +236,20 @@ export class CleaningsComponent implements OnInit {
   }
 
   private loadCleaningTasks(): void {
-    this.loading$.next(true);
-    this.error$.next(null);
-
-    this._cleaningsApi.getAll()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        catchError((error) => {
-          this.error$.next('Ошибка при загрузке заданий на уборку');
-          console.error('Error loading cleaning tasks:', error);
-          return of([]);
-        }),
-        finalize(() => this.loading$.next(false))
-      )
-      .subscribe((tasks) => {
-        this.cleaningTasks$.next(tasks);
-      });
+    this._cleaningsApi.getAll().subscribe({
+      next: (tasks) => {
+        if (this.isAdmin()) {
+          this.cleaningTasks$.next(tasks);
+        } else {
+          const currentUserId = this.authService.currentUserSubject.value?.employeeId;
+          const filteredTasks = tasks.filter(task => task.employee.employeeId === currentUserId);
+          this.cleaningTasks$.next(filteredTasks);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading cleaning tasks:', error);
+      }
+    });
   }
 
   protected getStatusAppearance(status: string): 'negative' | 'primary' | 'positive' {
@@ -261,5 +263,17 @@ export class CleaningsComponent implements OnInit {
       default:
         return 'negative';
     }
+  }
+
+  protected getDescriptionText(): string {
+    const currentUser = this.authService.currentUserSubject.value;
+    if (currentUser?.jobPosition.jobTitle === 'Управляющий') {
+      return 'Здесь вы можете просмотреть задания на уборку гостиничных номеров, назначенные на горничных.';
+    }
+    return 'Здесь вы можете просмотреть задания на уборку гостиничных номеров, назначенные на вас. После исполнения уборки, обязательно проставьте отметку о выполнении.';
+  }
+
+  protected isAdmin(): boolean {
+    return this.authService.currentUserSubject.value?.jobPosition.jobTitle === 'Управляющий';
   }
 }

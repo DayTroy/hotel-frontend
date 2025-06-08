@@ -35,6 +35,7 @@ import {
   Observable,
   catchError,
   finalize,
+  map,
   of,
   switchMap,
   tap,
@@ -48,6 +49,7 @@ import { CleaningTask } from '../cleanings/cleanings.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RoomsApiService } from '../references/rooms/rooms-api.service';
 import { EmployeesApiService } from '../references/employees/employees-api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-request-info',
@@ -104,6 +106,7 @@ export class CleaningInfoComponent implements OnInit {
     private _roomsApi: RoomsApiService,
     private _employeesApi: EmployeesApiService,
     private _cleaningsForms: CleaningForms,
+    public readonly authService: AuthService,
     private route: ActivatedRoute
   ) {
     this.cleaningTask$ = this.route.params.pipe(
@@ -132,6 +135,9 @@ export class CleaningInfoComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.isMaid()) {
+      this.cleaningTaskForm.disable();
+    }
     this.loadRooms();
     this.loadEmployees();
   }
@@ -195,6 +201,7 @@ export class CleaningInfoComponent implements OnInit {
       .getAll()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
+        map(employees => employees.filter((employee: Employee) => employee.jobPosition.jobTitle === 'Горничная')),
         catchError((error) => {
           this.error$.next('Ошибка при загрузке данных сотрудников');
           return of([]);
@@ -204,6 +211,10 @@ export class CleaningInfoComponent implements OnInit {
       .subscribe((employees) => {
         this.employees$.next(employees);
       });
+  }
+
+  protected isMaid(): boolean {
+    return this.authService.currentUserSubject.value?.jobPosition.jobTitle === 'Горничная';
   }
 
   protected readonly stringifyRoom = (item: Room | null | undefined) =>

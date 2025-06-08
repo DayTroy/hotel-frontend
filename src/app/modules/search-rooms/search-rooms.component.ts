@@ -10,6 +10,7 @@ import {
   TuiIcon,
   TuiTextfieldDropdownDirective,
   TuiFormatNumberPipe,
+  TuiCalendar,
 } from '@taiga-ui/core';
 import {
   TuiInputDate,
@@ -90,7 +91,8 @@ interface Room {
     TuiFilterByInputPipe,
     TuiStringifyContentPipe,
     TuiFormatNumberPipe,
-    MaskitoDirective
+    MaskitoDirective,
+    TuiCalendar,
   ],
   templateUrl: './search-rooms.component.html',
   styleUrl: './search-rooms.component.scss',

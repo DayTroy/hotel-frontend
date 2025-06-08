@@ -25,7 +25,7 @@ interface DecodedToken {
 export class AuthService {
   private readonly TOKEN_KEY = 'access_token';
   private readonly API_URL = 'http://localhost:3000/api';
-  private currentUserSubject = new BehaviorSubject<Employee | null>(null);
+  public currentUserSubject = new BehaviorSubject<Employee | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   private jwtHelper = new JwtHelperService();
 
