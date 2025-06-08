@@ -26,6 +26,7 @@
         placeholder="Введите номер задания на уборку"
         tuiTextfield
         [(ngModel)]="value"
+        (ngModelChange)="onSearch($event)"
       />
     </tui-textfield>
     <button

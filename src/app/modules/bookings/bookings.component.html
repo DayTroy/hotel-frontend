@@ -11,7 +11,8 @@
       <input
         placeholder="Введите номер брони"
         tuiTextfield
-        [(ngModel)]="value"
+        [(ngModel)]="searchValue"
+        (ngModelChange)="onSearch($event)"
       />
     </tui-textfield>
   </div>

@@ -1,44 +1,83 @@
 <form class="request-info" [formGroup]="form">
-    <button iconStart="@tui.redo-2" tuiLink type="button" routerLink=".." [style.color]="'#E4002B'"
-        [textContent]="'Назад'" [style.margin-bottom]="'1rem'"></button>
+  <button
+    iconStart="@tui.redo-2"
+    tuiLink
+    type="button"
+    routerLink=".."
+    [style.color]="'#E4002B'"
+    [textContent]="'Назад'"
+    [style.margin-bottom]="'1rem'"
+  ></button>
 
-    <div *ngIf="error$ | async as error" class="error-message">
-        {{ error }}
-    </div>
+  <div *ngIf="error$ | async as error" class="error-message">
+    {{ error }}
+  </div>
 
-    <div *ngIf="loading$ | async" class="loading">
-        Загрузка...
-    </div>
+  <div *ngIf="loading$ | async" class="loading">Загрузка...</div>
 
-    <ng-container *ngIf="!(loading$ | async) && !(error$ | async)">
-        <ng-container *tuiLet="request$ | async as request">
-            <ng-container *ngIf="request">
-                <h1 class="request-info__title">Заявка № {{request.requestId}}</h1>
-                <div class="request-info__header">
-                    <tui-segmented class="request-info__status" size="m" [style.border]="'1px solid #E4002B'"
-                        [(activeItemIndex)]="active" [style.width]="'fit-content'" (activeItemIndexChange)="setRequestStatus()">
-                        <button *ngFor="let requestStatus of requestStatuses; let index = index" type="button"
-                            [class.active]="index === active">
-                            {{ requestStatus }}
-                        </button>
-                    </tui-segmented>
-                    <tui-textfield class="request-info__date">
-                        <label tuiLabel>Дата создания</label>
-                        <input tuiInputDate formControlName="creationDate" />
-                        <tui-calendar *tuiTextfieldDropdown />
-                    </tui-textfield>
-                </div>
-                <div class="request-info__main">
-                    <h3>Описание</h3>
-                    <tui-textfield [style.margin-block-end.rem]="1" [style.margin-top]="'1rem'">
-                        <label tuiLabel>Описание</label>
-                        <textarea placeholder="Введите описание" tuiTextarea formControlName="description" [limit]="100" [max]="6" [min]="3"></textarea>
-                    </tui-textfield>
-                </div>
-                <button class="request-info__submit" tuiButton type="submit" [disabled]="loading$ | async" [loading]="loading$ | async" size="m" (click)="submit()">
-                    Сохранить
-                </button>
-            </ng-container>
-        </ng-container>
+  <ng-container *ngIf="!(loading$ | async) && !(error$ | async)">
+    <ng-container *tuiLet="request$ | async as request">
+      <ng-container *ngIf="request">
+        <h1 class="request-info__title">Заявка № {{ request.requestId }}</h1>
+        <div class="request-info__header">
+          <tui-segmented
+            class="request-info__status"
+            size="m"
+            [style.border]="'1px solid #E4002B'"
+            [(activeItemIndex)]="active"
+            [style.width]="'fit-content'"
+            (activeItemIndexChange)="setRequestStatus()"
+          >
+            <button
+              *ngFor="let requestStatus of requestStatuses; let index = index"
+              type="button"
+              [class.active]="index === active"
+            >
+              {{ requestStatus }}
+            </button>
+          </tui-segmented>
+          <tui-textfield class="request-info__date">
+            <label tuiLabel>Дата создания</label>
+            <input tuiInputDate formControlName="creationDate" />
+            <tui-calendar *tuiTextfieldDropdown />
+          </tui-textfield>
+          <tui-textfield class="request-info__phone" iconEnd="@tui.phone">
+            <label tuiLabel>Контактный телефон</label>
+            <input
+              tuiTextfield
+              formControlName="phoneNumber"
+            />
+          </tui-textfield>
+        </div>
+        <div class="request-info__main">
+          <h3>Описание</h3>
+          <tui-textfield
+            [style.margin-block-end.rem]="1"
+            [style.margin-top]="'1rem'"
+          >
+            <label tuiLabel>Описание</label>
+            <textarea
+              placeholder="Введите описание"
+              tuiTextarea
+              formControlName="description"
+              [limit]="100"
+              [max]="6"
+              [min]="3"
+            ></textarea>
+          </tui-textfield>
+        </div>
+        <button
+          class="request-info__submit"
+          tuiButton
+          type="submit"
+          [disabled]="loading$ | async"
+          [loading]="loading$ | async"
+          size="m"
+          (click)="submit()"
+        >
+          Сохранить
+        </button>
+      </ng-container>
     </ng-container>
+  </ng-container>
 </form>

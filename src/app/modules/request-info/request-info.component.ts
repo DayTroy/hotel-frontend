@@ -81,6 +81,7 @@ export class RequestInfoComponent implements OnInit {
     requestId: new FormControl(''),
     status: new FormControl(''),
     creationDate: new FormControl({ value: null, disabled: true }),
+    phoneNumber: new FormControl({ value: null, disabled: true }),
     description: new FormControl(''),
   });
 

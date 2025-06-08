@@ -116,6 +116,8 @@ export class CleaningsComponent implements OnInit {
   protected readonly loading$ = new BehaviorSubject<boolean>(false);
   protected readonly error$ = new BehaviorSubject<string | null>(null);
   protected readonly cleaningTasks$ = new BehaviorSubject<CleaningTaskResponse[]>([]);
+  protected readonly allCleaningTasks$ = new BehaviorSubject<CleaningTaskResponse[]>([]);
+  protected readonly notFound$ = new BehaviorSubject<boolean>(false);
   protected readonly rooms$ = new BehaviorSubject<Room[]>([]);
   protected readonly employees$ = new BehaviorSubject<Employee[]>([]);
   cleaningTypes = ['Регулярная', 'Генеральная', 'После ремонта'];
@@ -240,10 +242,12 @@ export class CleaningsComponent implements OnInit {
       next: (tasks) => {
         if (this.isAdmin()) {
           this.cleaningTasks$.next(tasks);
+          this.allCleaningTasks$.next(tasks);
         } else {
           const currentUserId = this.authService.currentUserSubject.value?.employeeId;
           const filteredTasks = tasks.filter(task => task.employee.employeeId === currentUserId);
           this.cleaningTasks$.next(filteredTasks);
+          this.allCleaningTasks$.next(filteredTasks);
         }
       },
       error: (error) => {
@@ -275,5 +279,19 @@ export class CleaningsComponent implements OnInit {
 
   protected isAdmin(): boolean {
     return this.authService.currentUserSubject.value?.jobPosition.jobTitle === 'Управляющий';
+  }
+
+  onSearch(value: string) {
+    if (!value) {
+      this.cleaningTasks$.next(this.allCleaningTasks$.value);
+      this.notFound$.next(false);
+      return;
+    }
+    
+    const filteredCleaningTasks = this.allCleaningTasks$.value.filter(cleaningTask => 
+      cleaningTask.cleaningId.toString().toLowerCase().includes(value.toLowerCase())
+    );
+    this.cleaningTasks$.next(filteredCleaningTasks);
+    this.notFound$.next(filteredCleaningTasks.length === 0);
   }
 }
