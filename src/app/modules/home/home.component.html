@@ -17,10 +17,7 @@
         <h2 tuiTitle>{{ module.name }}</h2>
         <tui-icon icon="@tui.{{ module.icon }}" [style.color]="'#000'" />
       </div>
-      <div
-        [style.display]="'flex'"
-        [style.flex-direction]="'column'"
-      >
+      <div [style.display]="'flex'" [style.flex-direction]="'column'">
         <span tuiSubtitle>{{ module.description }}</span>
         <button
           size="m"

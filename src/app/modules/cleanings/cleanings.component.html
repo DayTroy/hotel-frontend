@@ -54,7 +54,7 @@
           [style.align-items]="'center'"
         >
           <h2 tuiTitle>{{ cleaningTask.cleaningId }}</h2>
-          <tui-chip [appearance]="getStatusAppearance(cleaningTask.status)">{{ cleaningTask.status }}</tui-chip>
+          <tui-chip [appearance]="getCleaningStatusAppearance(cleaningTask.status)">{{ cleaningTask.status }}</tui-chip>
         </div>
         <div
           [style.display]="'grid'"

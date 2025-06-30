@@ -54,6 +54,7 @@ import phoneMask from '../../shared/masks/phoneMask';
 import { passportNumberMask, passportSeriesMask } from '../../shared/masks/passportMask';
 import { nameMask } from '../../shared/masks/nameMask';
 import { Room } from '../../interfaces/room.interface';
+import { CITIZENSHIPS, GENDERS } from '../../global.config';
 
 @Component({
   selector: 'app-search-rooms',
@@ -97,15 +98,15 @@ export class SearchRoomsComponent implements OnInit {
   protected readonly error$ = new BehaviorSubject<string | null>(null);
   protected guestForms: FormGroup[] = [];
   protected expandedStates: boolean[] = [];
-  private readonly dialogs = inject(TuiDialogService);
-  private readonly alerts = inject(TuiAlertService);
+  protected readonly dialogs = inject(TuiDialogService);
+  protected readonly alerts = inject(TuiAlertService);
   private currentDialogObserver: any;
-  genders = ['Мужской', 'Женский'];
-  citizenships = ['Россия', 'Беларусь', 'Казахстан', 'Другое'];
-  readonly phoneOptions: MaskitoOptions = phoneMask;
-  readonly passportSeriesOptions: MaskitoOptions = passportSeriesMask;
-  readonly passportNumberOptions: MaskitoOptions = passportNumberMask;
-  readonly nameOptions: MaskitoOptions = nameMask;
+  protected readonly genders = GENDERS;
+  protected readonly citizenships = CITIZENSHIPS;
+  protected readonly phoneOptions: MaskitoOptions = phoneMask;
+  protected readonly passportSeriesOptions: MaskitoOptions = passportSeriesMask;
+  protected readonly passportNumberOptions: MaskitoOptions = passportNumberMask;
+  protected readonly nameOptions: MaskitoOptions = nameMask;
 
   protected searchRoomsForm: FormGroup = new FormGroup({
     guests: new FormControl(null, [
@@ -171,9 +172,7 @@ export class SearchRoomsComponent implements OnInit {
           return null;
         })
       )
-      .subscribe((total) => {
-        form.patchValue({ amenitiesTotalPrice: total }, { emitEvent: false });
-      });
+      .subscribe((total) => form.patchValue({ amenitiesTotalPrice: total }, { emitEvent: false }));
   }
 
   initSubscriptions(): void {
@@ -364,7 +363,6 @@ export class SearchRoomsComponent implements OnInit {
         error: (error) => {
           this.isLoading = false;
           this.error$.next('Произошла ошибка при создании бронирования');
-          console.error('Error creating booking:', error);
         }
       });
     }

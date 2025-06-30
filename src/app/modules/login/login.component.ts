@@ -102,7 +102,6 @@ export class LoginComponent implements OnInit {
             }
           )
           .subscribe();
-        console.error('Login error:', error);
       }
     });
   }

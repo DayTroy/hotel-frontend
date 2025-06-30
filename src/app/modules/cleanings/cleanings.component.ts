@@ -37,6 +37,8 @@ import { AuthService } from '../../services/auth.service';
 import { Room } from '../../interfaces/room.interface';
 import { Employee } from '../../interfaces/employee.interface';
 import { CleaningTask } from '../../interfaces/cleaning.interface';
+import { CLEANING_TYPES } from '../../global.config';
+import { getCleaningStatusAppearance } from './utils/get-cleaning-status-appearance.function';
 
 @Component({
   selector: 'app-cleanings',
@@ -82,8 +84,9 @@ export class CleaningsComponent implements OnInit {
   protected readonly notFound$ = new BehaviorSubject<boolean>(false);
   protected readonly rooms$ = new BehaviorSubject<Room[]>([]);
   protected readonly employees$ = new BehaviorSubject<Employee[]>([]);
-  cleaningTypes = ['Регулярная', 'Генеральная', 'После ремонта'];
+  protected readonly cleaningTypes = CLEANING_TYPES;
   protected currentUser$ = this.authService.currentUser$;
+  protected readonly getCleaningStatusAppearance = getCleaningStatusAppearance;
 
   constructor(
     private readonly _employeesApi: EmployeesApiService,
@@ -109,14 +112,11 @@ export class CleaningsComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
           this.error$.next('Ошибка при загрузке данных');
-          console.error('Error loading rooms:', error);
           return of([]);
         }),
         finalize(() => this.loading$.next(false))
       )
-      .subscribe((rooms) => {
-        this.rooms$.next(rooms);
-      });
+      .subscribe((rooms) => this.rooms$.next(rooms));
   }
 
   protected loadEmployees(): void {
@@ -134,9 +134,7 @@ export class CleaningsComponent implements OnInit {
         }),
         finalize(() => this.loading$.next(false))
       )
-      .subscribe((employees) => {
-        this.employees$.next(employees);
-      });
+      .subscribe((employees) => this.employees$.next(employees));
   }
 
   protected readonly stringifyRoom = (item: Room | null | undefined) =>
@@ -178,7 +176,6 @@ export class CleaningsComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
           this.error$.next('Ошибка при создании задания на уборку');
-          console.error('Error creating cleaning task:', error);
           return of(null);
         }),
         finalize(() => {
@@ -211,24 +208,8 @@ export class CleaningsComponent implements OnInit {
           this.cleaningTasks$.next(filteredTasks);
           this.allCleaningTasks$.next(filteredTasks);
         }
-      },
-      error: (error) => {
-        console.error('Error loading cleaning tasks:', error);
       }
     });
-  }
-
-  protected getStatusAppearance(status: string): 'negative' | 'primary' | 'positive' {
-    switch (status) {
-      case 'Новый':
-        return 'negative';
-      case 'В работе':
-        return 'primary';
-      case 'Выполнено':
-        return 'positive';
-      default:
-        return 'negative';
-    }
   }
 
   protected getDescriptionText(): string {

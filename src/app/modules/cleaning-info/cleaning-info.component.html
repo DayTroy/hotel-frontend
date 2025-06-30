@@ -62,7 +62,7 @@
           </tui-combo-box>
         </div>
         <div class="cleaning-info__subheader">
-            <tui-combo-box
+          <tui-combo-box
             [formControl]="cleaningTaskForm.get('employee')"
             [stringify]="stringifyEmployee"
           >
@@ -76,17 +76,17 @@
           </tui-combo-box>
 
           <tui-textfield tuiChevron>
-        <input
-          tuiSelect
-          placeholder="Выберите вид уборки"
-          formControlName="cleaningType"
-        />
-        <tui-data-list-wrapper
-          *tuiTextfieldDropdown
-          new
-          [items]="cleaningTypes"
-        />
-      </tui-textfield>
+            <input
+              tuiSelect
+              placeholder="Выберите вид уборки"
+              formControlName="cleaningType"
+            />
+            <tui-data-list-wrapper
+              *tuiTextfieldDropdown
+              new
+              [items]="cleaningTypes"
+            />
+          </tui-textfield>
         </div>
         <div class="cleaning-info__main">
           <h3>Описание</h3>

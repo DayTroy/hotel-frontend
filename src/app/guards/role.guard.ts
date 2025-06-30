@@ -16,7 +16,6 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot) {
-    // Сначала проверяем, есть ли токен
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return of(false);

@@ -3,24 +3,37 @@
   [style.padding]="'8rem'"
   [style.aspect-ratio]="'1'"
 >
-  <form tuiAppearance="floating" tuiCardLarge tuiForm="m" [formGroup]="form" [style.max-width.rem]="32"
-    [style.margin]="'0 auto'" [style.padding.rem]="'2'">
+  <form
+    tuiAppearance="floating"
+    tuiCardLarge
+    tuiForm="m"
+    [formGroup]="form"
+    [style.max-width.rem]="32"
+    [style.margin]="'0 auto'"
+    [style.padding.rem]="'2'"
+  >
     <header tuiHeader>
       <h2 tuiTitle class="tui-text_h1">Вход в систему</h2>
-      <span tuiAccessories>
-      </span>
+      <span tuiAccessories> </span>
     </header>
     <tui-textfield iconEnd="@tui.at-sign">
       <label tuiLabel>E-mail</label>
-      <input formControlName="email" placeholder="john@wick.com" tuiTextfield  />
+      <input formControlName="email" placeholder="john@wick.com" tuiTextfield />
     </tui-textfield>
     <tui-textfield iconEnd="@tui.lock-keyhole">
       <label tuiLabel>Пароль</label>
       <input formControlName="password" tuiTextfield type="password" />
     </tui-textfield>
     <footer>
-      <button tuiButton type="submit" [disabled]="form.invalid" [loading]="loading$ | async" (click)="submit()"
-        [style.width]="'100%'" [style.background-color]="'#EB3B43'">
+      <button
+        tuiButton
+        type="submit"
+        [disabled]="form.invalid"
+        [loading]="loading$ | async"
+        (click)="submit()"
+        [style.width]="'100%'"
+        [style.background-color]="'#EB3B43'"
+      >
         Войти
       </button>
     </footer>

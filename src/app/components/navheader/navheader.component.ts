@@ -14,7 +14,8 @@ import { AuthService } from '../../services/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Employee } from '../../interfaces/employee.interface';
-import { SearchResult } from '../../interfaces/search-result.interface';
+import { APP_MODULES } from '../../global.config';
+import { IAppModules } from '../../interfaces/search-result.interface';
 
 @Component({
   standalone: true,
@@ -41,17 +42,9 @@ export default class NavHeaderComponent implements OnInit {
   protected avatarText$ = new BehaviorSubject<string>('');
   protected currentUser$ = new BehaviorSubject<Employee | null>(null);
   protected searchText = '';
-  protected readonly searchResults$ = new BehaviorSubject<SearchResult[]>([]);
+  protected readonly searchResults$ = new BehaviorSubject<IAppModules[]>([]);
 
-  private readonly availableModules: SearchResult[] = [
-    { name: 'Заявки', url: '/dashboard/requests', icon: 'send' },
-    { name: 'Бронирования', url: '/dashboard/bookings', icon: 'book-open-check' },
-    { name: 'Номера', url: '/dashboard/search-rooms', icon: 'key-round' },
-    { name: 'Уборка', url: '/dashboard/cleanings', icon: 'paintbrush' },
-    { name: 'Аналитика', url: '/dashboard/analytics', icon: 'chart-line' },
-    { name: 'Справочники', url: '/dashboard/references', icon: 'book-marked' },
-    { name: 'Профиль', url: '/dashboard/profile', icon: 'user-round' },
-  ];
+  private readonly appModules = APP_MODULES;
 
   constructor(
     private readonly authService: AuthService,
@@ -69,7 +62,6 @@ export default class NavHeaderComponent implements OnInit {
         this.currentUser$.next(profile);
       },
       error: (error) => {
-        console.error('Error loading user profile:', error);
         this.router.navigate(['/']);
       }
     });
@@ -100,7 +92,7 @@ export default class NavHeaderComponent implements OnInit {
         availableModules = ['Профиль'];
     }
 
-    const filteredResults = this.availableModules
+    const filteredResults = this.appModules
       .filter(module => 
         availableModules.includes(module.name) &&
         module.name.toLowerCase().includes(searchText.toLowerCase())

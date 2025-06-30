@@ -68,64 +68,68 @@
 
     <div class="form-section">
       <h3>Изменение пароля</h3>
-      <div [style.display]="'grid'" [style.grid-template-columns]="'1fr 1fr'" [style.gap]="'1rem'">
-      <div>
-        <tui-textfield iconEnd="@tui.lock-keyhole">
-          <label tuiLabel>Текущий пароль</label>
-          <input
-            formControlName="currentPassword"
-            tuiTextfield
-            type="password"
-            placeholder="Введите текущий пароль"
-          />
-        </tui-textfield>
-        <div
-          *ngIf="profileForm.get('currentPassword')?.touched && profileForm.get('currentPassword')?.errors?.['required']"
-          class="error-message"
-        >
-          Текущий пароль обязателен
+      <div
+        [style.display]="'grid'"
+        [style.grid-template-columns]="'1fr 1fr'"
+        [style.gap]="'1rem'"
+      >
+        <div>
+          <tui-textfield iconEnd="@tui.lock-keyhole">
+            <label tuiLabel>Текущий пароль</label>
+            <input
+              formControlName="currentPassword"
+              tuiTextfield
+              type="password"
+              placeholder="Введите текущий пароль"
+            />
+          </tui-textfield>
+          <div
+            *ngIf="profileForm.get('currentPassword')?.touched && profileForm.get('currentPassword')?.errors?.['required']"
+            class="error-message"
+          >
+            Текущий пароль обязателен
+          </div>
         </div>
-      </div>
-      <div>
-        <tui-textfield iconEnd="@tui.lock-keyhole">
-          <label tuiLabel>Новый пароль</label>
-          <input
-            formControlName="newPassword"
-            tuiTextfield
-            type="password"
-            placeholder="Введите новый пароль"
-          />
-        </tui-textfield>
-        <div
-          *ngIf="
-            profileForm.get('newPassword')?.touched &&
-            profileForm.get('newPassword')?.errors
-          "
-          class="error-message"
-        >
-          {{ getPasswordErrorMessage() }}
+        <div>
+          <tui-textfield iconEnd="@tui.lock-keyhole">
+            <label tuiLabel>Новый пароль</label>
+            <input
+              formControlName="newPassword"
+              tuiTextfield
+              type="password"
+              placeholder="Введите новый пароль"
+            />
+          </tui-textfield>
+          <div
+            *ngIf="
+              profileForm.get('newPassword')?.touched &&
+              profileForm.get('newPassword')?.errors
+            "
+            class="error-message"
+          >
+            {{ getPasswordErrorMessage() }}
+          </div>
         </div>
-      </div>
-      <div>
-        <tui-textfield iconEnd="@tui.lock-keyhole">
-          <label tuiLabel>Подтверждение пароля</label>
-          <input
-            formControlName="confirmPassword"
-            tuiTextfield
-            type="password"
-            placeholder="Подтвердите новый пароль"
-          />
-        </tui-textfield>
-        <div
-          *ngIf="
-            profileForm.get('confirmPassword')?.touched &&
-            profileForm.get('confirmPassword')?.errors
-          "
-          class="error-message"
-        >
-          {{ getConfirmPasswordErrorMessage() }}
+        <div>
+          <tui-textfield iconEnd="@tui.lock-keyhole">
+            <label tuiLabel>Подтверждение пароля</label>
+            <input
+              formControlName="confirmPassword"
+              tuiTextfield
+              type="password"
+              placeholder="Подтвердите новый пароль"
+            />
+          </tui-textfield>
+          <div
+            *ngIf="
+              profileForm.get('confirmPassword')?.touched &&
+              profileForm.get('confirmPassword')?.errors
+            "
+            class="error-message"
+          >
+            {{ getConfirmPasswordErrorMessage() }}
+          </div>
         </div>
-      </div>
       </div>
     </div>
 

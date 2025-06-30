@@ -30,7 +30,12 @@
 
 <table
   tuiTable
-  *ngIf="!(loading$$ | async) && !error && !(notFound$$ | async) && !((bookings$$ | async)?.length === 0)"
+  *ngIf="
+    !(loading$$ | async) &&
+    !error &&
+    !(notFound$$ | async) &&
+    !((bookings$$ | async)?.length === 0)
+  "
   class="table tui-space_top-5"
   [columns]="columns"
   [style.width]="'100%'"

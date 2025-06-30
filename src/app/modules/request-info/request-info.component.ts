@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TUI_FALSE_HANDLER, TuiLet } from '@taiga-ui/cdk';
+import { TuiLet } from '@taiga-ui/cdk';
 import {
   TuiAlertService,
   TuiButton,
@@ -16,7 +16,6 @@ import {
   TuiLink,
   TuiTextfield,
   TuiTextfieldDropdownDirective,
-  TuiTitle,
 } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
@@ -30,13 +29,12 @@ import {
   Observable,
   catchError,
   finalize,
-  map,
   of,
-  startWith,
   switchMap,
   tap,
 } from 'rxjs';
 import { RequestsApiService } from '../requests/request-api.service';
+import { REQUEST_STATUSES } from '../../global.config';
 
 @Component({
   selector: 'app-request-info',
@@ -66,16 +64,10 @@ import { RequestsApiService } from '../requests/request-api.service';
 })
 export class RequestInfoComponent implements OnInit {
   protected active = 0;
-  protected readonly requestStatuses = [
-    'Новая',
-    'Обработана',
-    'Отменена',
-    'Закрыта',
-  ];
+  protected readonly requestStatuses = REQUEST_STATUSES;
   protected readonly loading$ = new BehaviorSubject<boolean>(false);
   protected readonly error$ = new BehaviorSubject<string | null>(null);
-  protected readonly request$: Observable<any>;
-  private readonly alerts = inject(TuiAlertService);
+  protected request$ = new Observable<any>();
 
   protected form: FormGroup = new FormGroup({
     requestId: new FormControl(''),
@@ -87,8 +79,11 @@ export class RequestInfoComponent implements OnInit {
 
   constructor(
     private _requestsApi: RequestsApiService,
+    private alerts: TuiAlertService,
     private route: ActivatedRoute
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.request$ = this.route.params.pipe(
       switchMap((params) => {
         this.loading$.next(true);
@@ -105,17 +100,12 @@ export class RequestInfoComponent implements OnInit {
           }),
           catchError((error) => {
             this.error$.next('Ошибка при загрузке данных');
-            console.error('Error loading request:', error);
             return of(null);
           }),
           finalize(() => this.loading$.next(false))
         );
       })
     );
-  }
-
-  ngOnInit() {
-    // Initialization is handled in the constructor
   }
 
   setRequestStatus(): void {
@@ -132,7 +122,6 @@ export class RequestInfoComponent implements OnInit {
           .pipe(
             catchError((error) => {
               this.error$.next('Ошибка при сохранении данных');
-              console.error('Error saving request:', error);
               return of(null);
             }),
             finalize(() => {

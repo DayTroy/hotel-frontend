@@ -1,13 +1,8 @@
-import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TUI_FALSE_HANDLER, TuiLet } from '@taiga-ui/cdk';
+import { TuiLet } from '@taiga-ui/cdk';
 import {
   TuiAlertService,
   TuiButton,
@@ -16,7 +11,6 @@ import {
   TuiLink,
   TuiTextfield,
   TuiTextfieldDropdownDirective,
-  TuiTitle,
 } from '@taiga-ui/core';
 import {
   TuiButtonLoading,
@@ -49,6 +43,7 @@ import { EmployeesApiService } from '../references/employees/employees-api.servi
 import { AuthService } from '../../services/auth.service';
 import { Employee } from '../../interfaces/employee.interface';
 import { Room } from '../../interfaces/room.interface';
+import { CLEANING_TASK_STATUSES, CLEANING_TYPES } from '../../global.config';
 
 @Component({
   selector: 'app-request-info',
@@ -85,28 +80,24 @@ import { Room } from '../../interfaces/room.interface';
 })
 export class CleaningInfoComponent implements OnInit {
   protected active = 0;
-  protected readonly cleaningTaskStatuses = [
-    'Новый',
-    'В работе',
-    'Выполнено',
-  ];
   protected readonly loading$ = new BehaviorSubject<boolean>(false);
   protected readonly error$ = new BehaviorSubject<string | null>(null);
-  destroyRef = inject(DestroyRef);
-  cleaningTask$: Observable<any>;
   protected readonly rooms$ = new BehaviorSubject<Room[]>([]);
   protected readonly employees$ = new BehaviorSubject<Employee[]>([]);
-  private readonly alerts = inject(TuiAlertService);
+  protected readonly cleaningTaskStatuses = CLEANING_TASK_STATUSES;
+  protected readonly cleaningTypes = CLEANING_TYPES;
   protected cleaningTaskForm = this._cleaningsForms.createCleaningTaskForm();
-  cleaningTypes = ['Регулярная', 'Генеральная', 'После ремонта'];
+  destroyRef = inject(DestroyRef);
+  cleaningTask$: Observable<any>;
 
   constructor(
-    private _cleaningsApi: CleaningsApiService,
-    private _roomsApi: RoomsApiService,
-    private _employeesApi: EmployeesApiService,
-    private _cleaningsForms: CleaningForms,
-    public readonly authService: AuthService,
-    private route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly _cleaningsApi: CleaningsApiService,
+    private readonly _roomsApi: RoomsApiService,
+    private readonly _employeesApi: EmployeesApiService,
+    private readonly _cleaningsForms: CleaningForms,
+    private readonly alerts: TuiAlertService,
+    private readonly authService: AuthService
   ) {
     this.cleaningTask$ = this.route.params.pipe(
       switchMap((params) => {
@@ -124,7 +115,6 @@ export class CleaningInfoComponent implements OnInit {
           }),
           catchError((error) => {
             this.error$.next('Ошибка при загрузке данных');
-            console.error('Error loading cleaning task:', error);
             return of(null);
           }),
           finalize(() => this.loading$.next(false))
@@ -134,7 +124,7 @@ export class CleaningInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.isMaid()) {
+    if (this.isMaid()) {
       this.cleaningTaskForm.get('room')?.disable();
       this.cleaningTaskForm.get('employee')?.disable();
       this.cleaningTaskForm.get('scheduledDate')?.disable();
@@ -161,12 +151,13 @@ export class CleaningInfoComponent implements OnInit {
           .pipe(
             catchError((error) => {
               this.error$.next('Ошибка при сохранении данных');
-              console.error('Error saving request:', error);
               return of(null);
             }),
             finalize(() => {
               this.alerts
-                .open('Задание на уборку успешно обновлено', { appearance: 'positive' })
+                .open('Задание на уборку успешно обновлено', {
+                  appearance: 'positive',
+                })
                 .subscribe();
               this.loading$.next(false);
             })
@@ -186,14 +177,11 @@ export class CleaningInfoComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
           this.error$.next('Ошибка при загрузке данных');
-          console.error('Error loading rooms:', error);
           return of([]);
         }),
         finalize(() => this.loading$.next(false))
       )
-      .subscribe((rooms) => {
-        this.rooms$.next(rooms);
-      });
+      .subscribe((rooms) => this.rooms$.next(rooms));
   }
 
   protected loadEmployees(): void {
@@ -204,20 +192,26 @@ export class CleaningInfoComponent implements OnInit {
       .getAll()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        map(employees => employees.filter((employee: Employee) => employee.jobPosition.jobTitle === 'Горничная')),
+        map((employees) =>
+          employees.filter(
+            (employee: Employee) =>
+              employee.jobPosition.jobTitle === 'Горничная'
+          )
+        ),
         catchError((error) => {
           this.error$.next('Ошибка при загрузке данных сотрудников');
           return of([]);
         }),
         finalize(() => this.loading$.next(false))
       )
-      .subscribe((employees) => {
-        this.employees$.next(employees);
-      });
+      .subscribe((employees) => this.employees$.next(employees));
   }
 
   protected isMaid(): boolean {
-    return this.authService.currentUserSubject.value?.jobPosition.jobTitle === 'Горничная';
+    return (
+      this.authService.currentUserSubject.value?.jobPosition.jobTitle ===
+      'Горничная'
+    );
   }
 
   protected readonly stringifyRoom = (item: Room | null | undefined) =>

@@ -71,7 +71,6 @@ export class ProfileComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error loading profile:', error);
         this.alerts
           .open('Ошибка при загрузке профиля', {
             label: 'Ошибка',

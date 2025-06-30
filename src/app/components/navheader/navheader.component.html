@@ -1,23 +1,26 @@
 <header class="navheader">
   <tui-textfield [style.width]="'100%'" [style.margin-right]="'2rem'">
-    <input 
-      [tuiInputSearch]="results" 
-      placeholder="Поиск..." 
+    <input
+      [tuiInputSearch]="results"
+      placeholder="Поиск..."
       (input)="onSearchChange($any($event).target.value)"
     />
     <ng-template #results>
       <tui-data-list>
         @for (result of searchResults$ | async; track result.name) {
-          <button 
-            tuiOption 
-            [routerLink]="[result.url]"
-            type="button"
-            [style.background-color]="'#BC565B'"
-            [style.justify-content]="'flex-start'"
-          >
-            <tui-icon [icon]="'@tui.' + result.icon" class="tui-space_right-2"></tui-icon>
-            <span>{{ result.name }}</span>
-          </button>
+        <button
+          tuiOption
+          [routerLink]="[result.url]"
+          type="button"
+          [style.background-color]="'#BC565B'"
+          [style.justify-content]="'flex-start'"
+        >
+          <tui-icon
+            [icon]="'@tui.' + result.icon"
+            class="tui-space_right-2"
+          ></tui-icon>
+          <span>{{ result.name }}</span>
+        </button>
         }
       </tui-data-list>
     </ng-template>

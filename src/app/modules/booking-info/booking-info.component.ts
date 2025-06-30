@@ -3,7 +3,6 @@ import { TuiLet } from '@taiga-ui/cdk';
 import {
   TuiTextfield,
   TuiButton,
-  TuiLoader,
   TuiAlertService,
   TuiDialogService,
   TuiIcon,
@@ -28,7 +27,6 @@ import {
   ReactiveFormsModule,
   FormsModule,
   FormGroup,
-  FormControl,
   FormArray,
   AbstractControl,
   FormBuilder,
@@ -55,6 +53,7 @@ import { passportNumberMask, passportSeriesMask } from '../../shared/masks/passp
 import { nameMask } from '../../shared/masks/nameMask';
 import { Booking } from '../../interfaces/booking.interface';
 import { Amenity } from '../../interfaces/amenity.interface';
+import { BOOKING_INFO_TABS, BOOKING_STATUSES, CITIZENSHIPS, GENDERS } from '../../global.config';
 
 @Component({
   selector: 'app-booking-info',
@@ -65,7 +64,6 @@ import { Amenity } from '../../interfaces/amenity.interface';
     FormsModule,
     TuiInputNumber,
     TuiButton,
-    TuiLoader,
     TuiButtonLoading,
     NgIf,
     AsyncPipe,
@@ -107,27 +105,18 @@ export class BookingInfoComponent implements OnInit {
   protected readonly _amenitiesApi = inject(AmenitiesApiService);
   protected readonly _amenitiesForms = inject(AmenitiesForms);
   protected readonly fb = inject(FormBuilder);
-
   protected readonly booking$ = new BehaviorSubject<Booking| null>(null);
   protected readonly error$ = new BehaviorSubject<string | null>(null);
   protected readonly loading$ = new BehaviorSubject<boolean>(false);
-
-  readonly phoneOptions: MaskitoOptions = phoneMask;
-  readonly passportSeriesOptions: MaskitoOptions = passportSeriesMask;
-  readonly passportNumberOptions: MaskitoOptions = passportNumberMask;
-  readonly nameOptions: MaskitoOptions = nameMask;
-
-  protected readonly bookingStatuses = [
-    'Новое',
-    'Подтверждено',
-    'Заселен',
-    'Выселен',
-    'Отменен',
-  ];
-  genders = ['Мужской', 'Женский'];
-  citizenships = ['Россия', 'Другое'];
+  protected readonly phoneOptions: MaskitoOptions = phoneMask;
+  protected readonly passportSeriesOptions: MaskitoOptions = passportSeriesMask;
+  protected readonly passportNumberOptions: MaskitoOptions = passportNumberMask;
+  protected readonly nameOptions: MaskitoOptions = nameMask;
+  protected readonly bookingStatuses = BOOKING_STATUSES;
+  protected readonly genders = GENDERS;
+  protected readonly citizenships = CITIZENSHIPS;
+  protected readonly bookingMainContentTypes = BOOKING_INFO_TABS;
   protected expandedStates: boolean[] = [];
-  protected readonly bookingMainContentTypes = ['Гости', 'Услуги'];
   protected activeBookingStatus = 0;
   protected activeBookingContentType = 0;
 
@@ -445,7 +434,6 @@ export class BookingInfoComponent implements OnInit {
         document.body.removeChild(element);
       })
       .catch((error) => {
-        console.error('Error generating PDF:', error);
         this.alerts
           .open('Ошибка при генерации PDF.', { appearance: 'error' })
           .subscribe();
@@ -658,7 +646,6 @@ export class BookingInfoComponent implements OnInit {
           }
         })
         .catch((error) => {
-          console.error('Error generating PDF page:', error);
           this.alerts
             .open('Ошибка при генерации PDF страницы.', { appearance: 'error' })
             .subscribe();
@@ -686,8 +673,6 @@ export class BookingInfoComponent implements OnInit {
             totalPrice: form.get('amenitiesTotalPrice')?.value || 0
           })).filter(amenity => amenity.amenityId)
         };
-
-        console.log('Sending booking data:', bookingFormValue);
 
         this._bookingsApi.update(booking.bookingId, bookingFormValue).subscribe({
           next: () => {

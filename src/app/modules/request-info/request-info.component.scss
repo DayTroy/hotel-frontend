@@ -1,51 +1,52 @@
 .request-info {
-    &__header {
-        display: flex;
-        align-items: center;
-    }
-    &__status {
-        background: var(--tui-background-base);
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+  &__status {
+    background: var(--tui-background-base);
 
-        &::before {
-            color: #E4002B;
-            box-shadow: none;
-        }
-
-        .active {
-            color: #fff;
-        }
-    }
-    &__date, &__phone {
-        label {
-            color: #E4002B;
-        }
-        border: solid 1px #f4838c;
-        background-color: #fff;
-        color: #E4002B;
-        width: 20rem;
-        margin-left: 2rem;
+    &::before {
+      color: #e4002b;
+      box-shadow: none;
     }
 
-    &__submit {
-        display: flex;
-        justify-self: flex-end;
-        width: 30%;
-        margin-top: 2rem;
-        color: #fff;
-        background-color: #E4002B;
+    .active {
+      color: #fff;
     }
+  }
+  &__date,
+  &__phone {
+    label {
+      color: #e4002b;
+    }
+    border: solid 1px #f4838c;
+    background-color: #fff;
+    color: #e4002b;
+    width: 20rem;
+    margin-left: 2rem;
+  }
+
+  &__submit {
+    display: flex;
+    justify-self: flex-end;
+    width: 30%;
+    margin-top: 2rem;
+    color: #fff;
+    background-color: #e4002b;
+  }
 }
 
 .error-message {
-    color: #E4002B;
-    margin: 1rem 0;
-    padding: 1rem;
-    background-color: rgba(228, 0, 43, 0.1);
-    border-radius: 0.5rem;
+  color: #e4002b;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: rgba(228, 0, 43, 0.1);
+  border-radius: 0.5rem;
 }
 
 .loading {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
+  text-align: center;
+  padding: 2rem;
+  color: #666;
 }
