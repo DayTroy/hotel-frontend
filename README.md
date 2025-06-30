@@ -1,27 +1,49 @@
 # Azimut Hotels
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.9.
+Данный репозиторий содержит в себе реализацию клиентской части веб-приложения для оказания гостиничных услуг в ООО "Азимут Хотелс Компани". Проект построен на Angular 17 и использует UI-библиотеку Taiga UI.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Возможности
 
-## Code scaffolding
+- Управление бронированиями и гостями
+- Учёт и назначение уборок номеров
+- Просмотр и анализ статистики по услугам и уборкам
+- Работа с заявками клиентов
+- Ролевая модель (администратор, горничная и др.)
+- Современный интерфейс на базе Taiga UI
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Локальный запуск приложения
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Склонируйте репозиторий
 
-## Running end-to-end tests
+```bash
+  git clone https://github.com/DayTroy/hotel-frontend
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Перейдите в папку, где будет храниться склонированный локальный репозиторий
+```bash
+  cd my-project
+```
 
-## Further help
+Установите зависимости
+```bash
+  npm install
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Запустите локальный сервер и откройте в браузере по адресу: [http://localhost:4200](http://localhost:4200).
+```bash
+  ng serve
+```
+Сборка проекта
+   ```bash
+   ng build
+   ```
+   Готовые файлы будут в папке `dist/`.
+## Документация
+
+- [Документация Angular](https://angular.dev/)
+- [Документация Taiga UI](https://taiga-ui.dev/)
+- [Документация RxJS](https://www.learnrxjs.io/)
