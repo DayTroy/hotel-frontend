@@ -3,15 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './modules/login/login.component';
-
-export function tokenGetter() {
-  return localStorage.getItem('access_token');
-}
 
 @NgModule({
   declarations: [
@@ -24,9 +21,9 @@ export function tokenGetter() {
     ReactiveFormsModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:3000'],
-        disallowedRoutes: ['localhost:3000/api/auth/login']
+        tokenGetter: () => localStorage.getItem('access_token'),
+        allowedDomains: [environment.apiUrl.replace('http://', '').replace('/api', '')],
+        disallowedRoutes: [`${environment.apiUrl}/auth/login`]
       }
     })
   ],

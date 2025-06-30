@@ -2,10 +2,11 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CleaningTask } from "../../interfaces/cleaning.interface";
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: "root" })
 export class CleaningsApiService {
-  private readonly apiUrl = 'http://localhost:3000/api';
+  private readonly apiUrl = environment.apiUrl;
 
   constructor(
     private readonly httpClient: HttpClient 
